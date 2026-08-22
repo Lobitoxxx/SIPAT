@@ -36,6 +36,11 @@ En curso (mejoras del módulo "ruta segura"):
 - Mejoras completadas (22/08/2026, tarde): **contraste de fuentes + README**.
   - `dashboard/theme.py`: sidebar ya no fuerza texto claro en widgets (inputs/selects/chips con texto oscuro explícito); secundarios oscurecidos (`.sub`/.mini-note #64748b, `.lbl` #475569); banners con color de texto temático; métricas y tabs inactivas con contraste explícito; captions #475569.
   - `README.md` nuevo en raíz: qué es SIPAT, 7 pestañas + tabla de endpoints API, fuentes de datos con volúmenes reales, pipeline completo (geocodificación lineal → dataset 3750×40 → multi-fuente/puntos negros/NegBin), fórmula del score_km con umbrales y factor temporal, estructura de carpetas, puesta en marcha, verificación 30 checks, decisiones metodológicas y limitaciones. Red vial = ~28,900 km.
+- Mejoras completadas (22/08/2026, noche): **tema claro fijado + README con Mermaid**.
+  - `.streamlit/config.toml`: base="light", primaryColor #4f46e5, textColor #0f172a — ningún widget puede invertirse a oscuro.
+  - `dashboard/theme.py` ronda 2: ticks del slider del sidebar en claro (#cbd5e1), placeholders #475569, headings/enlaces/dataframe/expander con contraste explícito, estilo_plotly con title_font y tickfont coloreados.
+  - README: diagrama ASCII del pipeline reemplazado por mermaid flowchart (fuentes→ingesta→procesos→servicios) + sequenceDiagram del flujo "Viaja seguro" + flowchart del reporte ciudadano.
+  - Repo publicado en GitHub: https://github.com/Lobitoxxx/SIPAT (rama main; .gitignore excluye data/raw/ OSM 2.5GB, caches, reportes ciudadanos por privacidad).
 - Pendiente: nada urgente; próximas ideas = tráfico OSITRAN en el score (hecho), rediseño del grafo, exportaciones.
 
 Convenciones del entorno:

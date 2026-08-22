@@ -80,24 +80,48 @@ tipos de incidente) desde cualquier resultado de análisis: `reporte_desde_resum
 
 ## 3. Cómo se manejan los datos (pipeline)
 
-```
-FUENTES OFICIALES                 INGESTA Y GEOCODIFICACIÓN            SERVICIOS
-─────────────────                 ─────────────────────────            ─────────
-ONSV ──────────────┐
-SUTRAN ────────────┤   geocodificación lineal por kilómetro      OSRM (Docker :5000)
-OSITRAN ───────────┼──► (abscisado: km de la vía → lat/lon)  ──► FastAPI (:8000)
-MTC red vial ──────┤                                            Streamlit (:8501)
-INGEMMET ──────────┘         dataset_modelo.csv (3,750 × 40)
-                                          │
-                    ┌─────────────────────┼──────────────────────┐
-                    ▼                     ▼                      ▼
-        build_dashboard_data.py   build_puntos_negros.py    modelo_multi.py /
-        tramos_geo.json (multi-   EB de Hauer + percentil   prediccion.py
-        fuente, eventos CSV)      95 + residuos → 129 PN    NegBin → IRRs
-                    │                     │                      │
-                    └──────────┬──────────┴──────────┬──────────┘
-                               ▼                     ▼
-                        DASHBOARD (7 tabs)     API REST + reporte HTML
+```mermaid
+flowchart LR
+    subgraph FUENTES["Fuentes oficiales"]
+        ONSV["ONSV<br/>5,014 siniestros"]
+        SUTRAN["SUTRAN<br/>7,656 + alertas"]
+        OSITRAN["OSITRAN<br/>41,833 + peajes"]
+        MTC["MTC red vial<br/>3,750 tramos · 28,900 km"]
+        INGEMMET["INGEMMET<br/>peligros geológicos"]
+    end
+
+    subgraph INGESTA["Ingesta y geocodificación"]
+        GEOC["Geocodificación lineal por km<br/>(abscisado: ruta + km → lat/lon)"]
+        MODELO["dataset_modelo.csv<br/>3,750 × 40"]
+    end
+
+    subgraph PROCESOS["Procesamiento"]
+        BD["build_dashboard_data.py<br/>→ tramos_geo.json multi-fuente"]
+        PN["build_puntos_negros.py<br/>EB de Hauer → 129 puntos negros"]
+        NB["modelo_multi.py / prediccion.py<br/>NegBin → IRRs + predictor"]
+    end
+
+    subgraph SERVICIOS["Servicios"]
+        OSRM["OSRM (Docker :5000)"]
+        API["FastAPI (:8000)"]
+        APP["Streamlit (:8501)"]
+    end
+
+    ONSV --> GEOC
+    SUTRAN --> GEOC
+    OSITRAN --> GEOC
+    MTC --> GEOC
+    INGEMMET --> MODELO
+    GEOC --> MODELO
+    MODELO --> BD
+    MODELO --> PN
+    MODELO --> NB
+    BD --> APP
+    PN --> APP
+    NB --> APP
+    OSRM --> APP
+    BD --> API
+    NB --> API
 ```
 
 ### Pasos clave
@@ -141,6 +165,56 @@ INGEMMET ──────────┘         dataset_modelo.csv (3,750 × 
 - Reportes ciudadanos: almacenamiento **append-only**
   (`data/processed/dashboard/reportes_ciudadanos.json` + fotos en `reportes_fotos/`),
   con validación de coordenadas dentro de Perú y deduplicación de 10 minutos.
+
+### Flujo "Viaja seguro" (antes de salir)
+
+```mermaid
+sequenceDiagram
+    actor U as Usuario
+    participant D as Dashboard<br/>🧭 Viaja seguro
+    participant G as geocode()<br/>(cache TTL)
+    participant O as OSRM :5000
+    participant R as ruta_segura.py<br/>+ riesgo_red.py
+    participant P as prediccion.py<br/>(NegBin IA)
+    participant C as clima.py<br/>(SENAMHI·OMeteo·COEN)
+
+    U->>D: origen, destino, fecha/hora salida
+    D->>G: geocodificar extremos
+    G-->>D: lat/lon
+    D->>O: /route/v1/driving
+    O-->>D: geometría de la ruta + km
+    par Análisis de riesgo
+        D->>R: analizar(geometría, salida)
+        R->>R: buffer 2 km · score_km ·<br/>factor temporal · alertas SUTRAN
+        R-->>D: nivel histórico + perfil km-a-km
+    and Predicción IA
+        D->>P: predecir_ruta(geometría)
+        P-->>D: siniestros/km esperados + cobertura
+    and Clima y emergencias
+        D->>C: avisos SENAMHI · pronóstico · COEN
+        C-->>D: avisos activos en la ruta
+    end
+    D-->>U: banner semáforo · mapa con accidentes ·<br/>perfil · clima · ruta más segura · reporte HTML
+```
+
+### Flujo del reporte ciudadano
+
+```mermaid
+flowchart TD
+    A[Usuario llena el formulario<br/>📣 Reporta] --> B{Foto PNG/JPG?}
+    B -- sí --> C[Guardar en reportes_fotos/]
+    B -- no --> D
+    C --> D{Validaciones}
+    D -- "coordenadas fuera de Perú" --> X["❌ Rechazado (HTTP 400)"]
+    D -- "descripción < 5 caracteres" --> X
+    D -- "duplicado: mismo tipo,<br/><150 m y <10 min" --> Y["↩️ Se omite (dedupe)"]
+    D -- ok --> E["agregar_reporte()<br/>storage append-only"]
+    E --> F[(reportes_ciudadanos.json)]
+    E --> G[(reportes_fotos/)]
+    F --> H["🗺️ Mapa de reportes<br/>(fotos embebidas base64)"]
+    F --> I["reportes_en_ruta()<br/>→ aparecen en Viaja seguro"]
+    F --> J["GET /reportes · POST /reportes<br/>(API FastAPI)"]
+```
 
 ---
 

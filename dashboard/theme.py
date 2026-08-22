@@ -44,11 +44,14 @@ def banner(nivel, html_interno):
 
 def estilo_plotly(fig, alto=380):
     fig.update_layout(font=dict(family="Inter, sans-serif", size=12, color="#334155"),
+                      title_font=dict(color="#0f172a", size=15),
                       paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                       margin=dict(l=10, r=10, t=46, b=10), height=alto,
                       legend=dict(orientation="h", y=-0.15))
-    fig.update_xaxes(gridcolor="#eef2f7")
-    fig.update_yaxes(gridcolor="#eef2f7")
+    fig.update_xaxes(gridcolor="#eef2f7", title_font_color="#475569",
+                     tickfont_color="#334155")
+    fig.update_yaxes(gridcolor="#eef2f7", title_font_color="#475569",
+                     tickfont_color="#334155")
     return fig
 
 
@@ -69,7 +72,10 @@ def css():
     st.markdown("""
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-      html, body, [class*="css"], .stApp {font-family:'Inter','Segoe UI',system-ui,sans-serif;}
+      html, body, [class*="css"], .stApp {font-family:'Inter','Segoe UI',system-ui,sans-serif;
+                                           color:#0f172a;}
+      .stApp h1, .stApp h2, .stApp h3, .stApp h4 {color:#0f172a;}
+      .stApp a, .stApp a:visited {color:#2563eb;}
       .block-container {padding-top:.9rem; max-width:1500px;}
       #MainMenu, footer {visibility:hidden;}
       header[data-testid="stHeader"] {background:transparent;}
@@ -88,8 +94,20 @@ def css():
       section[data-testid="stSidebar"] [data-baseweb="select"] > div,
       section[data-testid="stSidebar"] [data-baseweb="tag"] {color:#0f172a !important;}
       section[data-testid="stSidebar"] [data-baseweb="tag"] {background:#dbe3ef; border-color:#94a3b8;}
+      section[data-testid="stSidebar"] [data-testid="stSliderTickValueBar"],
+      section[data-testid="stSidebar"] [data-testid="stSliderTickValueMin"],
+      section[data-testid="stSidebar"] [data-testid="stSliderTickValueMax"] {color:#cbd5e1 !important;
+                                                                            background:transparent !important;}
+      section[data-testid="stSidebar"] [data-baseweb="select"] svg {fill:#94a3b8;}
+      section[data-testid="stSidebar"] [role="checkbox"] p,
+      section[data-testid="stSidebar"] [role="radio"] p {color:#e2e8f0 !important;}
       section[data-testid="stSidebar"] .stMultiSelect label,
       section[data-testid="stSidebar"] .stSlider label {font-size:.82rem;}
+
+      div[data-testid="stExpander"] details summary {color:#0f172a;}
+      div[data-testid="stDataFrame"] {color:#0f172a;}
+      [data-baseweb="select"] input::placeholder,
+      input::placeholder, textarea::placeholder {color:#475569 !important; opacity:1;}
 
       .hero {background:linear-gradient(120deg,#0f172a 0%,#1e3a8a 55%,#4f46e5 100%);
              border-radius:20px; padding:24px 32px 20px; color:white; margin-bottom:14px;
