@@ -1,0 +1,32 @@
+{
+  "onsv": {
+    "n_tramos": 1278,
+    "n_accidentes": 5004,
+    "pseudo_r2": null
+  },
+  "sutran": {
+    "n_tramos": 1188,
+    "n_accidentes": 4116,
+    "pseudo_r2": null
+  },
+  "total": {
+    "n_tramos": 2467,
+    "n_accidentes": 27206,
+    "pseudo_r2": NaN
+  },
+  "features": [
+    "carriles",
+    "vel_proy",
+    "topografia_ondulado",
+    "topografia_montanoso",
+    "topografia_llanura",
+    "sup_buena",
+    "sup_regular",
+    "dist_ingemmet_km_log",
+    "dist_peajes_km_log",
+    "dist_cinemometros_km_log",
+    "es_panamericana",
+    "es_ruta_nacional",
+    "long_km"
+  ]
+}

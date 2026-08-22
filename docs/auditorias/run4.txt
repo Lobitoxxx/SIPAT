@@ -1,0 +1,94 @@
+﻿== Modelo 1: Poisson (referencia) ==
+
+##### Poisson #####
+                      IRR  IRR_low  IRR_high      p
+const               0.103    0.077     0.137  0.000
+reg_SELVA           0.676    0.592     0.771  0.000
+reg_SIERRA          0.972    0.886     1.066  0.543
+top_ONDULADO        1.035    0.929     1.154  0.534
+top_PLANO           1.851    1.629     2.103  0.000
+carriles            1.367    1.323     1.412  0.000
+vel_proy            1.018    1.015     1.020  0.000
+sinuosidad          0.598    0.546     0.654  0.000
+log_ingemmet        0.717    0.687     0.749  0.000
+log_peajes          1.020    0.985     1.057  0.268
+log_cine            0.869    0.845     0.893  0.000
+cinemometros_c10km  1.000    1.000     1.000  0.223
+sup_buena           1.529    1.375     1.700  0.000
+es_panamericana     0.913    0.839     0.993  0.034
+AIC=11983.9  n=3750
+
+== Modelo 2: Negative Binomial ==
+
+##### NegBin #####
+                      IRR  IRR_low  IRR_high      p
+const               0.075    0.047     0.120  0.000
+reg_SELVA           0.672    0.531     0.851  0.001
+reg_SIERRA          0.996    0.830     1.196  0.968
+top_ONDULADO        0.951    0.811     1.115  0.537
+top_PLANO           2.015    1.647     2.464  0.000
+carriles            1.538    1.432     1.651  0.000
+vel_proy            1.018    1.015     1.022  0.000
+sinuosidad          0.668    0.593     0.751  0.000
+log_ingemmet        0.722    0.666     0.784  0.000
+log_peajes          1.001    0.935     1.070  0.987
+log_cine            0.874    0.823     0.929  0.000
+cinemometros_c10km  1.000    1.000     1.000  0.393
+sup_buena           1.479    1.261     1.736  0.000
+es_panamericana     0.973    0.835     1.133  0.723
+AIC=8663.3  n=3750
+
+== Modelo 3: NegBin con errores cluster por ruta ==
+                      IRR  IRR_low  IRR_high      p
+const               0.075    0.028     0.201  0.000
+reg_SELVA           0.672    0.414     1.090  0.107
+reg_SIERRA          0.996    0.669     1.485  0.985
+top_ONDULADO        0.951    0.757     1.194  0.666
+top_PLANO           2.015    1.464     2.772  0.000
+carriles            1.538    1.303     1.815  0.000
+vel_proy            1.018    1.013     1.023  0.000
+sinuosidad          0.668    0.566     0.788  0.000
+log_ingemmet        0.722    0.598     0.873  0.001
+log_peajes          1.001    0.860     1.164  0.994
+log_cine            0.874    0.769     0.995  0.041
+cinemometros_c10km  1.000    1.000     1.000  0.430
+sup_buena           1.479    1.105     1.982  0.009
+es_panamericana     0.973    0.674     1.405  0.883
+
+dispersion Poisson (deviance/df): 1.00
+alpha NegBin estimado: 1.000
+
+== Tramos con mayor residual (mas siniestros que lo esperado) ==
+  ruta     km0     km1  y_onsv  pred  pearson region topografia  vel_proy  sinuosidad
+ PE-5N 1081.12 1098.97      28  6.09     3.33  SELVA   ONDULADO     60.03        1.03
+ PE-1N   21.72   22.37       8  1.63     3.08  COSTA      PLANO     80.89        1.00
+PE-34J   94.15  105.25       7  1.60     2.64 SIERRA   ONDULADO     49.53        1.11
+ PE-20   14.33   16.43       9  2.29     2.45  COSTA      PLANO     77.35        1.03
+ PE-1N    0.00    0.53       7  1.80     2.31  COSTA      PLANO     80.89        1.00
+ PE-20   10.96   14.33      17  4.96     2.21  COSTA      PLANO     77.35        1.22
+PE-34A  119.09  124.06       8  2.22     2.16 SIERRA  MONTAÐOSO     53.00        1.06
+ PE-3N 1560.58 1578.85       7  1.98     2.06  SELVA   ONDULADO     27.06        1.21
+PE-5NI    0.00    4.44       5  1.44     1.91  SELVA      PLANO      0.00        1.08
+PE-28C  251.85  264.48       7  2.45     1.57  SELVA      PLANO      0.00        1.07
+ PE-5S  103.09  108.13       5  1.70     1.54  SELVA   ONDULADO     59.09        1.02
+PE-3SG  243.67  271.05       8  2.88     1.53 SIERRA   ONDULADO     43.03        1.15
+ PE-1N   26.38   26.76       4  1.36     1.47  COSTA      PLANO     80.89        1.00
+ PE-3N 1428.16 1430.86       4  1.37     1.46 SIERRA  MONTAÐOSO     44.10        1.15
+ PE-3S  946.12  957.46      15  5.88     1.43 SIERRA   ONDULADO     62.45        1.05
+
+== Tramos con exceso (top por tasa y residual alto) - candidatos a puntos negros ==
+  ruta     km0     km1  y_onsv  pred  pearson  dist_ingemmet_km  dist_peajes_km
+ PE-5N 1081.12 1098.97      28  6.09     3.33              2.50           33.09
+ PE-1N   21.72   22.37       8  1.63     3.08              1.22           22.52
+PE-34J   94.15  105.25       7  1.60     2.64              8.97           61.02
+ PE-20   14.33   16.43       9  2.29     2.45              2.49           34.03
+ PE-1N    0.00    0.53       7  1.80     2.31              1.33           38.96
+ PE-20   10.96   14.33      17  4.96     2.21              0.58           32.03
+PE-34A  119.09  124.06       8  2.22     2.16              3.68            7.39
+ PE-3N 1560.58 1578.85       7  1.98     2.06              2.61           24.11
+PE-5NI    0.00    4.44       5  1.44     1.91              0.56          442.06
+PE-28C  251.85  264.48       7  2.45     1.57              4.48          101.65
+ PE-5S  103.09  108.13       5  1.70     1.54              3.52           82.94
+PE-3SG  243.67  271.05       8  2.88     1.53              7.24           49.18
+
+puntos_negros.csv guardado

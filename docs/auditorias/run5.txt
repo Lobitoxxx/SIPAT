@@ -1,0 +1,8 @@
+﻿mapa_siniestros_tramos.png OK
+mapa_puntos_negros.png OK
+tendencia_temporal.png OK
+ranking_rutas.png OK
+contexto_espacial.png OK
+irr_modelo.png OK
+
+TODAS LAS FIGURAS GENERADAS

@@ -1,0 +1,6 @@
+﻿tramos_red.csv: 3750 tramos, 150 rutas
+ONSV nacional: 5014
+  columna fecha: FECHA SINIESTRO
+  guardado oNSV_nacional_geocod.csv con km_red y dist_linea_km
+  con coords: 5014   sin coords: 0
+cinemometros 2019-21 con coords: 160018

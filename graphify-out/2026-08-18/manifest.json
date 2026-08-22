@@ -1,0 +1,584 @@
+{
+  "dashboard/app.py": {
+    "mtime": 1786646828.788254,
+    "seen": 1786724516.7466426,
+    "ast_hash": "bb5173e2530544ebef2b0168d86fdd1e",
+    "semantic_hash": ""
+  },
+  "scripts/analisis_rutas.py": {
+    "mtime": 1786467811.8134809,
+    "seen": 1786724516.7466426,
+    "ast_hash": "a27d480a2ccece7435359e428a9772d1",
+    "semantic_hash": "a27d480a2ccece7435359e428a9772d1"
+  },
+  "scripts/analisis_temporal.py": {
+    "mtime": 1786467693.9044359,
+    "seen": 1786724516.7466426,
+    "ast_hash": "6aab903aa9e1a7d52f36d2579bae1b6f",
+    "semantic_hash": "6aab903aa9e1a7d52f36d2579bae1b6f"
+  },
+  "scripts/audit.py": {
+    "mtime": 1786462856.4178574,
+    "seen": 1786724516.7466426,
+    "ast_hash": "825178a5a7b53c06bb34a88e8d2d4eaf",
+    "semantic_hash": "825178a5a7b53c06bb34a88e8d2d4eaf"
+  },
+  "scripts/audit_all_raw.py": {
+    "mtime": 1786463414.0840206,
+    "seen": 1786724516.7466426,
+    "ast_hash": "5ec59fc120b880bbe12d92da2082a024",
+    "semantic_hash": "5ec59fc120b880bbe12d92da2082a024"
+  },
+  "scripts/audit_extra.py": {
+    "mtime": 1786463530.763152,
+    "seen": 1786724516.7466426,
+    "ast_hash": "c7556f601675738b717c862c6fe6569f",
+    "semantic_hash": "c7556f601675738b717c862c6fe6569f"
+  },
+  "scripts/audit_onsv_deep.py": {
+    "mtime": 1786463579.4763198,
+    "seen": 1786724516.7466426,
+    "ast_hash": "faff2cade0d8897a758a5b56f0dd1166",
+    "semantic_hash": "faff2cade0d8897a758a5b56f0dd1166"
+  },
+  "scripts/build_dataset.py": {
+    "mtime": 1786467705.0798976,
+    "seen": 1786724516.7466426,
+    "ast_hash": "9bc298c71e317d743a141c627ecffa25",
+    "semantic_hash": "9bc298c71e317d743a141c627ecffa25"
+  },
+  "scripts/build_geocoded.py": {
+    "mtime": 1786466310.8870502,
+    "seen": 1786724516.7466426,
+    "ast_hash": "6bf860e2b7511c5d08c9a0cd4c66929a",
+    "semantic_hash": "6bf860e2b7511c5d08c9a0cd4c66929a"
+  },
+  "scripts/check_codes.py": {
+    "mtime": 1786466199.2090192,
+    "seen": 1786724516.7466426,
+    "ast_hash": "2f56a9f1ae3bf98686a5fecc1da12ece",
+    "semantic_hash": "2f56a9f1ae3bf98686a5fecc1da12ece"
+  },
+  "scripts/ckan_api.py": {
+    "mtime": 1786462636.04771,
+    "seen": 1786724516.7466426,
+    "ast_hash": "830d865f68d2e85cd35a9d7eb92f7baf",
+    "semantic_hash": "830d865f68d2e85cd35a9d7eb92f7baf"
+  },
+  "scripts/dataset_files.py": {
+    "mtime": 1786462787.8510115,
+    "seen": 1786724516.7466426,
+    "ast_hash": "e2c217ac864f9495b2358a4d71f63417",
+    "semantic_hash": "e2c217ac864f9495b2358a4d71f63417"
+  },
+  "scripts/debug_ingemmet.py": {
+    "mtime": 1786463762.25633,
+    "seen": 1786724516.7466426,
+    "ast_hash": "c70ad879c35551afedce7e3ff55085d5",
+    "semantic_hash": "c70ad879c35551afedce7e3ff55085d5"
+  },
+  "scripts/diagnose_km.py": {
+    "mtime": 1786466355.060639,
+    "seen": 1786724516.7466426,
+    "ast_hash": "290cc402f32c59271f0358ab022c70a6",
+    "semantic_hash": "290cc402f32c59271f0358ab022c70a6"
+  },
+  "scripts/download.py": {
+    "mtime": 1786462173.8635921,
+    "seen": 1786724516.7466426,
+    "ast_hash": "0ff65b88d7f5af0e64e1d7db5b29501f",
+    "semantic_hash": "0ff65b88d7f5af0e64e1d7db5b29501f"
+  },
+  "scripts/download_ingemmet.py": {
+    "mtime": 1786463912.88793,
+    "seen": 1786724516.7466426,
+    "ast_hash": "6fa43e45d387c981fe4a5c9298a21876",
+    "semantic_hash": "6fa43e45d387c981fe4a5c9298a21876"
+  },
+  "scripts/eda_tramos.py": {
+    "mtime": 1786467084.2705958,
+    "seen": 1786724516.7466426,
+    "ast_hash": "f1b4d131358a7e5969b7c83218133921",
+    "semantic_hash": "f1b4d131358a7e5969b7c83218133921"
+  },
+  "scripts/explore_shapefile.py": {
+    "mtime": 1786466136.1632528,
+    "seen": 1786724516.7466426,
+    "ast_hash": "71440b8e261d46207770ac89999bf11f",
+    "semantic_hash": "71440b8e261d46207770ac89999bf11f"
+  },
+  "scripts/features_engine.py": {
+    "mtime": 1786467602.094792,
+    "seen": 1786724516.7466426,
+    "ast_hash": "921384b2455ea5cd0ff7904b77e8f551",
+    "semantic_hash": "921384b2455ea5cd0ff7904b77e8f551"
+  },
+  "scripts/features_tramos.py": {
+    "mtime": 1786467014.955743,
+    "seen": 1786724516.7466426,
+    "ast_hash": "e431e2069e65304440c2333317969b9e",
+    "semantic_hash": "e431e2069e65304440c2333317969b9e"
+  },
+  "scripts/find_indeci.py": {
+    "mtime": 1786464160.1760585,
+    "seen": 1786724516.7466426,
+    "ast_hash": "435a71b131b46d4b6257402642369340",
+    "semantic_hash": "435a71b131b46d4b6257402642369340"
+  },
+  "scripts/geocode.py": {
+    "mtime": 1786466500.4957168,
+    "seen": 1786724516.7466426,
+    "ast_hash": "c87db5de4f03255c4abc6c55b7ce7358",
+    "semantic_hash": "c87db5de4f03255c4abc6c55b7ce7358"
+  },
+  "scripts/graficos.py": {
+    "mtime": 1786467977.5891912,
+    "seen": 1786724516.7466426,
+    "ast_hash": "d8f10ca420ed6913250dfe3bad35bd4c",
+    "semantic_hash": "d8f10ca420ed6913250dfe3bad35bd4c"
+  },
+  "scripts/ingemmet_stats.py": {
+    "mtime": 1786464071.361123,
+    "seen": 1786724516.7466426,
+    "ast_hash": "9b60c1cd1e29d9da46e099c5d6d6f4dd",
+    "semantic_hash": "9b60c1cd1e29d9da46e099c5d6d6f4dd"
+  },
+  "scripts/modelo_glm.py": {
+    "mtime": 1786467892.8246799,
+    "seen": 1786724516.7466426,
+    "ast_hash": "f09f67cbbf7ce43f6ef1815c0f2e84f5",
+    "semantic_hash": "f09f67cbbf7ce43f6ef1815c0f2e84f5"
+  },
+  "scripts/prep_dashboard.py": {
+    "mtime": 1786471399.14585,
+    "seen": 1786724516.7466426,
+    "ast_hash": "a3de583e014cc5b4355afb31d454708b",
+    "semantic_hash": "a3de583e014cc5b4355afb31d454708b"
+  },
+  "scripts/resource_files.py": {
+    "mtime": 1786462652.6516438,
+    "seen": 1786724516.7466426,
+    "ast_hash": "f2506cc3e86dd45a6300949234352cb7",
+    "semantic_hash": "f2506cc3e86dd45a6300949234352cb7"
+  },
+  "scripts/validate_geo.py": {
+    "mtime": 1786466264.1952364,
+    "seen": 1786724516.7466426,
+    "ast_hash": "fa295b3ea89a3f7e6b377172cc7c446d",
+    "semantic_hash": "fa295b3ea89a3f7e6b377172cc7c446d"
+  },
+  "scripts/validate_peajes.py": {
+    "mtime": 1786466562.546634,
+    "seen": 1786724516.7466426,
+    "ast_hash": "f7beddc9d5b48c19d9fc804eb03ecef4",
+    "semantic_hash": "f7beddc9d5b48c19d9fc804eb03ecef4"
+  },
+  "dashboard/_map_puntos.html": {
+    "mtime": 1786724472.1200588,
+    "seen": 1786724516.7466426,
+    "ast_hash": "542ff214f9437d0aa951b4c5d19404b0",
+    "semantic_hash": ""
+  },
+  "dashboard/_map_siniestros.html": {
+    "mtime": 1786724471.3765013,
+    "seen": 1786724516.7466426,
+    "ast_hash": "e5f662dccb8e98a81162ebb8bf88c888",
+    "semantic_hash": ""
+  },
+  "data/raw/mtc_datos_espaciales/rvn_dic16/wfsrequest.txt": {
+    "mtime": 1521843910.0,
+    "seen": 1786724516.7466426,
+    "ast_hash": "3ce7196e45839176c30ff05337e0c71d",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/analisis_rutas.txt": {
+    "mtime": 1786467817.074852,
+    "seen": 1786724516.7466426,
+    "ast_hash": "db79f1d288e46ce5dece07fdd2171684",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/analisis_temporal.txt": {
+    "mtime": 1786467780.3561308,
+    "seen": 1786724516.7466426,
+    "ast_hash": "8f98cc14133ec61d4db70bbd6e4e38ef",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/build_dataset.txt": {
+    "mtime": 1786467733.1077275,
+    "seen": 1786724516.7466426,
+    "ast_hash": "430ef18cc0c3036f378851ed26f35db3",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/build_geocoded.txt": {
+    "mtime": 1786466328.8550668,
+    "seen": 1786724516.7466426,
+    "ast_hash": "73eec4dbee16dadee9f8396ec8317bd1",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/codigos.txt": {
+    "mtime": 1786466213.1458628,
+    "seen": 1786724516.7466426,
+    "ast_hash": "ecc495f7f4030aa26d14affcdfc67ffc",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/diagnostico_km.txt": {
+    "mtime": 1786466389.0382168,
+    "seen": 1786724516.7466426,
+    "ast_hash": "d891a900ac1f836cfd329a14987dc2b1",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/eda_tramos.txt": {
+    "mtime": 1786467094.0306559,
+    "seen": 1786724516.7466426,
+    "ast_hash": "424baa21433a0716f3ef091d2eb30941",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/features_engine.txt": {
+    "mtime": 1786467772.672982,
+    "seen": 1786724516.7466426,
+    "ast_hash": "90b1969bff8b0de083aa5a9052faa812",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/features_tramos.txt": {
+    "mtime": 1786467764.4668763,
+    "seen": 1786724516.7466426,
+    "ast_hash": "f721e6969654eaab13022b2c2d073da5",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/flujo_recursos.txt": {
+    "mtime": 1786463289.5417318,
+    "seen": 1786724516.7466426,
+    "ast_hash": "3ea1cff067b8ebad0d3bee2aae78feb6",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/graficos.txt": {
+    "mtime": 1786467997.8155274,
+    "seen": 1786724516.7466426,
+    "ast_hash": "ecc11b8f467c5d5d4a5f09b85af9a6c8",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/ingemmet_stats.txt": {
+    "mtime": 1786464085.6855507,
+    "seen": 1786724516.7466426,
+    "ast_hash": "269c9f0fa95064a2e1d76758ba4ea556",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/inventario_raw.txt": {
+    "mtime": 1786463431.9235728,
+    "seen": 1786724516.7466426,
+    "ast_hash": "033a78abf09a62609c7b7d4e738d820d",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/inventario_raw2.txt": {
+    "mtime": 1786463544.903141,
+    "seen": 1786724516.7466426,
+    "ast_hash": "be3386947a4f47688b435d8349aed8aa",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/modelo_glm.txt": {
+    "mtime": 1786467899.7608469,
+    "seen": 1786724516.7466426,
+    "ast_hash": "c5400a536ea6fa2a300476337dd12d74",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/onsv_profundo.txt": {
+    "mtime": 1786463589.4254422,
+    "seen": 1786724516.7466426,
+    "ast_hash": "f67fde4179c87a59f2fff6108e2daf51",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/peajes_geojson_recursos.txt": {
+    "mtime": 1786463290.5778122,
+    "seen": 1786724516.7466426,
+    "ast_hash": "721480496f3cd89f38589af878773d69",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/prep_dashboard.txt": {
+    "mtime": 1786471421.153051,
+    "seen": 1786724516.7466426,
+    "ast_hash": "568e816815d82e81184c57a59847dcac",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/run1.txt": {
+    "mtime": 1786468974.635334,
+    "seen": 1786724516.7466426,
+    "ast_hash": "169c99cbc4946c297e8998abb579be2d",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/run2.txt": {
+    "mtime": 1786469018.1979125,
+    "seen": 1786724516.7466426,
+    "ast_hash": "5335d74583381b51f84d850f9460bc5b",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/run3.txt": {
+    "mtime": 1786469030.7877927,
+    "seen": 1786724516.7466426,
+    "ast_hash": "f8b9f5c6913218653dc965250077b301",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/run4.txt": {
+    "mtime": 1786469038.50862,
+    "seen": 1786724516.7466426,
+    "ast_hash": "109292c8f4e5723c28cc0026328918f4",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/run5.txt": {
+    "mtime": 1786469062.5643606,
+    "seen": 1786724516.7466426,
+    "ast_hash": "aa4f7352b17e7cc5a6dfb04ef10f9094",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/shapefile_estructura.txt": {
+    "mtime": 1786466148.8069942,
+    "seen": 1786724516.7466426,
+    "ast_hash": "e8b6a8ed04128ab9633ab7741014cc9e",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/validacion_geo.txt": {
+    "mtime": 1786466292.0956738,
+    "seen": 1786724516.7466426,
+    "ast_hash": "9e5a62c13241d637bdbcfb6a0e7c1b7b",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/validacion_peajes.txt": {
+    "mtime": 1786466412.4782798,
+    "seen": 1786724516.7466426,
+    "ast_hash": "575db8b103605dee6521f330747ff073",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/validacion_peajes2.txt": {
+    "mtime": 1786466516.7330463,
+    "seen": 1786724516.7466426,
+    "ast_hash": "bdd423b5c61bd9f003bdada6f22bf666",
+    "semantic_hash": ""
+  },
+  "docs/auditorias/validacion_peajes3.txt": {
+    "mtime": 1786466576.6593652,
+    "seen": 1786724516.7466426,
+    "ast_hash": "1ea2b522605c3a3e558aeaf97b2cf618",
+    "semantic_hash": ""
+  },
+  "docs/informe_sipat.md": {
+    "mtime": 1786643634.254553,
+    "seen": 1786724516.7466426,
+    "ast_hash": "63228ef629a60beadcff52b70fc1141f",
+    "semantic_hash": ""
+  },
+  "docs/matriz_tecnica.md": {
+    "mtime": 1786643739.2556849,
+    "seen": 1786724516.7466426,
+    "ast_hash": "0cdb26ce82c476bf6a359977e1206612",
+    "semantic_hash": ""
+  },
+  "data/raw/mtc_flujo_peajes/diccionario_peajes_2024-2025.pdf": {
+    "mtime": 1786463395.9611127,
+    "seen": 1786724516.7466426,
+    "ast_hash": "ebe965adf966a7f283187f60bc098e59",
+    "semantic_hash": ""
+  },
+  "docs/figuras/contexto_espacial.png": {
+    "mtime": 1786469060.7235205,
+    "seen": 1786724516.7466426,
+    "ast_hash": "a7e1b3a9032281610691b6af4b1d0414",
+    "semantic_hash": ""
+  },
+  "docs/figuras/irr_modelo.png": {
+    "mtime": 1786469062.5603626,
+    "seen": 1786724516.7466426,
+    "ast_hash": "95853a6cdbe0b48fa22a57e69f0e58fc",
+    "semantic_hash": ""
+  },
+  "docs/figuras/mapa_puntos_negros.png": {
+    "mtime": 1786469052.7705472,
+    "seen": 1786724516.7466426,
+    "ast_hash": "9ee9d2357cf4ec9d821ac36160b824cf",
+    "semantic_hash": ""
+  },
+  "docs/figuras/mapa_siniestros_tramos.png": {
+    "mtime": 1786469048.6305897,
+    "seen": 1786724516.7466426,
+    "ast_hash": "5064c2f0af8bf1b0032228f358b9b525",
+    "semantic_hash": ""
+  },
+  "docs/figuras/ranking_rutas.png": {
+    "mtime": 1786469055.9171894,
+    "seen": 1786724516.7466426,
+    "ast_hash": "5b7af3c6060fd42e3c88fbd2d4b2d8e6",
+    "semantic_hash": ""
+  },
+  "docs/figuras/tendencia_temporal.png": {
+    "mtime": 1786469055.7198844,
+    "seen": 1786724516.7466426,
+    "ast_hash": "2d5a72f9f39b881bd25dea4aeab38864",
+    "semantic_hash": ""
+  },
+  ".opencode/plugins/graphify.js": {
+    "mtime": 1786639285.8187366,
+    "seen": 1786724516.7466426,
+    "ast_hash": "b33d000860642c6f4907a877e0387a21",
+    "semantic_hash": ""
+  },
+  "scripts/alertas_sutran.py": {
+    "mtime": 1786641158.0023675,
+    "seen": 1786724516.7466426,
+    "ast_hash": "3cb6465262950796b473ee3d57f4ec10",
+    "semantic_hash": ""
+  },
+  "scripts/download_osm.py": {
+    "mtime": 1786639351.7825704,
+    "seen": 1786724516.7466426,
+    "ast_hash": "c913b05c23f85e9200dd2c97f316cb8e",
+    "semantic_hash": ""
+  },
+  "scripts/graphify_obsidian.py": {
+    "mtime": 1786639321.3342876,
+    "seen": 1786724516.7466426,
+    "ast_hash": "1b8c6978d940c532831ef84ad14045a4",
+    "semantic_hash": ""
+  },
+  "scripts/osrm_build.py": {
+    "mtime": 1786639795.3757591,
+    "seen": 1786724516.7466426,
+    "ast_hash": "596b7af1ec7418007d71221d1977ad4d",
+    "semantic_hash": ""
+  },
+  "scripts/osrm_router.py": {
+    "mtime": 1786639434.2427733,
+    "seen": 1786724516.7466426,
+    "ast_hash": "0671b136566ce5b7bbfb42fb2a96cc9c",
+    "semantic_hash": ""
+  },
+  "scripts/riesgo_red.py": {
+    "mtime": 1786647128.398566,
+    "seen": 1786724516.7466426,
+    "ast_hash": "03ebe37a1352601905b5a3b698411447",
+    "semantic_hash": ""
+  },
+  "scripts/ruta_segura.py": {
+    "mtime": 1786646492.4949932,
+    "seen": 1786724516.7466426,
+    "ast_hash": "1675493a51c10d050bc11995b944246b",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1786647669.1487017,
+    "seen": 1786724516.7466426,
+    "ast_hash": "5caec7776b290f93e096433ca7df8d29",
+    "semantic_hash": ""
+  },
+  "dashboard/_map_ruta.html": {
+    "mtime": 1786724476.4571314,
+    "seen": 1786724516.7466426,
+    "ast_hash": "a66fd35b43aee80cad0330c567301e6b",
+    "semantic_hash": ""
+  },
+  "data/processed/dashboard/ruta_segura.html": {
+    "mtime": 1786640021.328781,
+    "seen": 1786724516.7466426,
+    "ast_hash": "51b43d1cb47e314b971ff9ecba2958d2",
+    "semantic_hash": ""
+  },
+  "api/app.py": {
+    "mtime": 1786647441.7585313,
+    "seen": 1786724516.7466426,
+    "ast_hash": "8e7a16a5c6e3a6caaad6ca6738000e3b",
+    "semantic_hash": ""
+  },
+  "scripts/ositran_data.py": {
+    "mtime": 1786641858.056458,
+    "seen": 1786724516.7466426,
+    "ast_hash": "d6a03304a6d2e17f89553ee2a8fed31c",
+    "semantic_hash": ""
+  },
+  "scripts/reporte_ruta.py": {
+    "mtime": 1786646776.901179,
+    "seen": 1786724516.7466426,
+    "ast_hash": "e9f26756d9824d0b5a2827c8867896ba",
+    "semantic_hash": ""
+  },
+  "data/processed/dashboard/reporte_ruta.html": {
+    "mtime": 1786647593.4286118,
+    "seen": 1786724516.7466426,
+    "ast_hash": "074cbee709240f301ce80b72c6d473fc",
+    "semantic_hash": ""
+  },
+  "data/raw/sutran_mapa_page.html": {
+    "mtime": 1786641041.6801586,
+    "seen": 1786724516.7466426,
+    "ast_hash": "c9a7f1138b13b54212df5b6f536dee83",
+    "semantic_hash": ""
+  },
+  "docs/modulo_ruta_segura.md": {
+    "mtime": 1786647657.0288138,
+    "seen": 1786724516.7466426,
+    "ast_hash": "6abd0e2769486f3a5c5b5e832218c8e7",
+    "semantic_hash": ""
+  },
+  "scripts/clima.py": {
+    "mtime": 1786646800.9884644,
+    "seen": 1786724516.7466426,
+    "ast_hash": "1eef767b350353e9e37690d0e2abc37b",
+    "semantic_hash": ""
+  },
+  "scripts/prediccion.py": {
+    "mtime": 1786646511.7311592,
+    "seen": 1786724516.7466426,
+    "ast_hash": "27474efd641fab278519266c862602af",
+    "semantic_hash": ""
+  },
+  "data/processed/dashboard/reporte_prueba.html": {
+    "mtime": 1786646869.8084743,
+    "seen": 1786724516.7466426,
+    "ast_hash": "ce933117af4e4fad0a34470c8d4a10f1",
+    "semantic_hash": ""
+  },
+  ".opencode/opencode.json": {
+    "mtime": 1786722145.1588147,
+    "seen": 1786724516.7466426,
+    "ast_hash": "1efe24ecf938911d4f23e4b1c6ec91f7",
+    "semantic_hash": ""
+  },
+  "scripts/apptest_check.py": {
+    "mtime": 1786722830.8469517,
+    "seen": 1786724516.7466426,
+    "ast_hash": "152d78079d9ed4ee35e9584fb231f67e",
+    "semantic_hash": ""
+  },
+  "scripts/arrancar_servicios.ps1": {
+    "mtime": 1786723699.4474442,
+    "seen": 1786724516.7466426,
+    "ast_hash": "29134c65b8d4eddc8d8806f7ed6ad0e8",
+    "semantic_hash": ""
+  },
+  "scripts/boot_services.py": {
+    "mtime": 1786724040.2027948,
+    "seen": 1786724516.7466426,
+    "ast_hash": "7df7e58cd61e5ba8f93a55833e467f33",
+    "semantic_hash": ""
+  },
+  "scripts/generar_exportes.py": {
+    "mtime": 1786724374.8321376,
+    "seen": 1786724516.7466426,
+    "ast_hash": "a89cbf2962c9bcc62f12a701d9fe9f10",
+    "semantic_hash": ""
+  },
+  "scripts/verificar_proyecto.py": {
+    "mtime": 1786724268.1581564,
+    "seen": 1786724516.7466426,
+    "ast_hash": "80b78b66dc79cb1241faef0303d85fbd",
+    "semantic_hash": ""
+  },
+  "data/processed/dashboard/reporte_Lima_Huancayo.html": {
+    "mtime": 1786724387.1648962,
+    "seen": 1786724516.7466426,
+    "ast_hash": "a70c92d00953a3b6c430f3839cf1d701",
+    "semantic_hash": ""
+  },
+  "data/processed/dashboard/reporte_Trujillo_Chiclayo.html": {
+    "mtime": 1786724391.3247206,
+    "seen": 1786724516.7466426,
+    "ast_hash": "aea82d3ae6f920e6ba7f197e9602737b",
+    "semantic_hash": ""
+  }
+}

@@ -1,0 +1,249 @@
+
+### data/raw/sutran_accidentes/accidentes_carreteras_2020-2021_sutran.csv  (444,600 bytes)
+shape=(8155, 9)
+cols=FECHA_CORTE|FECHA|HORA|DEPARTAMENTO|CODIGO_VÍA|KILOMETRO|MODALIDAD|FALLECIDOS|HERIDOS
+  FECHA_CORTE: nulos=0 unicos=1 tipo=int64
+  FECHA: nulos=0 unicos=638 tipo=int64
+  HORA: nulos=0 unicos=596 tipo=str
+  DEPARTAMENTO: nulos=0 unicos=29 tipo=str
+  CODIGO_VÍA: nulos=0 unicos=175 tipo=str
+  KILOMETRO: nulos=0 unicos=1215 tipo=str
+  MODALIDAD: nulos=0 unicos=6 tipo=str
+  FALLECIDOS: nulos=0 unicos=16 tipo=str
+  HERIDOS: nulos=0 unicos=37 tipo=str
+head=|FECHA_CORTE|FECHA|HORA|DEPARTAMENTO|CODIGO_VÍA|KILOMETRO|MODALIDAD|FALLECIDOS|HERIDOS ~ 0|20211222|20200101|05:40|LIMA|PE-1S|24|DESPISTE|0|0 ~ 1|20211222|20200101|16:30|CAJAMARCA|PE-3N|74|DESPISTE|0|0 ~ 
+
+### data/raw/sutran_reportes_cgm/reportes_preliminares_cgm_2020-2021.csv  (437,582 bytes)
+shape=(3832, 14)
+cols=FECHA_CORTE|NRO_REPORTE|FECHA_ACC|HORA_ACC|MODALIDAD_ACC|CANT_FALLECIDOS|CANT_HERIDOS|LATITUD|LONGITUD|PROGRESIVA|CODIGO_VIA|DEPARTAMENTO|PROVINCIA|DISTRITO
+  FECHA_CORTE: nulos=0 unicos=1 tipo=int64
+  NRO_REPORTE: nulos=0 unicos=3832 tipo=str
+  FECHA_ACC: nulos=0 unicos=678 tipo=int64
+  HORA_ACC: nulos=0 unicos=464 tipo=str
+  MODALIDAD_ACC: nulos=0 unicos=8 tipo=str
+  CANT_FALLECIDOS: nulos=0 unicos=17 tipo=int64
+  CANT_HERIDOS: nulos=0 unicos=40 tipo=int64
+  LATITUD: nulos=0 unicos=3671 tipo=float64
+  LONGITUD: nulos=0 unicos=3678 tipo=float64
+  PROGRESIVA: nulos=80 unicos=2105 tipo=float64
+  CODIGO_VIA: nulos=31 unicos=179 tipo=str
+  DEPARTAMENTO: nulos=0 unicos=25 tipo=str
+  PROVINCIA: nulos=0 unicos=158 tipo=str
+  DISTRITO: nulos=0 unicos=631 tipo=str
+head=|FECHA_CORTE|NRO_REPORTE|FECHA_ACC|HORA_ACC|MODALIDAD_ACC|CANT_FALLECIDOS|CANT_HERIDOS|LATITUD|LONGITUD|PROGRESIVA|CODIGO_VIA|DEPARTAMENTO|PROVINCIA|DISTRITO ~ 0|20211130|001.01-001.2020 SC|20200101|23:40:00|CHOQUE|0|0|-15.45674|-74.866607|521.0|PE-1S|AREQUIPA|CARAVELI|LOMAS ~ 1|20211130|002.01-002.2020 CC|20200101|07:45:00|DESPISTE|0|1|-10.824119|-76.199915|103.1|PE-3N|PASCO|PASCO|VICCO ~ 
+
+### data/raw/sutran_cinemometros/cinemometros_2019-2021.csv  (13,399,690 bytes)
+shape=(160018, 9)
+cols=NRO_DETECCION|FECHA_PAPELETA|REGION|CARRETERA|LATITUD|LONGITUD|LIMITE_VELOCIDAD|VELOCIDAD_DETECTADA|FECHA_CORTE
+  NRO_DETECCION: nulos=0 unicos=160018 tipo=int64
+  FECHA_PAPELETA: nulos=0 unicos=459 tipo=int64
+  REGION: nulos=0 unicos=11 tipo=str
+  CARRETERA: nulos=0 unicos=7 tipo=str
+  LATITUD: nulos=0 unicos=18366 tipo=float64
+  LONGITUD: nulos=0 unicos=18552 tipo=float64
+  LIMITE_VELOCIDAD: nulos=0 unicos=12 tipo=int64
+  VELOCIDAD_DETECTADA: nulos=0 unicos=164 tipo=int64
+  FECHA_CORTE: nulos=0 unicos=1 tipo=int64
+head=|NRO_DETECCION|FECHA_PAPELETA|REGION|CARRETERA|LATITUD|LONGITUD|LIMITE_VELOCIDAD|VELOCIDAD_DETECTADA|FECHA_CORTE ~ 0|1|20191031|LIMA|Panamericana Norte|-11.45944444|-77.31765833|100|127|20211003 ~ 1|2|20191031|LIMA|Panamericana Norte|-11.459275|-77.318175|100|117|20211003 ~ 
+
+### data/raw/sutran_cinemometros/cinemometros_2022.xlsx  (3,448,585 bytes)
+shape=(103092, 7)
+cols=ITEM|DEPARTAMENTO|FECHA_PAPELETA|VELOCIDAD_FISCALIZADA|VELOCIDAD_DETECTADA|CARRETERA|TIPO DE VEHÍCULO
+  ITEM: nulos=0 unicos=103092 tipo=int64
+  DEPARTAMENTO: nulos=0 unicos=10 tipo=str
+  FECHA_PAPELETA: nulos=0 unicos=362 tipo=datetime64[us]
+  VELOCIDAD_FISCALIZADA: nulos=0 unicos=8 tipo=int64
+  VELOCIDAD_DETECTADA: nulos=0 unicos=160 tipo=int64
+  CARRETERA: nulos=0 unicos=9 tipo=str
+  TIPO DE VEHÍCULO: nulos=0 unicos=4 tipo=str
+head=|ITEM|DEPARTAMENTO|FECHA_PAPELETA|VELOCIDAD_FISCALIZADA|VELOCIDAD_DETECTADA|CARRETERA|TIPO DE VEHÍCULO ~ 0|1|JUNIN|2022-01-01|35|51|Carretera PE-3SB|AUTOMÓVIL Y PICK UP ~ 1|2|JUNIN|2022-01-01|35|64|Carretera PE-3SB|AUTOMÓVIL Y PICK UP ~ 
+
+### data/raw/onsv/historico_2008-2025.xlsx  (379,883 bytes)
+shape=(34, 141)
+cols=SINIESTRALIDAD DE TRÁNSITO, ENERO A OCTUBRE 2025 (PRELIMINAR)|Unnamed: 1|Unnamed: 2|Unnamed: 3|Unnamed: 4|Unnamed: 5|Unnamed: 6|Unnamed: 7|Unnamed: 8|Unnamed: 9|Unnamed: 10|Unnamed: 11|Unnamed: 12|Unnamed: 13|Unnamed: 14|Unnamed: 15|Unnamed: 16|Unnamed: 17|Unnamed: 18|Unnamed: 19|Unnamed: 20|Unnamed: 21|Unnamed: 22|Unnamed: 23|Unnamed: 24|Unnamed: 25|Unnamed: 26|Unnamed: 27|Unnamed: 28|Unnamed: 29|Unnamed: 30|Unnamed: 31|Unnamed: 32|Unnamed: 33|Unnamed: 34|Unnamed: 35|Unnamed: 36|Unnamed: 37|Unnamed: 38|Unnamed: 39|Unnamed: 40|Unnamed: 41|Unnamed: 42|Unnamed: 43|Unnamed: 44|Unnamed: 45|Unnamed: 46|Unnamed: 47|Unnamed: 48|Unnamed: 49|Unnamed: 50|Unnamed: 51|Unnamed: 52|Unnamed: 53|Unnamed: 54|Unnamed: 55|Unnamed: 56|Unnamed: 57|Unnamed: 58|Unnamed: 59|Unnamed: 60|Unnamed: 61|Unnamed: 62|Unnamed: 63|Unnamed: 64|Unnamed: 65|Unnamed: 66|Unnamed: 67|Unnamed: 68|Unnamed: 69|Unnamed: 70|Unnamed: 71|Unnamed: 72|Unnamed: 73|Unnamed: 74|Unnamed: 75|Unnamed: 76|Unnamed: 77|Unnamed: 78|Unnamed: 79|Unnamed: 80|Unnamed: 81|Unnamed: 82|Unnamed: 83|Unnamed: 84|Unnamed: 85|Unnamed: 86|Unnamed: 87|Unnamed: 88|Unnamed: 89|Unnamed: 90|Unnamed: 91|Unnamed: 92|Unnamed: 93|Unnamed: 94|Unnamed: 95|Unnamed: 96|Unnamed: 97|Unnamed: 98|Unnamed: 99|Unnamed: 100|Unnamed: 101|Unnamed: 102|Unnamed: 103|Unnamed: 104|Unnamed: 105|Unnamed: 106|Unnamed: 107|Unnamed: 108|Unnamed: 109|Unnamed: 110|Unnamed: 111|Unnamed: 112|Unnamed: 113|Unnamed: 114|Unnamed: 115|Unnamed: 116|Unnamed: 117|Unnamed: 118|Unnamed: 119|Unnamed: 120|Unnamed: 121|Unnamed: 122|Unnamed: 123|Unnamed: 124|Unnamed: 125|Unnamed: 126|Unnamed: 127|Unnamed: 128|Unnamed: 129|Unnamed: 130|Unnamed: 131|Unnamed: 132|Unnamed: 133|Unnamed: 134|Unnamed: 135|Unnamed: 136|Unnamed: 137|Unnamed: 138|Unnamed: 139|Unnamed: 140
+  SINIESTRALIDAD DE TRÁNSITO, ENERO A OCTUBRE 2025 (PRELIMINAR): nulos=32 unicos=2 tipo=str
+  Unnamed: 1: nulos=7 unicos=27 tipo=str
+  Unnamed: 2: nulos=7 unicos=27 tipo=object
+  Unnamed: 3: nulos=6 unicos=27 tipo=object
+  Unnamed: 4: nulos=7 unicos=27 tipo=object
+  Unnamed: 5: nulos=7 unicos=19 tipo=object
+  Unnamed: 6: nulos=7 unicos=23 tipo=object
+  Unnamed: 7: nulos=7 unicos=24 tipo=object
+  Unnamed: 8: nulos=7 unicos=9 tipo=object
+  Unnamed: 9: nulos=7 unicos=26 tipo=object
+  Unnamed: 10: nulos=7 unicos=26 tipo=object
+  Unnamed: 11: nulos=7 unicos=23 tipo=object
+  Unnamed: 12: nulos=7 unicos=11 tipo=object
+  Unnamed: 13: nulos=7 unicos=27 tipo=object
+  Unnamed: 14: nulos=7 unicos=9 tipo=object
+  Unnamed: 15: nulos=7 unicos=27 tipo=object
+  Unnamed: 16: nulos=34 unicos=0 tipo=float64
+  Unnamed: 17: nulos=7 unicos=27 tipo=str
+  Unnamed: 18: nulos=7 unicos=27 tipo=object
+  Unnamed: 19: nulos=6 unicos=28 tipo=object
+  Unnamed: 20: nulos=7 unicos=26 tipo=object
+  Unnamed: 21: nulos=7 unicos=26 tipo=object
+  Unnamed: 22: nulos=7 unicos=23 tipo=object
+  Unnamed: 23: nulos=7 unicos=11 tipo=object
+  Unnamed: 24: nulos=7 unicos=11 tipo=object
+  Unnamed: 25: nulos=7 unicos=14 tipo=object
+  Unnamed: 26: nulos=7 unicos=6 tipo=object
+  Unnamed: 27: nulos=7 unicos=23 tipo=object
+  Unnamed: 28: nulos=7 unicos=12 tipo=object
+  Unnamed: 29: nulos=7 unicos=20 tipo=object
+  Unnamed: 30: nulos=7 unicos=11 tipo=object
+  Unnamed: 31: nulos=7 unicos=18 tipo=object
+  Unnamed: 32: nulos=7 unicos=8 tipo=object
+  Unnamed: 33: nulos=7 unicos=21 tipo=object
+  Unnamed: 34: nulos=7 unicos=14 tipo=object
+  Unnamed: 35: nulos=7 unicos=25 tipo=object
+  Unnamed: 36: nulos=7 unicos=25 tipo=object
+  Unnamed: 37: nulos=7 unicos=27 tipo=object
+  Unnamed: 38: nulos=34 unicos=0 tipo=float64
+  Unnamed: 39: nulos=7 unicos=27 tipo=str
+  Unnamed: 40: nulos=7 unicos=27 tipo=object
+  Unnamed: 41: nulos=6 unicos=28 tipo=object
+  Unnamed: 42: nulos=7 unicos=27 tipo=object
+  Unnamed: 43: nulos=7 unicos=24 tipo=object
+  Unnamed: 44: nulos=7 unicos=26 tipo=object
+  Unnamed: 45: nulos=7 unicos=27 tipo=object
+  Unnamed: 46: nulos=7 unicos=21 tipo=object
+  Unnamed: 47: nulos=7 unicos=25 tipo=object
+  Unnamed: 48: nulos=7 unicos=26 tipo=object
+  Unnamed: 49: nulos=7 unicos=21 tipo=object
+  Unnamed: 50: nulos=7 unicos=22 tipo=object
+  Unnamed: 51: nulos=7 unicos=21 tipo=object
+  Unnamed: 52: nulos=7 unicos=24 tipo=object
+  Unnamed: 53: nulos=7 unicos=27 tipo=object
+  Unnamed: 54: nulos=7 unicos=27 tipo=object
+  Unnamed: 55: nulos=7 unicos=27 tipo=object
+  Unnamed: 56: nulos=7 unicos=16 tipo=object
+  Unnamed: 57: nulos=7 unicos=15 tipo=object
+  Unnamed: 58: nulos=7 unicos=16 tipo=object
+  Unnamed: 59: nulos=7 unicos=16 tipo=object
+  Unnamed: 60: nulos=7 unicos=26 tipo=object
+  Unnamed: 61: nulos=34 unicos=0 tipo=float64
+  Unnamed: 62: nulos=7 unicos=27 tipo=str
+  Unnamed: 63: nulos=7 unicos=27 tipo=object
+  Unnamed: 64: nulos=6 unicos=27 tipo=object
+  Unnamed: 65: nulos=7 unicos=25 tipo=object
+  Unnamed: 66: nulos=7 unicos=26 tipo=object
+  Unnamed: 67: nulos=7 unicos=26 tipo=object
+  Unnamed: 68: nulos=7 unicos=27 tipo=object
+  Unnamed: 69: nulos=7 unicos=25 tipo=object
+  Unnamed: 70: nulos=7 unicos=27 tipo=object
+  Unnamed: 71: nulos=7 unicos=27 tipo=object
+  Unnamed: 72: nulos=7 unicos=27 tipo=object
+  Unnamed: 73: nulos=7 unicos=27 tipo=object
+  Unnamed: 74: nulos=7 unicos=27 tipo=object
+  Unnamed: 75: nulos=7 unicos=25 tipo=object
+  Unnamed: 76: nulos=34 unicos=0 tipo=float64
+  Unnamed: 77: nulos=7 unicos=27 tipo=str
+  Unnamed: 78: nulos=7 unicos=27 tipo=object
+  Unnamed: 79: nulos=6 unicos=26 tipo=object
+  Unnamed: 80: nulos=7 unicos=24 tipo=object
+  Unnamed: 81: nulos=7 unicos=26 tipo=object
+  Unnamed: 82: nulos=7 unicos=26 tipo=object
+  Unnamed: 83: nulos=7 unicos=27 tipo=object
+  Unnamed: 84: nulos=7 unicos=27 tipo=object
+  Unnamed: 85: nulos=7 unicos=27 tipo=object
+  Unnamed: 86: nulos=34 unicos=0 tipo=float64
+  Unnamed: 87: nulos=7 unicos=27 tipo=str
+  Unnamed: 88: nulos=7 unicos=25 tipo=object
+  Unnamed: 89: nulos=6 unicos=26 tipo=object
+  Unnamed: 90: nulos=7 unicos=8 tipo=object
+  Unnamed: 91: nulos=7 unicos=7 tipo=object
+  Unnamed: 92: nulos=7 unicos=11 tipo=object
+  Unnamed: 93: nulos=7 unicos=21 tipo=object
+  Unnamed: 94: nulos=7 unicos=23 tipo=object
+  Unnamed: 95: nulos=7 unicos=20 tipo=object
+  Unnamed: 96: nulos=6 unicos=20 tipo=object
+  Unnamed: 97: nulos=7 unicos=7 tipo=object
+  Unnamed: 98: nulos=7 unicos=7 tipo=object
+  Unnamed: 99: nulos=7 unicos=9 tipo=object
+  Unnamed: 100: nulos=7 unicos=13 tipo=object
+  Unnamed: 101: nulos=7 unicos=19 tipo=object
+  Unnamed: 102: nulos=7 unicos=14 tipo=object
+  Unnamed: 103: nulos=34 unicos=0 tipo=float64
+  Unnamed: 104: nulos=7 unicos=27 tipo=str
+  Unnamed: 105: nulos=7 unicos=27 tipo=object
+  Unnamed: 106: nulos=6 unicos=27 tipo=object
+  Unnamed: 107: nulos=7 unicos=18 tipo=object
+  Unnamed: 108: nulos=7 unicos=25 tipo=object
+  Unnamed: 109: nulos=7 unicos=24 tipo=object
+  Unnamed: 110: nulos=7 unicos=26 tipo=object
+  Unnamed: 111: nulos=7 unicos=27 tipo=object
+  Unnamed: 112: nulos=7 unicos=25 tipo=object
+  Unnamed: 113: nulos=6 unicos=26 tipo=object
+  Unnamed: 114: nulos=7 unicos=20 tipo=object
+  Unnamed: 115: nulos=7 unicos=21 tipo=object
+  Unnamed: 116: nulos=7 unicos=24 tipo=object
+  Unnamed: 117: nulos=7 unicos=27 tipo=object
+  Unnamed: 118: nulos=7 unicos=26 tipo=object
+  Unnamed: 119: nulos=7 unicos=23 tipo=object
+  Unnamed: 120: nulos=34 unicos=0 tipo=float64
+  Unnamed: 121: nulos=7 unicos=27 tipo=str
+  Unnamed: 122: nulos=7 unicos=27 tipo=object
+  Unnamed: 123: nulos=6 unicos=28 tipo=object
+  Unnamed: 124: nulos=6 unicos=23 tipo=object
+  Unnamed: 125: nulos=7 unicos=27 tipo=object
+  Unnamed: 126: nulos=7 unicos=27 tipo=object
+  Unnamed: 127: nulos=7 unicos=25 tipo=object
+  Unnamed: 128: nulos=7 unicos=26 tipo=object
+  Unnamed: 129: nulos=6 unicos=11 tipo=object
+  Unnamed: 130: nulos=7 unicos=24 tipo=object
+  Unnamed: 131: nulos=7 unicos=26 tipo=object
+  Unnamed: 132: nulos=7 unicos=16 tipo=object
+  Unnamed: 133: nulos=7 unicos=27 tipo=object
+  Unnamed: 134: nulos=7 unicos=27 tipo=object
+  Unnamed: 135: nulos=7 unicos=27 tipo=object
+  Unnamed: 136: nulos=7 unicos=27 tipo=object
+  Unnamed: 137: nulos=7 unicos=18 tipo=object
+  Unnamed: 138: nulos=7 unicos=26 tipo=object
+  Unnamed: 139: nulos=7 unicos=17 tipo=object
+  Unnamed: 140: nulos=7 unicos=27 tipo=object
+head=|SINIESTRALIDAD DE TRÁNSITO, ENERO A OCTUBRE 2025 (PRELIMINAR)|Unnamed: 1|Unnamed: 2|Unnamed: 3|Unnamed: 4|Unnamed: 5|Unnamed: 6|Unnamed: 7|Unnamed: 8|Unnamed: 9|Unnamed: 10|Unnamed: 11|Unnamed: 12|Unnamed: 13|Unnamed: 14|Unnamed: 15|Unnamed: 16|Unnamed: 17|Unnamed: 18|Unnamed: 19|Unnamed: 20|Unnamed: 21|Unnamed: 22|Unnamed: 23|Unnamed: 24|Unnamed: 25|Unnamed: 26|Unnamed: 27|Unnamed: 28|Unnamed: 29|Unnamed: 30|Unnamed: 31|Unnamed: 32|Unnamed: 33|Unnamed: 34|Unnamed: 35|Unnamed: 36|Unnamed: 37|Unnamed: 38|Unnamed: 39|Unnamed: 40|Unnamed: 41|Unnamed: 42|Unnamed: 43|Unnamed: 44|Unnamed: 45|Unnamed: 46|Unnamed: 47|Unnamed: 48|Unnamed: 49|Unnamed: 50|Unnamed: 51|Unnamed: 52|Unnamed: 53|Unnamed: 54|Unnamed: 55|Unnamed: 56|Unnamed: 57|Unnamed: 58|Unnamed: 59|Unnamed: 60|Unnamed: 61|Unnamed: 62|Unnamed: 63|Unnamed: 64|Unnamed: 65|Unnamed: 66|Unnamed: 67|Unnamed: 68|Unnamed: 69|Unnamed: 70|Unnamed: 71|Unnamed: 72|Unnamed: 73|Unnamed: 74|Unnamed: 75|Unnamed: 76|Unnamed: 77|Unnamed: 78|Unnamed: 79|Unnamed: 80|Unnamed: 81|Unnamed: 82|Unnamed: 83|Unnamed: 84|Unnamed: 85|Unnamed: 86|Unnamed: 87|Unnamed: 88|Unnamed: 89|Unnamed: 90|Unnamed: 91|Unnamed: 92|Unnamed: 93|Unnamed: 94|Unnamed: 95|Unnamed: 96|Unnamed: 97|Unnamed: 98|Unnamed: 99|Unnamed: 100|Unnamed: 101|Unnamed: 102|Unnamed: 103|Unnamed: 104|Unnamed: 105|Unnamed: 106|Unnamed: 107|Unnamed: 108|Unnamed: 109|Unnamed: 110|Unnamed: 111|Unnamed: 112|Unnamed: 113|Unnamed: 114|Unnamed: 115|Unnamed: 116|Unnamed: 117|Unnamed: 118|Unnamed: 119|Unnamed: 120|Unnamed: 121|Unnamed: 122|Unnamed: 123|Unnamed: 124|Unnamed: 125|Unnamed: 126|Unnamed: 127|Unnamed: 128|Unnamed: 129|Unnamed: 130|Unnamed: 131|Unnamed: 132|Unnamed: 133|Unnamed: 134|Unnamed: 135|Unnamed: 136|Unnamed: 137|Unnamed: 138|Unnamed: 139|Unnamed: 140 ~ 0|Fuente: Policía Nacional del Perú|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ~ 1|Nota: Información preliminar de los siniestros de tránsito ocurridos a nivel nacional, en el periodo Enero a Octubre|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ~ 
+
+### data/raw/onsv/siniestros_fatales_2021-2025.xlsx  (1,519,015 bytes)
+shape=(9110, 27)
+cols=Unnamed: 0|Unnamed: 1|Unnamed: 2|Unnamed: 3|Unnamed: 4|Unnamed: 5|Unnamed: 6|Unnamed: 7|Unnamed: 8|Unnamed: 9|Unnamed: 10|Unnamed: 11|Unnamed: 12|Unnamed: 13|Unnamed: 14|Unnamed: 15|Unnamed: 16|Unnamed: 17|Unnamed: 18|Unnamed: 19|Unnamed: 20|Unnamed: 21|Unnamed: 22|Unnamed: 23|Unnamed: 24|Unnamed: 25|Unnamed: 26
+  Unnamed: 0: nulos=1 unicos=9109 tipo=str
+  Unnamed: 1: nulos=2 unicos=1731 tipo=object
+  Unnamed: 2: nulos=3 unicos=652 tipo=str
+  Unnamed: 3: nulos=3 unicos=12 tipo=str
+  Unnamed: 4: nulos=3 unicos=22 tipo=object
+  Unnamed: 5: nulos=3 unicos=42 tipo=object
+  Unnamed: 6: nulos=2816 unicos=10 tipo=object
+  Unnamed: 7: nulos=3 unicos=26 tipo=str
+  Unnamed: 8: nulos=3 unicos=183 tipo=str
+  Unnamed: 9: nulos=3 unicos=1087 tipo=str
+  Unnamed: 10: nulos=41 unicos=3 tipo=str
+  Unnamed: 11: nulos=3 unicos=14 tipo=str
+  Unnamed: 12: nulos=3 unicos=6 tipo=str
+  Unnamed: 13: nulos=4 unicos=1046 tipo=str
+  Unnamed: 14: nulos=3 unicos=9103 tipo=object
+  Unnamed: 15: nulos=3 unicos=9096 tipo=object
+  Unnamed: 16: nulos=426 unicos=9 tipo=str
+  Unnamed: 17: nulos=426 unicos=6 tipo=str
+  Unnamed: 18: nulos=426 unicos=10 tipo=str
+  Unnamed: 19: nulos=427 unicos=3 tipo=str
+  Unnamed: 20: nulos=426 unicos=8 tipo=str
+  Unnamed: 21: nulos=7093 unicos=3 tipo=str
+  Unnamed: 22: nulos=7793 unicos=4 tipo=str
+  Unnamed: 23: nulos=8575 unicos=4 tipo=str
+  Unnamed: 24: nulos=7093 unicos=3 tipo=str
+  Unnamed: 25: nulos=3 unicos=8 tipo=str
+  Unnamed: 26: nulos=85 unicos=39 tipo=str
+head=|Unnamed: 0|Unnamed: 1|Unnamed: 2|Unnamed: 3|Unnamed: 4|Unnamed: 5|Unnamed: 6|Unnamed: 7|Unnamed: 8|Unnamed: 9|Unnamed: 10|Unnamed: 11|Unnamed: 12|Unnamed: 13|Unnamed: 14|Unnamed: 15|Unnamed: 16|Unnamed: 17|Unnamed: 18|Unnamed: 19|Unnamed: 20|Unnamed: 21|Unnamed: 22|Unnamed: 23|Unnamed: 24|Unnamed: 25|Unnamed: 26 ~ 0||Datos de Registro de Siniestros de Tránsito Fatales, 2021 - 2025 (preliminar)||||||||||||||||||||||||| ~ 1|Nota 1: Información registrada por las Unidades de Prevención e Investigación de Accidentes de Tránsito PNP (UPIAT-PNP)|||||||||||||||||||||||||| ~ 
+
+### data/raw/mtc_red_vial/red_vial_nacional_2022-2024.csv  (7,416,129 bytes)
+shape=(20255, 1)
+cols=ID_RVN,ID_DEPARTAMENTO,DEPARTAMENTO,CODIGO_RUTA,TRAYECTORIA,INICIO,FINAL,CLASIFICACION_EJE,JERARQUIA,LONGITUD,NRO_CARRILES,SUPERFICIE,SUPERFICIE_L,ESTADO,ESTADO_L,CODIGO_CONCESION,NOMBRE_CONCESION,CODIGO_LOGISTICO,CORREDOR_LOGISTICO,FECHA_CORTE
+  ID_RVN,ID_DEPARTAMENTO,DEPARTAMENTO,CODIGO_RUTA,TRAYECTORIA,INICIO,FINAL,CLASIFICACION_EJE,JERARQUIA,LONGITUD,NRO_CARRILES,SUPERFICIE,SUPERFICIE_L,ESTADO,ESTADO_L,CODIGO_CONCESION,NOMBRE_CONCESION,CODIGO_LOGISTICO,CORREDOR_LOGISTICO,FECHA_CORTE: nulos=0 unicos=20255 tipo=str
+head=|ID_RVN,ID_DEPARTAMENTO,DEPARTAMENTO,CODIGO_RUTA,TRAYECTORIA,INICIO,FINAL,CLASIFICACION_EJE,JERARQUIA,LONGITUD,NRO_CARRILES,SUPERFICIE,SUPERFICIE_L,ESTADO,ESTADO_L,CODIGO_CONCESION,NOMBRE_CONCESION,CODIGO_LOGISTICO,CORREDOR_LOGISTICO,FECHA_CORTE ~ 0|1,20,PIURA,PE-02,Emp. PE-1N (Dv. Paita) - Paita,0.0,7.918,Transversal,RN,7.918,2,1,Pavimentado,1,Bueno,2,Eje Multimodal Amazonas Norte,C02,CO 2: Paita - Piura- Dv. Olmos,20221231 ~ 1|2,20,PIURA,PE-02,Emp. PE-1N (Dv. Paita) - Paita,7.918,40.095,Transversal,RN,32.177,2,1,Pavimentado,1,Bueno,2,Eje Multimodal Amazonas Norte,C02,CO 2: Paita - Piura- Dv. Olmos,20221231 ~ 
+
+### data/raw/mtc_flujo_peajes/unidades_peaje_2024-2025.geojson
+tipo=FeatureCollection features=233
+cols=IDPEAJE|NOMBRE|LABEL|CODPEAJE|CODRUTA|INICIO|CODCLOG|DEPARTAMEN|PROVINCIA|DISTRITO|LOCALIDAD|IDDPTO|IDPROV|IDDIST|ES_CONCES|TITULAR|UBICACION|ESTADO|ADMINIST|FECCORTE
+muestra={"IDPEAJE": 1, "NOMBRE": "Ica", "LABEL": "U.P. Ica", "CODPEAJE": "11PE1SICA1", "CODRUTA": "PE-1S", "INICIO": 276.1, "CODCLOG": "01CRL02", "DEPARTAMEN": "ICA", "PROVINCIA": "ICA", "DISTRITO": "SALAS", "LOCALIDAD": "PAMPA VILLACURI", "IDDPTO": "11", "IDPROV": "1101", "IDDIST": "110108", "ES_CONCES": 1, "TITULAR": "Pública (concesionada)", "UBICACION": "Panamericana Sur km 276+100", "ESTADO": "Operativo", "ADMINIST": "Concesionaria Vial del Perú S.A. (COVIPERÚ)", "FECCORTE": "20241230"}
+---FIN---

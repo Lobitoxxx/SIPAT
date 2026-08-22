@@ -1,0 +1,22 @@
+
+### layer0_Peligros_Geológicos.geojson: 18,133 features
+FECHA rango: 2002-12-08 05:00:00 -> 2009-07-28 05:00:00  nulos=428
+TIP_PELIGRO top: {'1000|1100': 6434, '1000|1300': 5323, '1000|1500': 5273, '1000|1600': 552, '1000|1700': 508, '1000|1200': 43}
+NM_DPTO: nulos=1 unicos=25
+NM_PROV: nulos=1 unicos=186
+NM_DIST: nulos=1 unicos=1314
+
+### layer1_Otros_Peligros_Geológicos.geojson: 8,908 features
+FECHA rango: 0009-08-07 00:00:00 -> 2026-02-06 00:00:00  nulos=221
+TIP_PELIGRO top: {'2000|2200': 4326, '3000|3100': 2321, '3000|3200': 1825, '2000|2100': 295, '2000|2500': 85, '3000|3300': 29, '2000|2400': 21, '3000|3400': 6}
+NM_DPTO: nulos=4 unicos=25
+NM_PROV: nulos=4 unicos=195
+NM_DIST: nulos=4 unicos=1341
+
+### layer2_Zonas_Críticas.geojson: 2,186 features
+ANIO: {}
+NM_PROV: nulos=2 unicos=188
+NM_DIST: nulos=2 unicos=880
+
+### layer3_Peligros_por_Región.geojson: 25 features
+---FIN---

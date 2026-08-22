@@ -1,0 +1,220 @@
+{
+  "timestamp": "2026-08-22T17:25:20.912150",
+  "total": 30,
+  "passed": 30,
+  "required_total": 30,
+  "required_passed": 30,
+  "all_required_ok": true,
+  "checks": [
+    {
+      "id": "data:data/processed/tramos_red.csv",
+      "name": "Data asset: tramos red vial",
+      "ok": true,
+      "detail": "639 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/onsv_nacional_geocod.csv",
+      "name": "Data asset: ONSV geocodificado",
+      "ok": true,
+      "detail": "1687 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/sutran_accidentes_geocod.csv",
+      "name": "Data asset: SUTRAN geocodificado",
+      "ok": true,
+      "detail": "944 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/dataset_modelo.csv",
+      "name": "Data asset: dataset modelo 3750x40",
+      "ok": true,
+      "detail": "1386 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/puntos_negros.csv",
+      "name": "Data asset: puntos negros",
+      "ok": true,
+      "detail": "1 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/features_distancia.csv",
+      "name": "Data asset: features distancia",
+      "ok": true,
+      "detail": "411 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/ositran_accidentes.csv",
+      "name": "Data asset: OSITRAN accidentes",
+      "ok": true,
+      "detail": "10291 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/ositran_tramos_geocod.csv",
+      "name": "Data asset: OSITRAN tramos",
+      "ok": true,
+      "detail": "5 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/ositran_peajes_geo.json",
+      "name": "Data asset: OSITRAN peajes",
+      "ok": true,
+      "detail": "5 KB",
+      "required": true
+    },
+    {
+      "id": "data:data/processed/ositran_trafico.csv",
+      "name": "Data asset: OSITRAN tráfico",
+      "ok": true,
+      "detail": "13717 KB",
+      "required": true
+    },
+    {
+      "id": "doc:docs/informe_sipat.md",
+      "name": "Documento: Informe principal",
+      "ok": true,
+      "detail": "OK",
+      "required": true
+    },
+    {
+      "id": "doc:docs/matriz_tecnica.md",
+      "name": "Documento: Matriz técnica",
+      "ok": true,
+      "detail": "OK",
+      "required": true
+    },
+    {
+      "id": "doc:docs/modulo_ruta_segura.md",
+      "name": "Documento: Manual módulo ruta segura",
+      "ok": true,
+      "detail": "OK",
+      "required": true
+    },
+    {
+      "id": "doc:docs/figuras/",
+      "name": "Documento: Figuras",
+      "ok": true,
+      "detail": "OK",
+      "required": true
+    },
+    {
+      "id": "svc:port5000",
+      "name": "Servicio: OSRM routing :5000",
+      "ok": true,
+      "detail": "UP",
+      "required": true
+    },
+    {
+      "id": "svc:port8000",
+      "name": "Servicio: API FastAPI :8000",
+      "ok": true,
+      "detail": "UP",
+      "required": true
+    },
+    {
+      "id": "svc:port8501",
+      "name": "Servicio: Streamlit Dashboard :8501",
+      "ok": true,
+      "detail": "UP",
+      "required": true
+    },
+    {
+      "id": "api:health",
+      "name": "API endpoint: health",
+      "ok": true,
+      "detail": "HTTP 200 | puntos=18807 uptime=1204s",
+      "required": true
+    },
+    {
+      "id": "api:alertas",
+      "name": "API endpoint: alertas SUTRAN",
+      "ok": true,
+      "detail": "HTTP 200 | alertas=2",
+      "required": true
+    },
+    {
+      "id": "api:avisos",
+      "name": "API endpoint: avisos SENAMHI+COEN",
+      "ok": true,
+      "detail": "HTTP 200 | senamhi=0 coen=0",
+      "required": true
+    },
+    {
+      "id": "api:ruta_segura_completa",
+      "name": "API POST /ruta_segura_completa (Lima->Huancayo)",
+      "ok": true,
+      "detail": "hist=8.5726 [Alto] pred=0.6733 [Medio] cov=41.6% clima=True",
+      "required": true
+    },
+    {
+      "id": "dash:apptest",
+      "name": "Dashboard AppTest (7 tabs + Analizar mi ruta)",
+      "ok": true,
+      "detail": "OK: Dashboard 7 tabs + Analizar mi ruta -> 0 excepciones",
+      "required": true
+    },
+    {
+      "id": "graph:graph_json",
+      "name": "Grafo graphify actualizado",
+      "ok": true,
+      "detail": "nodos=446 enlaces=0",
+      "required": true
+    },
+    {
+      "id": "graph:obsidian_vault",
+      "name": "Vault Obsidian regenerado",
+      "ok": true,
+      "detail": "392 notas",
+      "required": true
+    },
+    {
+      "id": "export:Lima_Huancayo.json",
+      "name": "Exportación Lima→Huancayo .JSON",
+      "ok": true,
+      "detail": "667 KB",
+      "required": true
+    },
+    {
+      "id": "export:Lima_Huancayo.csv",
+      "name": "Exportación Lima→Huancayo .CSV",
+      "ok": true,
+      "detail": "0 KB",
+      "required": true
+    },
+    {
+      "id": "export:Trujillo_Chiclayo.json",
+      "name": "Exportación Trujillo→Chiclayo .JSON",
+      "ok": true,
+      "detail": "299 KB",
+      "required": true
+    },
+    {
+      "id": "export:Trujillo_Chiclayo.csv",
+      "name": "Exportación Trujillo→Chiclayo .CSV",
+      "ok": true,
+      "detail": "0 KB",
+      "required": true
+    },
+    {
+      "id": "report:Lima_Huancayo",
+      "name": "Reporte HTML Lima→Huancayo",
+      "ok": true,
+      "detail": "850 KB",
+      "required": true
+    },
+    {
+      "id": "report:Trujillo_Chiclayo",
+      "name": "Reporte HTML Trujillo→Chiclayo",
+      "ok": true,
+      "detail": "498 KB",
+      "required": true
+    }
+  ]
+}

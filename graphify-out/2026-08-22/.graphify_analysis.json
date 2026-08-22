@@ -1,0 +1,254 @@
+{
+  "communities": {
+    "0": [
+      "linestring",
+      "scripts_build_dataset",
+      "scripts_build_dataset_assign",
+      "scripts_build_dataset_rationale_1",
+      "scripts_features_engine",
+      "scripts_features_engine_rationale_1",
+      "scripts_geocode",
+      "scripts_geocode_interp_geodesic",
+      "scripts_geocode_load",
+      "scripts_geocode_locate",
+      "scripts_geocode_rationale_1",
+      "scripts_geocode_rationale_120",
+      "scripts_geocode_rationale_25",
+      "scripts_geocode_rationale_83",
+      "scripts_geocode_rationale_95",
+      "scripts_geocode_route_geometry",
+      "scripts_geocode_routes",
+      "scripts_geocode_snap_distance",
+      "scripts_prep_dashboard",
+      "scripts_prep_dashboard_rationale_1",
+      "scripts_validate_peajes",
+      "scripts_validate_peajes_rationale_1"
+    ],
+    "1": [
+      "scripts_features_tramos",
+      "scripts_features_tramos_build_forest",
+      "scripts_features_tramos_haversine_km",
+      "scripts_features_tramos_nearest_features",
+      "scripts_features_tramos_rationale_1",
+      "scripts_features_tramos_rationale_27",
+      "scripts_features_tramos_tramo_id",
+      "scripts_geocode_haversine"
+    ],
+    "2": [
+      "dataframe",
+      "scripts_audit_extra",
+      "scripts_audit_extra_load_csv",
+      "scripts_audit_extra_py_path",
+      "scripts_audit_extra_rationale_1",
+      "scripts_audit_extra_w"
+    ],
+    "3": [
+      "cache_data",
+      "dashboard_app",
+      "dashboard_app_color_ramp",
+      "dashboard_app_load",
+      "dashboard_app_rationale_1"
+    ],
+    "4": [
+      "scripts_audit",
+      "scripts_audit_audit",
+      "scripts_audit_detect_encoding",
+      "scripts_audit_detect_sep",
+      "scripts_audit_rationale_1"
+    ],
+    "5": [
+      "scripts_audit_all_raw",
+      "scripts_audit_all_raw_load",
+      "scripts_audit_all_raw_py_path",
+      "scripts_audit_all_raw_rationale_1",
+      "scripts_audit_all_raw_w"
+    ],
+    "6": [
+      "scripts_ckan_api",
+      "scripts_ckan_api_package",
+      "scripts_ckan_api_rationale_1",
+      "scripts_ckan_api_rationale_26",
+      "scripts_ckan_api_resource_download_url"
+    ],
+    "7": [
+      "scripts_check_codes",
+      "scripts_check_codes_match_codes",
+      "scripts_check_codes_rationale_1",
+      "scripts_check_codes_read_csv"
+    ],
+    "8": [
+      "scripts_diagnose_km",
+      "scripts_diagnose_km_project_to_km",
+      "scripts_diagnose_km_rationale_1",
+      "scripts_diagnose_km_rationale_19"
+    ],
+    "9": [
+      "scripts_download_ingemmet",
+      "scripts_download_ingemmet_download_layer",
+      "scripts_download_ingemmet_layer_info",
+      "scripts_download_ingemmet_rationale_1"
+    ],
+    "10": [
+      "scripts_audit_onsv_deep",
+      "scripts_audit_onsv_deep_rationale_1",
+      "scripts_audit_onsv_deep_w"
+    ],
+    "11": [
+      "scripts_build_geocoded",
+      "scripts_build_geocoded_rationale_1",
+      "scripts_build_geocoded_to_km"
+    ],
+    "12": [
+      "scripts_dataset_files",
+      "scripts_dataset_files_rationale_1",
+      "scripts_dataset_files_scrape"
+    ],
+    "13": [
+      "scripts_download",
+      "scripts_download_download",
+      "scripts_download_rationale_1"
+    ],
+    "14": [
+      "scripts_ingemmet_stats",
+      "scripts_ingemmet_stats_rationale_1",
+      "scripts_ingemmet_stats_w"
+    ],
+    "15": [
+      "scripts_modelo_glm",
+      "scripts_modelo_glm_rationale_1",
+      "scripts_modelo_glm_report"
+    ],
+    "16": [
+      "scripts_resource_files",
+      "scripts_resource_files_find_file_links",
+      "scripts_resource_files_rationale_1"
+    ],
+    "17": [
+      "scripts_analisis_rutas",
+      "scripts_analisis_rutas_rationale_1"
+    ],
+    "18": [
+      "scripts_analisis_temporal",
+      "scripts_analisis_temporal_rationale_1"
+    ],
+    "19": [
+      "scripts_debug_ingemmet",
+      "scripts_debug_ingemmet_rationale_1"
+    ],
+    "20": [
+      "scripts_eda_tramos",
+      "scripts_eda_tramos_rationale_1"
+    ],
+    "21": [
+      "scripts_explore_shapefile",
+      "scripts_explore_shapefile_rationale_1"
+    ],
+    "22": [
+      "scripts_graficos",
+      "scripts_graficos_rationale_1"
+    ],
+    "23": [
+      "scripts_validate_geo",
+      "scripts_validate_geo_rationale_1"
+    ],
+    "24": [
+      "scripts_find_indeci"
+    ]
+  },
+  "cohesion": {
+    "0": 0.1341991341991342,
+    "1": 0.2857142857142857,
+    "2": 0.3333333333333333,
+    "3": 0.4,
+    "4": 0.6,
+    "5": 0.4,
+    "6": 0.4,
+    "7": 0.5,
+    "8": 0.5,
+    "9": 0.6666666666666666,
+    "10": 0.6666666666666666,
+    "11": 0.6666666666666666,
+    "12": 0.6666666666666666,
+    "13": 0.6666666666666666,
+    "14": 0.6666666666666666,
+    "15": 0.6666666666666666,
+    "16": 0.6666666666666666,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0
+  },
+  "gods": [
+    {
+      "id": "scripts_geocode_load",
+      "label": "_load()",
+      "degree": 10
+    },
+    {
+      "id": "scripts_geocode_haversine",
+      "label": "_haversine()",
+      "degree": 5
+    },
+    {
+      "id": "scripts_geocode_interp_geodesic",
+      "label": "_interp_geodesic()",
+      "degree": 5
+    },
+    {
+      "id": "scripts_geocode_route_geometry",
+      "label": "route_geometry()",
+      "degree": 4
+    },
+    {
+      "id": "scripts_geocode_locate",
+      "label": "locate()",
+      "degree": 4
+    },
+    {
+      "id": "scripts_geocode_snap_distance",
+      "label": "snap_distance()",
+      "degree": 4
+    },
+    {
+      "id": "scripts_audit_audit",
+      "label": "audit()",
+      "degree": 3
+    },
+    {
+      "id": "scripts_audit_extra_load_csv",
+      "label": "load_csv()",
+      "degree": 3
+    },
+    {
+      "id": "dashboard_app_load",
+      "label": "load()",
+      "degree": 2
+    },
+    {
+      "id": "scripts_audit_detect_encoding",
+      "label": "detect_encoding()",
+      "degree": 2
+    }
+  ],
+  "surprises": [
+    {
+      "source": "haversine_km()",
+      "target": "_haversine()",
+      "source_files": [
+        "scripts/features_tramos.py",
+        "scripts/geocode.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `haversine_km()` unexpectedly reaches hub `_haversine()`"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

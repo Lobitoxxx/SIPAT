@@ -1,0 +1,36 @@
+### red_vial_nacional_2022-2024.csv
+shape=(0, 0)
+cols=
+### red_vial_nacional_2022-2024.csv
+shape=(20255, 20)
+cols=ID_RVN|ID_DEPARTAMENTO|DEPARTAMENTO|CODIGO_RUTA|TRAYECTORIA|INICIO|FINAL|CLASIFICACION_EJE|JERARQUIA|LONGITUD|NRO_CARRILES|SUPERFICIE|SUPERFICIE_L|ESTADO|ESTADO_L|CODIGO_CONCESION|NOMBRE_CONCESION|CODIGO_LOGISTICO|CORREDOR_LOGISTICO|FECHA_CORTE
+INICIO/FINAL min-max: (7680, 7878)
+FECHA_CORTE unicos: [np.int64(20221231), np.int64(20231231), np.int64(20240731)]
+CODIGO_RUTA unicos: 161
+JERARQUIA: {'RN': 20255}
+SUPERFICIE_L: {'Pavimentado': 11594, 'Asfaltado económico': 5991, 'Afirmado': 1772, 'Trocha': 488, 'Sin afirmar': 274, 'Proyectado': 136}
+ESTADO_L: {'Bueno': 10558, 'Regular': 8180, 'Malo': 1381, 'Información no disponible': 136}
+NRO_CARRILES: {2: 9498, 1: 6097, -1: 3244, 3: 808, 4: 494, 7: 45, 6: 39, 5: 30}
+
+### ONSV siniestros_fatales_2021-2025.xlsx
+HOJAS=['SINIESTROS']
+
+  HOJA[SINIESTROS] shape=(9111, 27)
+    fila0: []
+    fila1: ['Datos de Registro de Siniestros de Tránsito Fatales, 2021 - 2025 (preliminar)']
+    fila2: ['Nota 1: Información registrada por las Unidades de Prevención e Investigación de Accidentes de Tránsito PNP (UPIAT-PNP)']
+    fila3: ['Nota 2: Registros de siniestros fatales, preliminar 2024 y 2025']
+    fila4: ['CÓDIGO SINIESTRO', 'FECHA SINIESTRO', 'HORA SINIESTRO', 'CLASE SINIESTRO', 'CANTIDAD DE FALLECIDOS', 'CANTIDAD DE LESIONADOS', 'CANTIDAD DE VEHICULOS DAÑADOS', 'DEPARTAMENTO', 'PROVINCIA', 'DISTRITO']
+    fila5: ['A-2021-01-23', '01/01/2021', '04:40', 'DESPISTE', '1', '0', '1', 'LIMA', 'HUARAL', 'HUARAL']
+
+### ONSV historico_2008-2025.xlsx
+shape=(35, 141)
+  fila0: ['SINIESTRALIDAD DE TRÁNSITO, ENERO A OCTUBRE 2025 (PRELIMINAR)']
+  fila1: ['Fuente: Policía Nacional del Perú']
+  fila2: ['Nota: Información preliminar de los siniestros de tránsito ocurridos a nivel nacional, en el periodo Enero a Octubre']
+  fila3: []
+  fila4: []
+  fila5: ['DEPARTAMENTO', 'I. TOTAL  CLASE                                                   SINIESTROS ', 'CLASE']
+  fila6: ['CHOQUE ', 'ATROPELLO ', 'CHOQUE Y ATROPELLO', 'CAIDA DE PASAJERO', 'VOLCADURA']
+  fila7: []
+---FIN---

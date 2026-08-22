@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Datos pesados y regenerables (los scripts los vuelven a descargar)
+data/raw/
+data/processed/clima/
+data/processed/dashboard/openmeteo_*.json
+
+# Caches geográficos (se reconstruyen solos)
+data/processed/dashboard/geocode_cache.json
+data/processed/dashboard/coen_geocode.json
+data/processed/dashboard/coen_emergencias.json
+
+# Datos de usuarios (privacidad): reportes ciudadanos
+data/processed/dashboard/reportes_fotos/
+data/processed/dashboard/reportes_ciudadanos.json
+
+# Temporales del dashboard (se regeneran en cada render)
+dashboard/_map_*.html
+
+# Salidas de verificación
+data/processed/dashboard/apptest*.log
+data/processed/dashboard/build.log
+data/processed/dashboard/modelo_multi.log
+data/processed/dashboard/api_check.json
+
+# Sistema / IDE
+.opencode/
+.DS_Store
+Thumbs.db
+*.log
