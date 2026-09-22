@@ -218,7 +218,106 @@ flowchart TD
 
 ---
 
-## 4. Estructura del proyecto
+## 4. Arquitectura y diagramas interactivos
+
+SIPAT sigue una **topología en estrella** centrada en la API FastAPI: el dashboard, el motor de
+riesgo y los servicios externos no conversan entre sí, sino que todos pasan por el **nodo central**.
+La API es el único punto que orquesta las capas de datos y expone endpoints a la interfaz.
+
+```
+            ┌────────────┐    Fuentes: ONSV · SUTRAN · OSITRAN · MTC · INGEMMET
+            │  DATOS     │    tramos_geo.json (cKDTree) · ositran_*.csv · reportes
+            └─────┬──────┘
+                  │
+┌──────────┐      │      ┌────────────────┐
+│ OSRM     │      │      │  MOTOR RIESGO  │  riesgo_red.py · factor_temporal()
+│ (Docker) │──────┼──────│  prediccion.py │  NegBin (puntual) · clima.py
+└──────────┘      │      └────────────────┘
+                  │
+             ┌────┴───┐    ┌───────────────┐
+             │  API   │────│  DASHBOARD    │  Streamlit · 7 pestañas
+             └────────┘    └───────────────┘
+```
+
+**¿Por qué estrella?**
+- **Límite de responsabilidades**: el dashboard solo consume payloads ya integrados; nunca
+  geocodifica, modela ni consulta OSRM por su cuenta.
+- **Un solo dueño del ranking**: que las 3 rutas, el score histórico y el predictivo salgan de un
+  único endpoint evita versiones divergentes entre pestañas.
+- **Cachés centralizadas** en la API (alertas SUTRAN, clima, avisos) con TTL y botón de refresco;
+  el cacheo no se reparte entre procesos.
+- **Gobernanza de datos**: todos los accesos a `tramos_geo.json`, peajes y reportes pasan por la
+  API, de modo que validar (Perú + dedupe), auditar y testear (AppTest + 30 checks) es verificable
+  en un solo front.
+
+**Diagramas interactivos** (auto-contenidos, 1 fichero HTML cada uno; abren con cualquier navegador):
+
+| Diagrama | Contenido | Ver en línea |
+|---|---|---|
+| **Arquitectura** | Topología estrella completa: API como hub, flujos con OSRM/OSITRAN/alertas | [sipat-architecture.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-architecture.html) |
+| **Flujo de datos** | De las 3 fuentes geocodificadas al dataset 3,750×40 y a los servicios | [sipat-dataflow.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-dataflow.html) |
+| **Secuencia "Viaja seguro"** | Solicitud → cálculo de riesgo (motor+IA+clima) → respuesta integrada | [sipat-sequence.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-sequence.html) |
+| **Workflow del reporte ciudadano** | Formulario → validación+dedupe → almacén append-only → mapa | [sipat-workflow.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-workflow.html) |
+
+> Los HTML viven en `docs/archify/` (preview del navegador sobre el repo) y también se guardan
+> automáticamente en local dentro de la carpeta `docs/archify/` del proyecto.
+
+---
+
+## 5. Metodología de desarrollo: SCRUM + CRISP-DM
+
+**SIPAT integra dos marcos complementarios**: CRISP-DM ordena el *ciclo de datos* (qué se hace con
+los datos y cuándo) y SCRUM organiza la *entrega de producto* (quién hace qué y en qué sprints).
+
+### CRISP-DM — ciclo de datos en 6 fases
+
+```mermaid
+flowchart TB
+    A["1 · Entendimiento del negocio<br/>Prevenir accidentes antes de viajar"] --> B["2 · Entendimiento de los datos<br/>51,000+ siniestros en 3 fuentes"]
+    B --> C["3 · Preparación de los datos<br/>Geocodificación lineal · limpieza · dataset 3,750×40"]
+    C --> D["4 · Modelado<br/>NegBin por fuente → IRRs + predictor"]
+    D --> E["5 · Evaluación<br/>AIC · 12 + 129 puntos · cobertura 42%"]
+    E --> F["6 · Despliegue<br/>Datos ligeros → dashboard · API · reporte HTML"]
+    F -. "lecciones → nuevo sprint" .-> A
+```
+
+Las **6 fases** aplicadas al proyecto:
+
+| Fase CRISP-DM | Qué se hizo en SIPAT |
+|---|---|
+| **1. Negocio** | Productos: índice de riesgo por ruta + reporte ciudadano; usuarios: viajeros e instituciones |
+| **2. Datos** | Inventario (Fase 0): 3 fuentes de siniestros + red vial MTC + peligros INGEMMET; calidad: geocodificación lineal (~14 m), cobertura SUTRAN 99.4% |
+| **3. Preparación** | Limpieza (nulos, duplicados, rutas PE-XX), unificación multi-fuente por tramo, features espaciales (buffer 2 km, cKDTree), tráfico de peajes |
+| **4. Modelado** | Negative Binomial por fuente con offset de exposición; predictor que empalma la ruta del usuario a los tramos |
+| **5. Evaluación** | AIC NegBin 8,663 vs Poisson 11,984 (mezcla ONSV+SUTRAN); validación AppTest + 30 checks; comparación con umbrales de riesgo |
+| **6. Despliegue** | Dashboard 7 pestañas, API REST, reporte HTML autocontenido, datos ligeros en `data/processed/dashboard/` |
+
+### SCRUM — 3 sprints con entregas verificables
+
+```mermaid
+gantt
+    title SIPAT — planificación por sprints
+    dateFormat YYYY-MM
+    section Sprint 0
+    Fase 0 · inventario de datos      :a1, 2025-11, 1M
+    Fase 1 · geocodificación y modelo :a2, 2025-12, 2M
+    section Sprint 1
+    Motor ruta segura v1              :b1, 2026-03, 1M
+    Alertas SUTRAN + OSITRAN          :b2, 2026-04, 1M
+    section Sprint 2
+    Motor v2 · API · reporte HTML     :c1, 2026-06, 2M
+    section Sprint 3
+    Predicción + clima + COEN         :d1, 2026-08, 1M
+    Reportes ciudadanos + dashboard   :d2, 2026-08, 1M
+```
+
+Cada sprint entregó un **incremento verificado**: batería de 30 comprobaciones, AppTest headless
+del dashboard (7 pestañas + "Analizar mi ruta") y los diagramas Archify que documentan el sistema
+en su estado final.
+
+---
+
+## 6. Estructura del proyecto
 
 ```
 SIPAT/
@@ -253,13 +352,15 @@ SIPAT/
 │   ├── processed/              # datasets geocodificados y modelo
 │   ├── processed/dashboard/    # assets ligeros del dashboard (JSON/CSV)
 │   └── osm/                    # extracto PBF de Perú
-├── docs/                       # informe, matriz técnica, manual ruta segura, figuras
+├── docs/
+│   ├── informe_sipat.md             # informe técnico, matriz técnica, manual, figuras
+│   └── archify/                     # 4 diagramas interactivos (HTML autocontenidos)
 └── graphify-out/               # grafo de conocimiento del código
 ```
 
 ---
 
-## 5. Puesta en marcha
+## 7. Puesta en marcha
 
 **Requisitos**: Windows/Linux, Python ≥ 3.10, Docker Desktop (para OSRM).
 Dependencias principales: `streamlit folium plotly pandas numpy scipy statsmodels fastapi
@@ -288,7 +389,7 @@ python scripts/verificar_proyecto.py
 
 ---
 
-## 6. Verificación y calidad
+## 8. Verificación y calidad
 
 - `scripts/verificar_proyecto.py`: **30 checks** — presencia de datasets y documentos, servicios
   UP (OSRM/API/Streamlit), endpoints de API con respuesta válida, AppTest del dashboard
@@ -300,7 +401,7 @@ python scripts/verificar_proyecto.py
 
 ---
 
-## 7. Decisiones metodológicas y limitaciones
+## 9. Decisiones metodológicas y limitaciones
 
 - **Tres fuentes, tres realidades**: ONSV registra siniestros fatales/por lesiones con calidad
   variable por departamento; SUTRAN cubre 2020-2021; OSITRAN cubre solo concesiones (sin
@@ -316,11 +417,12 @@ python scripts/verificar_proyecto.py
 
 ---
 
-## 8. Documentación ampliada
+## 10. Documentación ampliada
 
 - `docs/informe_sipat.md` — informe técnico completo (Fase 0/Fase 1).
 - `docs/matriz_tecnica.md` — decisiones técnicas por componente.
 - `docs/modulo_ruta_segura.md` — manual del motor de ruta segura.
+- `docs/archify/*.html` — 4 diagramas interactivos (arquitectura, flujo de datos, secuencia y workflow).
 - `graphify-out/GRAPH_REPORT.md` — arquitectura como grafo de conocimiento.
 
 ---

@@ -43,6 +43,12 @@ En curso (mejoras del módulo "ruta segura"):
   - Repo publicado en GitHub: https://github.com/Lobitoxxx/SIPAT (rama main; .gitignore excluye data/raw/ OSM 2.5GB, caches, reportes ciudadanos por privacidad).
 - Pendiente: nada urgente; próximas ideas = tráfico OSITRAN en el score (hecho), rediseño del grafo, exportaciones.
 
+## Documentación reciente (22/09/2026)
+
+- **Diagrams-visuals**: 4 diagramas Archify interactivos en `docs/archify/` (`sipat-architecture.html`, `sipat-dataflow.html`, `sipat-sequence.html`, `sipat-workflow.html`), enlazados desde el README (sección 4) con preview vía htmlpreview.github.io. Generados con la CLI global de Archify; los candidatos JSON se editan en `Temp\opencode\archify-candidates\` y se entregan con `archify.mjs deliver <type> <json> <out.html> --quality showcase`.
+- **README** (sección 4 y 5): nueva narrativa de arquitectura (topología en estrella con la API FastAPI como hub y sus justificaciones) y metodología SCRUM + CRISP-DM (6 fases mapeadas + gantt de 3 sprints). Secciones reordenadas (1-10).
+- Detalles de validación Archify (para próximos diagramas): labels 7px+ (no dejar que subetiquetas bajen de 7px si `viewBox` > ~1080); los retornos largos con etiqueta automática inflan el ancho → usar `labelAt`/`fromSide:top` para mantener `viewBox` ≤ ~1080; los edges que cruzan lane-bandas de phases/groups no pasan `readable-v2` (routes cross-lane requieren columnas con hueco ≥ 56px o misma columna sin group).
+
 Convenciones del entorno:
 - Windows/PowerShell. La consola muestra ~1 linea de stdout por llamada: redirigir a archivo UTF-8 (`*> file.log`) y leerlo.
 - Procesos largos: `Start-Process -FilePath python ... -WindowStyle Hidden` (sobreviven entre comandos).

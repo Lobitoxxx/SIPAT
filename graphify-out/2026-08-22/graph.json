@@ -237,18 +237,6 @@
       "norm_label": "snap_distance()"
     },
     {
-      "label": "alertas()",
-      "file_type": "code",
-      "source_file": "api/app.py",
-      "source_location": "L55",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "api_app_alertas",
-      "community": 1,
-      "community_name": "api/app.py",
-      "norm_label": "alertas()"
-    },
-    {
       "label": "avisos()",
       "file_type": "code",
       "source_file": "api/app.py",
@@ -499,6 +487,18 @@
       "community": 1,
       "community_name": "api/app.py",
       "norm_label": "_clima_html()"
+    },
+    {
+      "label": "get_index()",
+      "file_type": "code",
+      "source_file": "scripts/riesgo_red.py",
+      "source_location": "L384",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_riesgo_red_get_index",
+      "community": 1,
+      "community_name": "api/app.py",
+      "norm_label": "get_index()"
     },
     {
       "label": "w()",
@@ -1269,18 +1269,6 @@
       "norm_label": "factor_temporal()"
     },
     {
-      "label": "get_index()",
-      "file_type": "code",
-      "source_file": "scripts/riesgo_red.py",
-      "source_location": "L384",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "scripts_riesgo_red_get_index",
-      "community": 27,
-      "community_name": "ruta_segura.py",
-      "norm_label": "get_index()"
-    },
-    {
       "label": "analizar()",
       "file_type": "code",
       "source_file": "scripts/ruta_segura.py",
@@ -1891,6 +1879,18 @@
       "community": 33,
       "community_name": "ositran_data.py",
       "norm_label": "_segmento()"
+    },
+    {
+      "label": "alertas()",
+      "file_type": "code",
+      "source_file": "api/app.py",
+      "source_location": "L55",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "api_app_alertas",
+      "community": 34,
+      "community_name": "alertas_sutran.py",
+      "norm_label": "alertas()"
     },
     {
       "label": "alertas_en_ruta()",
@@ -4783,6 +4783,171 @@
       "community": 41,
       "community_name": "build_puntos_negros.py",
       "norm_label": "build_puntos_negros.py"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "1. Funcionalidades",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "readme_1_funcionalidades",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "1. funcionalidades"
+    },
+    {
+      "label": "2. Fuentes de datos",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "readme_2_fuentes_de_datos",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "2. fuentes de datos"
+    },
+    {
+      "label": "3. C\u00f3mo se manejan los datos (pipeline)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L81",
+      "_origin": "ast",
+      "id": "readme_3_c\u00f3mo_se_manejan_los_datos_pipeline",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "3. como se manejan los datos (pipeline)"
+    },
+    {
+      "label": "4. Estructura del proyecto",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L147",
+      "_origin": "ast",
+      "id": "readme_4_estructura_del_proyecto",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "4. estructura del proyecto"
+    },
+    {
+      "label": "5. Puesta en marcha",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L188",
+      "_origin": "ast",
+      "id": "readme_5_puesta_en_marcha",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "5. puesta en marcha"
+    },
+    {
+      "label": "6. Verificaci\u00f3n y calidad",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L217",
+      "_origin": "ast",
+      "id": "readme_6_verificaci\u00f3n_y_calidad",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "6. verificacion y calidad"
+    },
+    {
+      "label": "7. Decisiones metodol\u00f3gicas y limitaciones",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L229",
+      "_origin": "ast",
+      "id": "readme_7_decisiones_metodol\u00f3gicas_y_limitaciones",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "7. decisiones metodologicas y limitaciones"
+    },
+    {
+      "label": "8. Documentaci\u00f3n ampliada",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L245",
+      "_origin": "ast",
+      "id": "readme_8_documentaci\u00f3n_ampliada",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "8. documentacion ampliada"
+    },
+    {
+      "label": "API REST (FastAPI \u00b7 `http://localhost:8000`)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "readme_api_rest_fastapi_http_localhost_8000",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "api rest (fastapi \u00b7 `http://localhost:8000`)"
+    },
+    {
+      "label": "Dashboard (Streamlit \u00b7 `http://localhost:8501`) \u2014 7 pesta\u00f1as",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "readme_dashboard_streamlit_http_localhost_8501_7_pesta\u00f1as",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "dashboard (streamlit \u00b7 `http://localhost:8501`) \u2014 7 pestanas"
+    },
+    {
+      "label": "Datos en tiempo real y caches",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L135",
+      "_origin": "ast",
+      "id": "readme_datos_en_tiempo_real_y_caches",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "datos en tiempo real y caches"
+    },
+    {
+      "label": "Pasos clave",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L103",
+      "_origin": "ast",
+      "id": "readme_pasos_clave",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "pasos clave"
+    },
+    {
+      "label": "Reporte HTML est\u00e1tico",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "readme_reporte_html_est\u00e1tico",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "reporte html estatico"
+    },
+    {
+      "label": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "community": 42,
+      "community_name": "\ud83d\udee1\ufe0f SIPAT \u2014 Sistema de Prevenci\u00f3n de Accidentes de Tr\u00e1nsito",
+      "norm_label": "\ud83d\udee1\ufe0f sipat \u2014 sistema de prevencion de accidentes de transito"
     },
     {
       "label": "audit_all_raw.py",
@@ -9370,6 +9535,160 @@
       "_origin": "ast",
       "source": "opencode_plugins_graphify",
       "target": "opencode_plugins_graphify_graphifyplugin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme",
+      "target": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_1_funcionalidades",
+      "target": "readme_dashboard_streamlit_http_localhost_8501_7_pesta\u00f1as",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_1_funcionalidades",
+      "target": "readme_api_rest_fastapi_http_localhost_8000",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_1_funcionalidades",
+      "target": "readme_reporte_html_est\u00e1tico",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_3_c\u00f3mo_se_manejan_los_datos_pipeline",
+      "target": "readme_pasos_clave",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L135",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_3_c\u00f3mo_se_manejan_los_datos_pipeline",
+      "target": "readme_datos_en_tiempo_real_y_caches",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L147",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "target": "readme_4_estructura_del_proyecto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L188",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "target": "readme_5_puesta_en_marcha",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "target": "readme_6_verificaci\u00f3n_y_calidad",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "target": "readme_1_funcionalidades",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L229",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "target": "readme_7_decisiones_metodol\u00f3gicas_y_limitaciones",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L245",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "target": "readme_8_documentaci\u00f3n_ampliada",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "target": "readme_2_fuentes_de_datos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_sipat_sistema_de_prevenci\u00f3n_de_accidentes_de_tr\u00e1nsito",
+      "target": "readme_3_c\u00f3mo_se_manejan_los_datos_pipeline",
       "confidence_score": 1.0
     },
     {

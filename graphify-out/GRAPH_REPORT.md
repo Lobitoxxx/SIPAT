@@ -1,13 +1,18 @@
 # Graph Report - SIPAT  (2026-08-22)
 
 ## Corpus Check
-- 83 files · ~7,538,965 words
+- 70 files · ~5,170,677 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 461 nodes · 678 edges · 43 communities (27 shown, 16 thin omitted)
+- 456 nodes · 675 edges · 41 communities (26 shown, 15 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 32 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `51e3272f`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - geocode.py
@@ -40,14 +45,12 @@
 - osrm_build.py
 - graphify_obsidian.py
 - AGENTS.md
-- graphify.js
 - download_osm.py
 - ositran_data.py
 - alertas_sutran.py
 - boot_services.py
 - reportes_ciudadanos.py
 - arrancar_servicios.ps1
-- opencode.json
 - modelo_multi.py
 - 🛡️ SIPAT — Sistema de Prevención de Accidentes de Tránsito
 
@@ -64,21 +67,21 @@
 10. `avisos_senamhi()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `health()` --calls--> `get_index()`  [INFERRED]
+  api/app.py → scripts/riesgo_red.py
+- `alertas()` --calls--> `get_alertas()`  [INFERRED]
+  api/app.py → scripts/alertas_sutran.py
 - `ruta_segura()` --calls--> `analizar()`  [INFERRED]
   api/app.py → scripts/ruta_segura.py
 - `ruta_segura()` --calls--> `resumen_analisis()`  [INFERRED]
   api/app.py → scripts/ruta_segura.py
 - `ruta_segura_completa()` --calls--> `analizar()`  [INFERRED]
   api/app.py → scripts/ruta_segura.py
-- `ruta_segura_completa()` --calls--> `resumen_analisis()`  [INFERRED]
-  api/app.py → scripts/ruta_segura.py
-- `render()` --calls--> `geocode()`  [INFERRED]
-  dashboard/reporta.py → scripts/ruta_segura.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (43 total, 16 thin omitted)
+## Communities (41 total, 15 thin omitted)
 
 ### Community 0 - "geocode.py"
 Cohesion: 0.07
@@ -86,7 +89,7 @@ Nodes (26): LineString, Construye el dataset espacial de analisis: 1. data/proce
 
 ### Community 1 - "api/app.py"
 Cohesion: 0.12
-Nodes (32): avisos(), health(), _nivel(), API FastAPI del modulo 'Ruta segura'. Endpoints: POST /ruta_segura {origin,…, ReporteRequest, reportes_add(), reportes_list(), ruta_segura() (+24 more)
+Nodes (32): alertas(), avisos(), health(), _nivel(), API FastAPI del modulo 'Ruta segura'. Endpoints: POST /ruta_segura {origin,…, ReporteRequest, reportes_add(), reportes_list() (+24 more)
 
 ### Community 2 - "audit_extra.py"
 Cohesion: 0.33
@@ -118,7 +121,7 @@ Nodes (3): download_layer(), layer_info(), Descarga las capas de INGEMMET por ra
 
 ### Community 11 - "RiesgoIndex"
 Cohesion: 0.08
-Nodes (23): _features(), _fit(), get_predictor(), Capa predictiva: modelo NegBin de Fase 1 aplicado a rutas OSRM. -…, Tasa predictiva (siniestros/km) para cada punto muestreado de la ruta., Riesgo predictivo del modelo NegBin a lo largo de una ruta. Devuelve tasa media…, Replica la especificacion de features de Fase 1 (modelo_glm.py)., Entrena NegBin (Fase 1) y devuelve (modelo, pred por tramo). (+15 more)
+Nodes (24): _features(), _fit(), get_predictor(), Capa predictiva: modelo NegBin de Fase 1 aplicado a rutas OSRM. -…, Tasa predictiva (siniestros/km) para cada punto muestreado de la ruta., Riesgo predictivo del modelo NegBin a lo largo de una ruta. Devuelve tasa media…, Replica la especificacion de features de Fase 1 (modelo_glm.py)., Entrena NegBin (Fase 1) y devuelve (modelo, pred por tramo). (+16 more)
 
 ### Community 23 - "3. Fichas detalladas"
 Cohesion: 0.06
@@ -149,8 +152,8 @@ Cohesion: 0.23
 Nodes (15): _cargar_cache(), _coords_por_token(), _dentro_peru(), _extremos(), _guardar_cache(), _int(), _len_km(), _load_peajes() (+7 more)
 
 ### Community 34 - "alertas_sutran.py"
-Cohesion: 0.17
-Nodes (15): alertas(), alertas_en_ruta(), _archivar(), _dist_km(), _fetch(), get_alertas(), get_historico(), _motivo() (+7 more)
+Cohesion: 0.19
+Nodes (14): alertas_en_ruta(), _archivar(), _dist_km(), _fetch(), get_alertas(), get_historico(), _motivo(), normalizar() (+6 more)
 
 ### Community 35 - "boot_services.py"
 Cohesion: 0.57
@@ -164,37 +167,33 @@ Nodes (20): foto_b64(), mapa_reportes(), Pestaña «Reporta un incidente»: repo
 Cohesion: 0.70
 Nodes (4): Start-API(), Start-OSRM(), Start-Streamlit(), Test-Port()
 
-### Community 38 - "opencode.json"
-Cohesion: 0.50
-Nodes (3): plugin, $schema, .opencode/plugins/graphify.js
-
 ### Community 40 - "modelo_multi.py"
 Cohesion: 0.40
 Nodes (5): build_features(), fit_model(), main(), Construye features dummy + transformaciones log (matching Fase 1)., Ajusta NegBin y devuelve resultados.
 
 ### Community 42 - "🛡️ SIPAT — Sistema de Prevención de Accidentes de Tránsito"
-Cohesion: 0.13
-Nodes (14): 1. Funcionalidades, 2. Fuentes de datos, 3. Cómo se manejan los datos (pipeline), 4. Estructura del proyecto, 5. Puesta en marcha, 6. Verificación y calidad, 7. Decisiones metodológicas y limitaciones, 8. Documentación ampliada (+6 more)
+Cohesion: 0.12
+Nodes (16): 1. Funcionalidades, 2. Fuentes de datos, 3. Cómo se manejan los datos (pipeline), 4. Estructura del proyecto, 5. Puesta en marcha, 6. Verificación y calidad, 7. Decisiones metodológicas y limitaciones, 8. Documentación ampliada (+8 more)
 
 ## Knowledge Gaps
-- **74 isolated node(s):** `$schema`, `.opencode/plugins/graphify.js`, `graphify`, `Estado del proyecto (SIPAT)`, `Dashboard (Streamlit · `http://localhost:8501`) — 7 pestañas` (+69 more)
+- **74 isolated node(s):** `graphify`, `Estado del proyecto (SIPAT)`, `Dashboard (Streamlit · `http://localhost:8501`) — 7 pestañas`, `API REST (FastAPI · `http://localhost:8000`)`, `Reporte HTML estático` (+69 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `avisos_en_ruta()` connect `api/app.py` to `geocode.py`, `ruta_segura.py`, `render`?**
-  _High betweenness centrality (0.078) - this node is a cross-community bridge._
+  _High betweenness centrality (0.080) - this node is a cross-community bridge._
 - **Why does `analizar()` connect `ruta_segura.py` to `RiesgoIndex`, `api/app.py`, `alertas_sutran.py`, `render`?**
-  _High betweenness centrality (0.048) - this node is a cross-community bridge._
+  _High betweenness centrality (0.049) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `analizar()` (e.g. with `ruta_segura()` and `ruta_segura_completa()`) actually correct?**
   _`analizar()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 9 inferred relationships involving `render()` (e.g. with `_set_pop()` and `avisos_en_ruta()`) actually correct?**
   _`render()` has 9 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 7 inferred relationships involving `ruta_segura_completa()` (e.g. with `avisos_en_ruta()` and `avisos_senamhi()`) actually correct?**
   _`ruta_segura_completa()` has 7 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `$schema`, `.opencode/plugins/graphify.js`, `graphify` to the rest of the system?**
+- **What connects `graphify`, `Estado del proyecto (SIPAT)`, `Dashboard (Streamlit · `http://localhost:8501`) — 7 pestañas` to the rest of the system?**
   _74 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `geocode.py` be split into smaller, more focused modules?**
   _Cohesion score 0.07152496626180836 - nodes in this community are weakly interconnected._
