@@ -198,6 +198,46 @@ comprueba ahora el número de filas, no solo que el fichero exista.
 
 ---
 
+## 6 bis. Confiabilidad de las métricas (apartado transversal)
+
+El DQS mide **propiedades del dato**. La confiabilidad mide **la confianza en las métricas**.
+Son preguntas distintas y el proyecto las trata por separado en
+[`docs/confiabilidad_etl.md`](confiabilidad_etl.md) y `src/quality/reliability.py`.
+
+Resumen de los 8 ejes evaluados sobre datos reales (4 alta · 2 media · 2 baja · 2 no verificable):
+
+| Eje | Veredicto | Evidencia |
+|---|---|---|
+| Reproducibilidad | alta | 3 corridas con la misma huella de medición → DQS idéntico |
+| Trazabilidad | alta | manifest, lineage DuckDB, `source_md5`, Bronze inmutable |
+| Robustez del DQS | media | spread p05–p95 = 8.43 con 300 perturbaciones de pesos |
+| Incertidumbre | alta | DQS 92.07, IC 95 % [92.06, 92.09] (amplitud 0.03) |
+| **Circularidad de catálogos** | **baja** | 100 % de los catálogos derivan del propio dataset |
+| Cobertura del universo | no verificable | 9.106 registros; sin total oficial ONSV/MTC |
+| Integridad referencial | no verificable | dimensión fijada a 100 (0 claves foráneas) |
+| Consistencia cruzada | baja | Jaccard ONSV↔cinemómetros = 0.40 |
+| Imputación | media | `vehiculos_danados` imputado con mediana (30.9 % nulos) |
+| Deriva temporal | alta | sin variación en el código vigente |
+
+**Hallazgo principal:** el mismo dataset y el mismo código dan un DQS de **70.26** (frescura
+crítica) a **100.00** (solo contrato). El 92.07 refleja una decisión de configuración, no solo
+una propiedad del dato. Por eso **no se calcula un "índice de confiabilidad"**: un número único
+repetiría el error que hace malinterpretable el DQS.
+
+Tres decisiones metodológicas que hubo que tomar (detalladas en el apartado de confiabilidad):
+
+1. **Huella de medición** (`versioning.measurement_fingerprint()`) en lugar de `git_commit`
+   para agrupar corridas: tras integrar el ETL en el repositorio SIPAT, el commit del padre
+   cambia por motivos ajenos. `reliability.py` queda **fuera** de la huella a propósito: el
+   auditor no produce la medición.
+2. **Bootstrap con `fix_dimensions`**: remuestrear con reemplazo duplica las PK y hunde la
+   unicidad, dando un IC descentrado (punto 92.07 contra IC [86.45, 86.65]). Las dimensiones
+   invariantes al muestreo se fijan.
+3. **Cambio de método ≠ deriva**: el DQS bajó de 94.97 a 92.07 al corregir el defecto de las
+   coordenadas. `run_drift` separa ambas causas.
+
+---
+
 ## 7. Trazabilidad
 
 - **run_id**: `run-YYYYMMDD-HHMMSS-<uuid8>`, único por ejecución.

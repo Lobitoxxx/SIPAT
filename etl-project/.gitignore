@@ -23,6 +23,7 @@ artifacts/*.db
 reports/profiling/
 reports/quality/
 reports/pipeline/
+reports/reliability/
 .ipynb_checkpoints/
 
 # Caches

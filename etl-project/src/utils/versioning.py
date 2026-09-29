@@ -23,7 +23,13 @@ def read_version() -> str:
 
 
 def git_commit() -> str:
-    """SHA corto del commit actual si el repo etl-project existe (Git), si no ''."""
+    """SHA corto del commit actual si el repo etl-project existe (Git), si no ''.
+
+    OJO: tras integrar `etl-project/` en el repositorio SIPAT, esto devuelve el
+    HEAD del repo PADRE, que cambia por motivos ajenos al ETL (editar un README,
+    un informe...). Para attributable una variación del DQS NO sirve. Para eso
+    está `measurement_fingerprint()`.
+    """
     from io import BytesIO
     import subprocess
 
@@ -40,6 +46,49 @@ def git_commit() -> str:
         return ""
 
 
+# Ficheros que, si cambian, pueden alterar el DQS o los gates.
+#
+# IMPORTANTE: se listan EXPLÍCITAMENTE y NO con un glob de `src/quality/*.py`.
+# `reliability.py` audita la medición pero no la produce: incluirlo haría que
+# tocar el auditor cambiara la huella y las corridas dejaran de ser comparables
+# entre sí, que es justo lo que la huella debe evitar.
+_MEASUREMENT_FILES = (
+    "config/settings.yaml",
+    "config/contracts/onsv_contract.yaml",
+    "config/contracts/cinemometros_contract.yaml",
+    "config/quality/quality_rules.yaml",
+    "config/quality/catalogs/onsv.yaml",
+    "config/quality/catalogs/cinemometros.yaml",
+    "src/quality/dimensions.py",
+    "src/quality/domain_rules.py",
+    "src/quality/gates.py",
+    "src/quality/model_ready.py",
+    "src/validation/contract.py",
+    "src/cleaning/clean.py",
+)
+
+_MEASUREMENT_GLOBS = _MEASUREMENT_FILES
+
+
+def measurement_fingerprint() -> str:
+    """Huella corta del código y la config que PRODUCEN las métricas.
+
+    A diferencia de `git_commit()`, esta huella SOLO cambia cuando cambia algo
+    que puede mover el DQS, el gate o la validación. Es la clave correcta para
+    atribuir una variación del DQS: si dos corridas comparten huella, su DQS
+    debe ser idéntico, y cualquier diferencia es inestabilidad real.
+    """
+    import hashlib
+
+    h = hashlib.sha256()
+    for rel in _MEASUREMENT_FILES:
+        p = ROOT / rel
+        if p.is_file():
+            h.update(rel.encode("utf-8"))
+            h.update(p.read_bytes())
+    return h.hexdigest()[:10]
+
+
 def save_run_manifest(run_id: str, payload: Dict[str, Any], extra: Optional[dict] = None) -> Path:
     """Manifiesto JSON del run: resultados por etapa + metadatos de trazabilidad."""
     manifest = {
@@ -47,6 +96,7 @@ def save_run_manifest(run_id: str, payload: Dict[str, Any], extra: Optional[dict
         "project": payload.get("project", "SIPAT-ETL"),
         "version": read_version(),
         "git_commit": git_commit(),
+        "measurement_fingerprint": measurement_fingerprint(),
         "started_at": payload.get("started_at"),
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "status": payload.get("status", "unknown"),

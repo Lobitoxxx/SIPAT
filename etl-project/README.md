@@ -185,6 +185,70 @@ el pipeline **no se detiene**: degrada a secuencial y lo deja registrado en el l
 
 ---
 
+## 4 bis. Confiabilidad de las métricas
+
+> **DQS ≠ confiabilidad.** El DQS mide *propiedades del dato* (nulos, rangos, unicidad).
+> La confiabilidad mide *la confianza en las métricas*: ¿el 92.07 es un hecho o el resultado
+> de decisiones mías?, ¿cuánta incertidumbre tiene?, ¿qué parte de la validación es tautológica?
+
+Se **calcula**, no se escribe a mano:
+
+```bash
+python scripts/graficos_etl.py     # 18 figuras + informe HTML + tabla de afirmaciones
+```
+
+Salidas: `reports/reliability/*.json` (datos), `reports/reliability/*_confiabilidad_*.html`
+(informe autocontenido con figuras embebidas) y `docs/figuras/etl/*.png`.
+
+### Veredictos por eje — ONSV (DQS 92.07)
+
+| Eje | Veredicto | Evidencia medida | Límite conocido |
+|---|---|---|---|
+| Reproducibilidad | 🟢 alta | 3 corridas, misma huella → DQS idéntico (rango 0.00) | Solo con el mismo fichero fuente |
+| Trazabilidad | 🟢 alta | manifest, lineage DuckDB, `source_md5`, Bronze inmutable | Acredita el origen, no la corrección de la fuente |
+| Robustez del DQS | 🟡 media | spread p05–p95 = **8.43** con 300 perturbaciones de pesos | Mide los pesos, no los datos |
+| Incertidumbre | 🟢 alta | DQS 92.07, IC 95 % = [92.06, 92.09], amplitud **0.03** | Cubre variabilidad muestral, no sesgo de fuente |
+| **Circularidad** | 🔴 **baja** | **100 %** de los catálogos derivan del propio dataset | Validar contra un catálogo hecho con esos datos es consistencia interna, no validación |
+| Cobertura del universo | ⚪ no verificable | 2021→2025, 9,106 registros | La completitud mide nulos, **no** si la fuente publicó todo |
+| Integridad referencial | ⚪ no verificable | `integrity` = 100 con 0 FK | Dimensión **vacía**: no debe leerse como "integridad perfecta" |
+| Consistencia cruzada | 🔴 baja | Jaccard ONSV↔cinemómetros = **0.40** | Sin maestro UBIGEO no se puede arbitrar |
+| Imputación | 🟡 media | `vehiculos_danados` con mediana (30.9 % nulos) | Esas métricas son **estimaciones** |
+| Deriva temporal | 🟢 alta | sin variación en el código vigente | Trivial: misma fuente |
+
+**4 alta · 2 media · 2 baja · 2 no verificable.**
+
+### El hallazgo más importante: el DQS depende de mis pesos
+
+| Escenario de pesos | DQS |
+|---|---|
+| Configuración actual | **92.07** |
+| Uniforme (6 dimensiones iguales) | 83.48 |
+| **Frescura crítica (0.30)** | **70.26** |
+| Integridad crítica (0.30) | 95.04 |
+| Solo contrato (frescura = 0) | **100.00** |
+
+![sensibilidad a los pesos](docs/figuras/etl/onsv_sensibilidad_pesos.png)
+
+Mismos datos, mismo código: de **70.26 a 100.00** según los pesos. Por eso **no** se calcula un
+"índice de confiabilidad": un número único repetiría el error que hace malinterpretable el DQS.
+
+### Figuras
+
+| Figura | Qué demuestra |
+|---|---|
+| `onsv_nulos_antes_despues.png` | La limpieza funciona, y también qué **no** pudo arreglar (4 columnas ~90 % vacías) |
+| `dqs_dimensiones.png` | Las 6 dimensiones con su peso; la frescura es la única baja y no es un defecto |
+| `onsv_dqs_ic_bootstrap.png` | DQS 92.07 con IC de 0.03 puntos: estimador muy estable |
+| `dqs_evolucion_onsv.png` | Línea plana = determinismo medido |
+| `onsv_frescura_distribucion.png` | Por qué la frescura es baja: los datos son históricos |
+| `onsv_confiabilidad_veredictos.png` | Los veredictos, coloreados |
+| `onsv_top_departamentos.png`, `onsv_top_clases.png` | Contexto de negocio |
+| `*_evolucion_anual.png` | Registros por año (2021–2025) |
+
+Detalle completo, método y decisiones metodológicas: **[`docs/confiabilidad_etl.md`](docs/confiabilidad_etl.md)**.
+
+---
+
 ## 5. Data Quality: DQS ponderado y quality gates
 
 ```mermaid
@@ -322,7 +386,7 @@ etl-project/
 │   ├── orchestration/             # flujo de 15 etapas
 │   ├── reports/                   # reporte HTML de calidad
 │   └── ml/                        # preparación (sin fugas) + esqueleto MLflow
-├── tests/                         # 87 tests (unit / integration / data_quality)
+├── tests/                         # 124 tests (unit / integration / data_quality)
 ├── scripts/                       # run_pipeline, verify_etl, duckdb_shell
 ├── notebooks/                     # exploración de datos reales
 ├── docs/                          # informes y guías
@@ -410,13 +474,14 @@ sequenceDiagram
 ## 11. Testing
 
 ```bash
-python -m pytest tests -q          # 87 tests
+python -m pytest tests -q          # 124 tests
 ```
 
 | Suite | Cobertura |
 |---|---|
 | `tests/unit/test_core.py` (33) | extractores, contratos, limpieza, TransformationLog, features, DQS, reglas, gates, cuarentena, MODEL_READY, silver, hashing, run_id |
-| `tests/unit/test_regressions.py` (28) | regresiones de defectos reales: columnas `object` mixtas en Bronze, coordenadas negativas en `validity`, `freshness_column`, folding de acentos en catálogos, comparación tz-naive, reglas nuevas del validador, agregaciones configurables, split ML |
+| `tests/unit/test_regressions.py` (31) | regresiones de defectos reales: columnas `object` mixtas en Bronze, coordenadas negativas en `validity`, `freshness_column`, folding de acentos en catálogos, comparación tz-naive, reglas nuevas del validador, agregaciones configurables, split ML, **bootstrap sesgado por duplicar PK**, **huella de medición vs `git_commit`** |
+| `tests/unit/test_reliability.py` (34) | los 8 ejes de confiabilidad: sensibilidad de pesos, bootstrap, circularidad, cobertura, consistencia cruzada, deriva, integridad, imputación |
 | `tests/unit/test_smoke.py` (4) | importación de todos los módulos, extracción XLSX con preámbulo, corrida mini end-to-end |
 | `tests/integration` (9) | pipeline completo (15 etapas), manifest, silver/gold/reporte, idempotencia, lineage DuckDB, agregaciones SQL |
 | `tests/data_quality` (13) | contrato y reglas críticas sobre los **datos reales** (se saltan si la fuente no está) |

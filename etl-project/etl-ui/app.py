@@ -110,17 +110,102 @@ for i, ds in enumerate(DATASETS):
         st.metric(f"{ds} · DQS", "n/d" if dqs is None else round(dqs, 2))
         st.write(f"{STATUS_ICON.get(gate, '?')} **{gate}**")
 
-# --- DQS por dimensión (bar chart) ---
-st.subheader("Data Quality Score por dimensión (último run)")
+# --- DQS por dimensión: radar (plotly) + evolución por corrida ---
+st.subheader("Data Quality Score")
 st.caption("DQS = indicador interno ponderado de calidad (NO es una probabilidad de verdad de los datos).")
-dim_rows = []
-for m in manifests[:5]:
-    for ds, data in (m.get("datasets") or {}).items():
-        dim_rows.append({"run": m["run_id"][-8:], "dataset": ds, "dqs": data.get("dqs")})
-if dim_rows:
-    dq_df = pd.DataFrame(dim_rows)
-    pivot = dq_df.pivot_table(index="dataset", columns="run", values="dqs")
-    st.bar_chart(pivot)
+
+# Lectura del último assessment de confiabilidad (contiene el desglose por dimensión).
+@st.cache_data
+def load_reliability(dataset: str):
+    saved = sorted((ROOT / "reports" / "reliability").glob(f"{dataset}_reliability_*.json"), reverse=True)
+    if not saved:
+        return None
+    return json.loads(saved[0].read_text(encoding="utf-8"))
+
+
+g1, g2 = st.columns([1, 1.2])
+
+with g1:
+    rel_map = {ds: load_reliability(ds) for ds in DATASETS}
+    if any(rel_map.values()):
+        try:
+            import plotly.graph_objects as go
+
+            fig = go.Figure()
+            palette = ["#4f46e5", "#059669", "#d97706", "#dc2626"]
+            for i, (ds, rel) in enumerate(rel_map.items()):
+                if not rel:
+                    continue
+                d = rel["dqs"]
+                dims = [k for k in WEIGHTS if k in d]
+                fig.add_trace(go.Scatterpolar(
+                    r=[d[k] for k in dims] + [d[dims[0]]],
+                    theta=[k[:10] for k in dims] + [dims[0][:10]],
+                    fill="toself", name=ds,
+                    line=dict(color=palette[i % len(palette)], width=2),
+                ))
+            fig.update_layout(
+                polar=dict(radialaxis=dict(visible=True, range=[0, 100])),
+                showlegend=True, height=380,
+                title="Dimensiones del DQS (0-100)",
+                margin=dict(l=40, r=40, t=50, b=20),
+            )
+            st.plotly_chart(fig, width="stretch")
+        except Exception as exc:
+            st.caption(f"Gráfico no disponible: {exc}")
+
+with g2:
+    if any(load_reliability(ds) for ds in DATASETS):
+        serie = []
+        for ds in DATASETS:
+            rel = load_reliability(ds)
+            if rel:
+                for s in rel["detalle"]["drift"]["serie"]:
+                    if s["dataset"] == ds:
+                        serie.append(s)
+        if serie:
+            import plotly.graph_objects as go
+
+            fig = go.Figure()
+            palette = ["#4f46e5", "#059669"]
+            for i, ds in enumerate(DATASETS):
+                xs = sorted([s for s in serie if s["dataset"] == ds], key=lambda r: r["run_id"])
+                if xs:
+                    fig.add_trace(go.Scatter(
+                        x=list(range(len(xs))), y=[s["dqs"] for s in xs],
+                        mode="lines+markers", name=ds,
+                        line=dict(color=palette[i % len(palette)], width=2),
+                    ))
+            fig.update_layout(
+                title="Evolución del DQS por corrida", height=380,
+                xaxis_title="Corridas (orden temporal)", yaxis_title="DQS",
+                yaxis_range=[0, 100], margin=dict(l=40, r=20, t=50, b=40),
+            )
+            st.plotly_chart(fig, width="stretch")
+            st.caption("Una línea plana es la evidencia de determinismo del pipeline.")
+
+# --- Tabla de confiabilidad (resumen) ---
+with st.expander("Confiabilidad de las métricas (¿cuánta confianza merecen?)", expanded=False):
+    st.caption(
+        "El DQS mide el DATO. Esto mide la CONFIANZA en las métricas. "
+        "No se colapsa en un número único a propósito."
+    )
+    for ds in DATASETS:
+        rel = load_reliability(ds)
+        if not rel:
+            st.info(f"{ds}: sin evaluación de confiabilidad. Ejecuta scripts/graficos_etl.py")
+            continue
+        st.markdown(f"**{ds}** — DQS {rel['dqs']['dqs']}")
+        st.dataframe(
+            pd.DataFrame([
+                {"Id": c["id"], "Eje": c["axis"], "Veredicto": c["verdict"],
+                 "Evidencia": json.dumps(c["evidence"], ensure_ascii=False)[:180],
+                 "Límite conocido": c["limit"]}
+                for c in rel["claims"]
+            ]),
+            width="stretch",
+        )
+        st.caption(f"Veredictos: {rel['resumen_veredictos']}")
 
 # --- Silver datasets ---
 st.subheader("Datasets Silver (contrato canónico)")
@@ -136,7 +221,6 @@ for ds in DATASETS:
         num = df.select_dtypes("number").columns.tolist()
         if num:
             st.bar_chart(df[num].describe().T[["mean", "min", "max"]])
-
 # --- Perfiles antes/después ---
 st.subheader("Perfilado de datos (antes → después)")
 for ds in DATASETS:

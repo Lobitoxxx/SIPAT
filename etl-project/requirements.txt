@@ -10,8 +10,10 @@ PyYAML==6.0.2
 # Orquestación (Prefect 3; el pipeline degrada a secuencial si no está disponible)
 prefect==3.8.7
 
-# Visualización (perfiles HTML y notebooks de exploración)
+# Visualización (figuras del ETL, perfiles HTML y notebooks de exploración)
+# seaborn se usa en src/quality/figures.py y en las celdas de los notebooks.
 matplotlib==3.11.1
+seaborn==0.13.2
 plotly==6.9.0
 
 # Tests

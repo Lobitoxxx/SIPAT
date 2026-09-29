@@ -7,6 +7,7 @@ por qué el fallo era un problema de integridad, no un detalle cosmético.
 from __future__ import annotations
 
 import datetime as dt
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -287,3 +288,71 @@ def test_split_no_leakage_requires_target():
 
     with pytest.raises(KeyError):
         split_no_leakage(pd.DataFrame({"x": [1, 2]}), "no_existe")
+
+# --- Defectos del motor de confiabilidad (src/quality/reliability.py) -------
+# Documentados aquí por la regla del proyecto: cada defecto real que aparece
+# durante la validación queda registrado con su causa. El detalle funcional de
+# cada eje vive en tests/unit/test_reliability.py.
+
+def test_bootstrap_must_not_be_biased_by_duplicate_primary_keys(onsv_rows):
+    """REGRESIÓN: el bootstrap remuestreaba filas CON REPLAZO, lo que duplica
+    las claves primarias y hunde la dimensión 'unicidad' por un artefacto del
+    remuestreo. El IC salía descentrado: punto 92.07 contra IC [86.45, 86.65].
+
+    Consecuencia: un IC que no contiene al estimador puntual es un bootstrap
+    sesgado, y publicarlo como "incertidumbre del DQS" habría sido falso."""
+    from src.quality import reliability as R
+    from src.utils.configloader import load_settings
+
+    settings = load_settings()
+    contract = {"contract": {"dataset": "onsv", "primary_key": "codigo", "columns": {
+        "codigo": {"type": "string", "nullable": False, "unique": True},
+        "fecha": {"type": "datetime", "nullable": False},
+    }}}
+    res = R.bootstrap_dqs(onsv_rows, settings, contract, {}, "onsv", R._rules())
+    d = res["dqs"]
+    assert d["ic_inf"] <= d["punto"] <= d["ic_sup"], "IC descentrado del estimador puntual"
+    assert "uniqueness" in res["fix_dimensions"]
+
+
+def test_drift_must_use_current_measurement_fingerprint(onsv_rows, tmp_path):
+    """REGRESIÓN: la huella 'vigente' se elegía como la MÁS FRECUENTE, que tras
+    integrar el ETL en SIPAT son las corridas antiguas con la medición ya
+    corregida. El veredicto de reproducibilidad se calculaba sobre datos
+    obsoletos y salía 'baja' cuando la realidad era 'alta'."""
+    from src.quality import reliability as R
+    from src.utils import versioning
+    from src.utils.configloader import load_settings
+
+    actual = versioning.measurement_fingerprint()
+    runs = tmp_path / "runs"
+    specs = [("sin_huella_vieja", 94.97)] * 5 + [(actual, 92.07)] * 3
+    for i, (fp, dqs) in enumerate(specs):
+        d = runs / f"run-20260929-00000{i}" / "manifest.json"
+        d.parent.mkdir(parents=True)
+        d.write_text(json.dumps({
+            "run_id": f"run-20260929-00000{i}", "version": "1.0.0",
+            "git_commit": "x", "measurement_fingerprint": fp,
+            "datasets": {"onsv": {"dqs": dqs, "gate": "PASSED"}},
+        }), encoding="utf-8")
+
+    res = R.run_drift(runs, R._rules())
+    det = res["datasets"]["onsv"]
+    assert det["huella_vigente"] == actual, "debe elegir la huella ACTUAL, no la más numerosa"
+    assert det["huella_es_actual"] is True
+    assert det["rango_huella_vigente"] == 0.0
+    assert res["verdict"] == "alta"
+
+
+def test_reliability_must_not_produce_a_single_score(onsv_rows, tmp_path):
+    """DECISIÓN DE DISEÑO, no un defecto: la confiabilidad NO se colapsa en un
+    número. Un 'índice de confiabilidad 87' repetiría el error que hace
+    malinterpretable el DQS (leído como probabilidad de que los datos sean
+    ciertos). Se produce una tabla de afirmaciones con evidencia y límite."""
+    from src.quality import reliability as R
+    from src.utils.configloader import load_settings
+
+    res = R.assess("onsv", onsv_rows, settings=load_settings(), runs_dir=tmp_path)
+    assert len(res["claims"]) >= 5
+    for clave in ("score", "confiabilidad", "indice", "reliability_score"):
+        assert clave not in res, f"no debe existir un número único: '{clave}'"

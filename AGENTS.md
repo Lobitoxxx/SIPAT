@@ -19,20 +19,22 @@ Objetivo: pipeline ETL profesional sobre datos reales de siniestralidad (ONSV + 
 
 Comandos (desde `etl-project/`):
 - `python scripts/run_pipeline.py [--engine auto|prefect|sequential] [--dataset onsv,cinemometros]`
+- `python scripts/graficos_etl.py` (18 figuras en docs/figuras/etl/ + informe HTML de confiabilidad)
 - `python scripts/verify_etl.py` (4/4 checks)
-- `python -m pytest tests -q` (87 tests verdes)
-- `python scripts/build_notebooks.py` (regenera y valida los 3 notebooks)
+- `python -m pytest tests -q` (124 tests verdes)
+- `python scripts/build_notebooks.py` y `scripts/add_viz_cells.py` (notebooks + celdas de gráficos)
 - `streamlit run etl-ui/app.py` (observabilidad de solo lectura)
 
-Estado: pipeline ejecutado sobre datos reales → onsv 9,106×33 DQS **92.07** PASSED, cinemometros 160,018×13 DQS **92.00** PASSED, 0 críticas, 0 cuarentena. Documentación en `etl-project/docs/` (informe, guía de sustentación, 12 preguntas técnicas, airflow/dvc/mlflow).
+Estado: pipeline ejecutado sobre datos reales → onsv 9,106×33 DQS **92.07** PASSED, cinemometros 160,018×13 DQS **92.00** PASSED, 0 críticas, 0 cuarentena. Documentación en `etl-project/docs/` (informe, **confiabilidad**, guía de sustentación, 12 preguntas técnicas, airflow/dvc/mlflow).
 
 Reglas al tocar `etl-project/src/`:
-- **Nada hardcodeado**: weights DQS, planes de limpieza, renombres, contratos, catálogos y agregaciones SQL viven en `config/*.yaml`. Si añades una regla, va al YAML.
+- **Nada hardcodeado**: weights DQS, planes de limpieza, renombres, contratos, catálogos, agregaciones SQL y **umbrales de confiabilidad** viven en `config/*.yaml`. Si añades una regla, va al YAML.
 - **Añade un test en `tests/unit/test_regressions.py`** por cada defecto real que encuentres: ese fichero existe para documentar por qué un test sintético no detectaba el fallo.
+- **DQS ≠ confiabilidad**: `src/quality/dimensions.py` mide el dato; `src/quality/reliability.py` mide la confianza en las métricas. No las mezcles y **no añadas un "índice de confiabilidad"**: la tabla de afirmaciones con veredicto + evidencia + límite es deliberada.
 - `tests/data_quality/` valida contra los datos reales del workspace SIPAT; si ONSV publica un valor fuera de catálogo, el test falla (es intencionado).
 - Los tests no deben escribir en `data/`, `artifacts/` ni `reports/` reales: usa el fixture `isolated_project` (o `monkeypatch` sobre `paths.DATA/ARTIFACTS/REPORTS`).
 
-Documentación clave: `etl-project/README.md` (arquitectura con Mermaid), `etl-project/docs/informe_etl_v1.md` (hallazgos + **10 defectos del propio sistema** y sus correcciones), `etl-project/docs/guia_sustentacion.md`.
+Documentación clave: `etl-project/README.md` (arquitectura con Mermaid), `etl-project/docs/informe_etl_v1.md` (hallazgos + **10 defectos del propio sistema** y sus correcciones), `etl-project/docs/confiabilidad_etl.md` (apartado de confiabilidad), `etl-project/docs/guia_sustentacion.md`.
 
 ## Estado del proyecto (SIPAT)
 

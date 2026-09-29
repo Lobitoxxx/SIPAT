@@ -1,0 +1,129 @@
+# Reglas de confiabilidad (apartado "Confiabilidad" del informe).
+#
+# DISTINCIÓN IMPORTANTE:
+#   - El DQS (src/quality/dimensions.py) mide PROPIEDADES DEL DATO.
+#   - La confiabilidad (este fichero) mide LA CONFIANZA EN LAS MÉTRICAS.
+# No son lo mismo y no se mezclan: por eso aquí no se calcula un único número,
+# sino un conjunto de afirmaciones verificables, cada una con su evidencia, su
+# veredicto y su límite conocido.
+#
+# Nada hardcodeado: umbrales, número de iteraciones y tolerancias viven aquí.
+# Verificado sobre datos reales el 29/09/2026.
+
+reliability:
+  # --- Veredictos posibles (de peor a mejor) ---
+  verdicts:
+    - "alta"
+    - "media"
+    - "baja"
+    - "no_verificable"
+
+  # --- 1) Sensibilidad a los pesos del DQS ---
+  # El DQS es una media ponderada. La pregunta NO es "¿cuánto vale?" sino
+  # "¿ese valor depende de una decisión arbitraria mía?".
+  weight_sensitivity:
+    enabled: true
+    n_samples: 300            # perturbaciones Dirichlet de los pesos
+    seed: 42                  # reproducibilidad
+    # Un DQS cuyo rango bajo perturbación de pesos no se estrecha más de esto se
+    # considera "robusto": el número no depende de los pesos elegidos.
+    robust_spread_max: 5.0    # puntos de diferencia entre p05 y p95
+    # Spread mayor que esto = el DQS es frágil ante los pesos: se declara.
+    fragile_spread_min: 12.0
+    # Pesos plausibles alternativos (no uniformes): una organización podría
+    # priorizar la frescura o la integridad. Se evaluan explícitamente.
+    weight_scenarios:
+      - name: "uniforme"
+        note: "las seis dimensiones pesan lo mismo"
+        weights: {completeness: 0.1667, validity: 0.1667, uniqueness: 0.1667,
+                  consistency: 0.1667, integrity: 0.1666, freshness: 0.1666}
+      - name: "frescura_critica"
+        note: "para un dataset que se publica a diario, la frescura es clave"
+        weights: {completeness: 0.15, validity: 0.20, uniqueness: 0.10,
+                  consistency: 0.10, integrity: 0.15, freshness: 0.30}
+      - name: "integridad_critica"
+        note: "para un dataset con claves foráneas reales, la integridad domina"
+        weights: {completeness: 0.20, validity: 0.20, uniqueness: 0.15,
+                  consistency: 0.10, integrity: 0.30, freshness: 0.05}
+      - name: "solo_contrato"
+        note: "prioriza lo que el contrato puede verificar: nada de frescura"
+        weights: {completeness: 0.30, validity: 0.30, uniqueness: 0.20,
+                  consistency: 0.10, integrity: 0.10, freshness: 0.00}
+
+  # --- 2) Incertidumbre del DQS (bootstrap) ---
+  # El DQS es una media de medias: no tiene barra de error. Con solo 9.106 filas
+  # el intervalo será estrecho, pero DEBE reportarse.
+  #
+  # NOTA METODOLÓGICA IMPORTANTE:
+  # remuestrear filas CON REEMPLAZO duplica las claves primarias, así que la
+  # dimensión *unicidad* se hunde por un artefacto del remuestreo, no por el
+  # dataset. Un bootstrap ingenuo da un IC descentrado respecto al punto
+  # estimado. Por eso las dimensiones que NO dependen del muestreo de filas se
+  # mantienen en su valor observado.
+  bootstrap:
+    enabled: true
+    n_resamples: 300
+    seed: 42
+    ci: 0.95
+    max_rows: 60000          # remuestreo con reemplazo sobre esta muestra como máximo
+    # Dimensiones invariantes al muestreo de filas (no se remuestrean).
+    fix_dimensions: ["uniqueness", "integrity"]
+
+  # --- 3) Circularidad de los catálogos ---
+  # ADVERTENCIA METODOLÓGICA:
+  # config/quality/catalogs/*.yaml se derivó de los valores OBSERVADOS en el
+  # propio dataset. Validar el dataset contra ese catálogo y obtener 100 % es
+  # CONSISTENCIA INTERNA, no validación externa: si la fuente trae un valor mal
+  # escrito, entra en el catálogo y se autovalida.
+  # Este control mide esa proporción y la DECLARA, en vez de esconderla.
+  catalog_circularity:
+    enabled: true
+    # Si más del 80 % de los valores del catálogo proceden del propio dato,
+    # la validación de ese catálogo se marca como circular.
+    circular_threshold_pct: 80.0
+
+  # --- 4) Cobertura temporal del universo ---
+  # Completitud mide nulos, NO si la fuente publicó todos los registros.
+  coverage:
+    enabled: true
+    date_column: "auto"       # usa settings.datasets.<dataset>.freshness_column
+    # Años sin ningún registro = hueco de cobertura.
+    flag_empty_years: true
+
+  # --- 5) Consistencia entre datasets ---
+  # Compara claves geográficas presentes en más de un dataset. Sin un maestro
+  # UBIGEO no se puede arbitrar cuál tiene razón: por eso se REPORTA, no se corrige.
+  cross_dataset:
+    enabled: true
+    # `key` es el nombre canónico de lavariable; `key_a`/`key_b` permiten mapear
+    # a la columna real de cada dataset (ONSV usa `departamento`, cinemómetros
+    # usa `region`: son la misma dimensión con distinto nombre).
+    compare:
+      - dataset_a: "onsv"
+        dataset_b: "cinemometros"
+        key: "departamento"
+        key_a: "departamento"
+        key_b: "region"
+    # OJO: en SIPAT los datasets no comparten vocabulario, así que un veredicto
+    # de "media" o "baja" es honesto: documenta el límite en vez de taparlo.
+
+  # --- 6) Deriva entre corridas ---
+  # Si la fuente publica un valor fuera de catálogo, el DQS debe reflejarlo.
+  drift:
+    enabled: true
+    min_runs: 3               # con menos de 3 corridas no hay histórico
+    tolerance_dqs: 0.5        # variación de DQS considerada ruido
+    tolerance_dimension: 10.0 # variación por dimensión considerada deriva
+
+  # --- 7) Integridad sin claves foráneas ---
+  # Dimensión fijada a 100 porque no hay FK. Se declara como no informativa.
+  integrity_dimension:
+    # Si la integridad supera este valor sin FK configuradas, es suspiciously alto.
+    suspicious_value: 100.0
+
+  # --- 8) Imputación declarada ---
+  # Las columnas imputadas convierten "medición" en "estimación". Se listan.
+  imputation:
+    enabled: true
+    # % de nulos a partir del cual una imputación debe declararse en el informe.
+    report_threshold_pct: 1.0
