@@ -1,0 +1,13 @@
+# Fuente ONSV — registro de siniestros fatales y lesionados 2021-2025 (preliminar).
+# Archivo XLSX oficial del Observatorio Nacional de Seguridad Vial (ONSV).
+source:
+  dataset: "onsv"
+  name: "onsv_xlsx"
+  source_type: "xlsx"
+  description: "Registro de Siniestros de Tránsito Fatales 2021-2025 (preliminar) — ONSV"
+  path: "${sipat_root}/data/raw/onsv/siniestros_fatales_2021-2025.xlsx"
+  sheet: 0
+  # La hoja tiene 5 filas de preámbulo (título y notas); la cabecera está en la fila 6 (índice 0-based 4).
+  header_row: 4
+  ingest_row_count: 0          # se completa con la fila real leída
+  primary_key: "CÓDIGO SINIESTRO"

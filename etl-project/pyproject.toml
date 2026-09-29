@@ -1,0 +1,20 @@
+# SIPAT-ETL
+[project]
+name = "sipat-etl"
+version = "1.0.0"
+description = "Sistema profesional ETL, calidad y preparación de datos (CRISP-DM + Kanban) sobre datos reales de siniestralidad vial del Perú."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[tool.setuptools]
+py-modules = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+# Los tests insertan src/ en sys.path via conftest.py; no instalar el paquete.
+python_files = ["test_*.py"]
+
+[tool.ruff]
+line-length = 120

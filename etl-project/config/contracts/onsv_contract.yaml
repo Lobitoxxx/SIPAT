@@ -1,0 +1,74 @@
+# Contrato de datos ONSV (nombres canónicos). Sección 5 — reglas configurables, no hardcodeadas.
+# Validación SINTÁCTICA (tipos, nulos, unicidad, rangos, formatos). La semántica de dominio va en
+# src/quality/domain_rules.py y los catálogos en config/quality/catalogs/.
+contract:
+  dataset: "onsv"
+  version: "1.0"
+  primary_key: "codigo"
+  target: "fallecidos"
+  note: "Catálogos derivados del análisis del dataset real (docs/informe_etl_v1.md, sección datos)."
+  columns:
+    codigo:
+      type: string
+      nullable: false
+      unique: true
+    fecha:
+      type: datetime
+      nullable: false
+      min: "2000-01-01"
+      max_before_today_days: 0
+    hora:
+      type: string
+      nullable: false
+      pattern: "^[0-9]{1,2}:[0-9]{2}$"
+    clase:
+      type: string
+      nullable: false
+      allowed_values: ["ATROPELLO", "ATROPELLO FUGA", "CAIDA DE PASAJERO", "CHOQUE",
+                       "CHOQUE CON OBJETO FIJO", "CHOQUE FUGA", "DESPISTE", "ESPECIAL",
+                       "FERROVIARIO", "INCENDIO", "VOLCADURA"]
+    fallecidos:
+      type: integer
+      nullable: false
+      min: 0
+    lesionados:
+      type: integer
+      nullable: true
+      min: 0
+    vehiculos_danados:
+      type: integer
+      nullable: true
+      min: 0
+    departamento:
+      type: string
+      nullable: false
+    provincia:
+      type: string
+      nullable: true
+    distrito:
+      type: string
+      nullable: true
+    zona:
+      type: string
+      nullable: true
+      allowed_values: ["RURAL", "URBANA"]
+    red_vial:
+      type: string
+      nullable: true
+      allowed_values: ["DEPARTAMENTAL", "NACIONAL", "PROVINCIAL", "SIN CLASIFICAR", "URBANO"]
+    condicion_climatica:
+      type: string
+      nullable: true
+    causa_principal:
+      type: string
+      nullable: true
+    latitud:
+      type: float
+      nullable: false
+      min: -18.5
+      max: 0.2
+    longitud:
+      type: float
+      nullable: false
+      min: -81.5
+      max: -68.5

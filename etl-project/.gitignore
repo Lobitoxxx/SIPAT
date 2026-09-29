@@ -1,0 +1,44 @@
+# --- SIPAT-ETL: ficheros generados y datos pesados/regenerables ---
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Datos producidos por el pipeline (regenerables; versionables con DVC, ver docs/dvc_versionado.md)
+data/silver/
+data/gold/
+data/bronze/
+data/quarantine/
+artifacts/runs/
+artifacts/lineage/
+artifacts/logs/
+artifacts/*.db
+*.log
+
+# Metadatos y reportes generados (se regeneran en cada corrida)
+reports/profiling/
+reports/quality/
+reports/pipeline/
+.ipynb_checkpoints/
+
+# Caches
+*.duckdb
+
+# Credenciales / secretos (nunca subir)
+.env
+
+# Editor / SO
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# --- Excepciones: la estructura de carpetas sí se versiona ---
+!.streamlit/
+!etl-ui/.streamlit/
+!etl-ui/.streamlit/config.toml
+!**/.gitkeep

@@ -1,0 +1,76 @@
+# SIPAT-ETL — reglas de calidad y quality gates (secciones 6-8).
+# El Data Quality Score es un INDICADOR INTERNO de calidad del dataset; no es una
+# probabilidad científica de verdad de los datos.
+quality_gates:
+  min_quality_score: 90
+  critical_rules:
+    schema_valid: 100
+    primary_key_not_null: 100
+    primary_key_unique: 100
+    target_available: 100
+    referential_integrity: 98
+
+# Reglas de dominio por dataset: cada regla define severity (critical o warning).
+# Las reglas criticales alimentan la cuarentena y el criterio MODEL_READY.
+domain_rules:
+  onsv:
+    rules:
+      - rule: "pk_not_null"
+        severity: "critical"
+        columns: ["codigo"]
+      - rule: "pk_unique"
+        severity: "critical"
+        columns: ["codigo"]
+      - rule: "fecha_parsable"
+        severity: "critical"
+        columns: ["fecha"]
+      - rule: "fecha_no_futura"
+        severity: "critical"
+        columns: ["fecha"]
+      - rule: "coordenadas_peru"
+        severity: "critical"
+        columns: ["latitud", "longitud"]
+      - rule: "departamento_catalogo"
+        severity: "critical"
+        columns: ["departamento"]
+      - rule: "clase_catalogo"
+        severity: "warning"
+        columns: ["clase"]
+      - rule: "condicion_catalogo"
+        severity: "warning"
+        columns: ["condicion_climatica"]
+      - rule: "contadores_no_negativos"
+        severity: "critical"
+        columns: ["fallecidos", "lesionados", "vehiculos_danados"]
+      - rule: "hora_formato"
+        severity: "warning"
+        columns: ["hora"]
+      - rule: "consistencia_ubigeo"
+        severity: "warning"
+        columns: ["departamento", "provincia", "distrito"]
+  cinemometros:
+    rules:
+      - rule: "pk_not_null"
+        severity: "critical"
+        columns: ["nro_deteccion"]
+      - rule: "pk_unique"
+        severity: "critical"
+        columns: ["nro_deteccion"]
+      - rule: "fecha_parsable"
+        severity: "critical"
+        columns: ["fecha_papeleta"]
+      - rule: "fecha_no_futura"
+        severity: "critical"
+        columns: ["fecha_papeleta"]
+      - rule: "coordenadas_peru"
+        severity: "critical"
+        columns: ["latitud", "longitud"]
+      - rule: "region_catalogo"
+        severity: "warning"
+        columns: ["region"]
+      - rule: "carretera_catalogo"
+        severity: "warning"
+        columns: ["carretera"]
+      - rule: "velocidad_rango"
+        severity: "critical"
+        columns: ["velocidad_detectada", "limite_velocidad"]

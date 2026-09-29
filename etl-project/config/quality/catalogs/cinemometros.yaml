@@ -1,0 +1,59 @@
+# Catálogos Cinemómetros — derivados del dataset real (160,018 filas).
+catalogs:
+  # El dataset presentaba la inconsistencia real 'LIMA' vs 'Lima'; al normalizar a
+  # mayúsculas, la región 'LIMA' queda conforme al catálogo oficial de departamentos.
+  regiones_validas:
+    - AMAZONAS
+    - ANCASH
+    - APURIMAC
+    - AREQUIPA
+    - AYACUCHO
+    - CAJAMARCA
+    - CALLAO
+    - CUSCO
+    - HUANCAVELICA
+    - HUANUCO
+    - ICA
+    - JUNIN
+    - LA LIBERTAD
+    - LAMBAYEQUE
+    - LIMA
+    - LORETO
+    - MADRE DE DIOS
+    - MOQUEGUA
+    - PASCO
+    - PIURA
+    - PUNO
+    - SAN MARTIN
+    - TACNA
+    - TUMBES
+    - UCAYALI
+  carreteras:
+    - CARR PE-34A
+    - CARRETERA CENTRAL
+    - LONGITUDINAL DE LA SIERRA SUR
+    - PANAMERICANA NORTE
+    - PANAMERICANA SUR
+    - VÍA NACIONAL PE-1SD
+    - VÍA PENETRACIÓN, PE-36
+
+  # Agregaciones Gold ejecutadas sobre DuckDB (src/load/aggregations.py).
+  aggregations:
+    - name: "detecciones_por_region"
+      kind: "count_by"
+      by: ["region"]
+      limit: 25
+    - name: "detecciones_por_carretera"
+      kind: "count_by"
+      by: ["carretera"]
+      limit: 20
+    - name: "velocidad_media_por_region"
+      kind: "mean_by"
+      by: ["region"]
+      value: "velocidad_detectada"
+      limit: 25
+    - name: "exceso_promedio_por_carretera"
+      kind: "mean_by"
+      by: ["carretera"]
+      value: "exceso_kmh"
+      limit: 20

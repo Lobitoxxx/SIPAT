@@ -1,0 +1,71 @@
+SIPAT-ETL — Sistema Profesional de ETL, Calidad y Preparación de Datos
+======================================================================
+
+ETL completo sobre datos REALES de siniestralidad vial del Perú (ONSV + SUTRAN),
+con arquitectura Medallion (Bronze/Silver/Gold), Data Quality Score ponderado,
+quality gates, cuarentena, trazabilidad end-to-end y preparacion ML sin fugas.
+
+Metodologia: CRISP-DM + KDD (modelado) | Kanban (gestion).
+
+
+INSTALACION
+-----------
+Requisitos: Python 3.10 o superior.
+
+    cd etl-project
+    pip install -r requirements.txt
+
+
+EJECUCION
+---------
+    python scripts/run_pipeline.py                 # ambos datasets
+    python scripts/run_pipeline.py --dataset onsv  # solo ONSV
+    python scripts/verify_etl.py                   # verificacion del proyecto
+    python -m pytest tests -q                      # suite de tests
+    streamlit run etl-ui/app.py                    # dashboard (opcional)
+
+
+RESULTADO ESPERADO
+------------------
+    onsv:        DQS ~95  gate PASSED  silver 9,106 filas
+    cinemometros: DQS ~91  gate PASSED  silver 160,018 filas
+
+Si el status del pipeline es FAILED, revisa el manifest de la corrida:
+
+    artifacts/runs/<run_id>/manifest.json
+
+
+ESTRUCTURA DE CARPETAS
+----------------------
+    config/     settings, fuentes, contratos de datos, reglas y catalogos
+    data/       bronze, silver, gold, quarantine
+    src/        codigo del pipeline (extract, cleaning, quality, load, ...)
+    tests/      unit, integration, data_quality
+    reports/    perfiles (JSON/CSV/HTML) y reportes de calidad
+    artifacts/  runs/<run_id>/ con manifest y transformation log
+    notebooks/  exploracion de datos reales
+    docs/       informes, guias y documentacion tecnica
+    etl-ui/     dashboard de observabilidad (solo lectura)
+
+
+FUENTES DE DATOS
+----------------
+Los datos NO se incluyen en este repositorio. Se leen del workspace SIPAT:
+
+    ../data/raw/onsv/siniestros_fatales_2021-2025.xlsx
+    ../data/processed/cinemometros_clean.csv
+
+Si no existen, los tests de calidad de datos se saltan automaticamente y el
+pipeline devuelve un error claro de fuente ausente.
+
+
+DOCUMENTACION
+-------------
+Empieza por README.md. Si no renderiza los diagramas, usa LEEME.txt
+o los .md de la carpeta docs/.
+
+
+VER PROYECTO COMPLETO
+---------------------
+La capa ETL forma parte del sistema SIPAT (analitica de siniestralidad vial
+en la Red Vial Nacional del Peru). Ver ../README.md

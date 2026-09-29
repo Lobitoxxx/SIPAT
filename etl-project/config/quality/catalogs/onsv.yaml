@@ -1,0 +1,93 @@
+# Catálogos ONSV — derivados del análisis del dataset real (9,106 filas del XLSX raw).
+# Para efectos de ETL v1, se fijan aquí los valores observados (decisión documentada).
+# NOTA: los valores están SIN ACENTOS porque la limpieza aplica `fold_accents`
+# (cleaning.fold_accents: true). Así catálogo y Silver comparan de forma exacta.
+catalogs:
+  departamentos:
+    - AMAZONAS
+    - ANCASH
+    - APURIMAC
+    - AREQUIPA
+    - AYACUCHO
+    - CAJAMARCA
+    - CALLAO
+    - CUSCO
+    - HUANCAVELICA
+    - HUANUCO
+    - ICA
+    - JUNIN
+    - LA LIBERTAD
+    - LAMBAYEQUE
+    - LIMA
+    - LORETO
+    - MADRE DE DIOS
+    - MOQUEGUA
+    - PASCO
+    - PIURA
+    - PUNO
+    - SAN MARTIN
+    - TACNA
+    - TUMBES
+    - UCAYALI
+  clase:
+    - ATROPELLO
+    - ATROPELLO FUGA
+    - CAIDA DE PASAJERO
+    - CHOQUE
+    - CHOQUE CON OBJETO FIJO
+    - CHOQUE FUGA
+    - DESPISTE
+    - ESPECIAL
+    - FERROVIARIO
+    - INCENDIO
+    - VOLCADURA
+  condicion_climatica:
+    # DESCONOCIDO es el valor de imputación configurado en settings.datasets.onsv.fill
+    # (strategy: domain_rule). Se admite como categoría válida y NO cuenta como outlier.
+    - DESCONOCIDO
+    - DESPEJADO
+    - GRANIZADO
+    - LLUVIOSO
+    - NEVADO
+    - NIEBLA
+    - NUBLADO
+    - SOLEADO
+    - VENTARRON
+  causa_factor_principal:
+    - EN PROCESO DE INVESTIGACION
+    - IMPERICIA DEL CONDUCTOR
+    - IMPRUDENCIA DEL CONDUCTOR
+    - IMPRUDENCIA DEL PASAJERO/OCUPANTE
+    - IMPRUDENCIA DEL PEATON
+    - INFRAESTRUCTURA Y ENTORNO VIAL
+    - NEGLIGENCIA DEL CONDUCTOR
+  red_vial:
+    - DEPARTAMENTAL
+    - NACIONAL
+    - PROVINCIAL
+    - SIN CLASIFICAR
+    - URBANO
+  zona:
+    - RURAL
+    - URBANA
+
+  # Agregaciones Gold ejecutadas sobre DuckDB (src/load/aggregations.py).
+  # kind: count_by | sum_by | mean_by
+  aggregations:
+    - name: "siniestros_por_departamento"
+      kind: "count_by"
+      by: ["departamento"]
+      limit: 25
+    - name: "siniestros_por_clase"
+      kind: "count_by"
+      by: ["clase"]
+      limit: 15
+    - name: "fallecidos_por_departamento"
+      kind: "sum_by"
+      by: ["departamento"]
+      value: "fallecidos"
+      limit: 25
+    - name: "siniestros_por_tramo_dia"
+      kind: "count_by"
+      by: ["tramo_dia"]
+      limit: 10

@@ -1,0 +1,45 @@
+# Contrato de datos Cinemómetros (nombres canónicos). Sección 5.
+contract:
+  dataset: "cinemometros"
+  version: "1.0"
+  primary_key: "nro_deteccion"
+  target: "velocidad_detectada"
+  columns:
+    nro_deteccion:
+      type: integer
+      nullable: false
+      unique: true
+    fecha_papeleta:
+      type: datetime
+      nullable: false
+      min: "2010-01-01"
+      max_before_today_days: 365
+    fecha_corte:
+      type: datetime
+      nullable: true
+    region:
+      type: string
+      nullable: false
+    carretera:
+      type: string
+      nullable: false
+    latitud:
+      type: float
+      nullable: false
+      min: -18.5
+      max: 0.2
+    longitud:
+      type: float
+      nullable: false
+      min: -81.5
+      max: -68.5
+    limite_velocidad:
+      type: integer
+      nullable: false
+      min: 10
+      max: 160
+    velocidad_detectada:
+      type: integer
+      nullable: false
+      min: 1
+      max: 300

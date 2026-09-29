@@ -1,0 +1,10 @@
+# Fuente Cinemómetros — papeletas por detector de velocidad (SUTRAN) sobre Red Vial.
+source:
+  dataset: "cinemometros"
+  name: "cinemometros_csv"
+  source_type: "csv"
+  description: "Infracciones por cinemómetros SUTRAN sobre la Red Vial Nacional (2019-2021)"
+  path: "${sipat_root}/data/processed/cinemometros_clean.csv"
+  encoding: "utf-8-sig"
+  delimiter: ","
+  primary_key: "NRO_DETECCION"

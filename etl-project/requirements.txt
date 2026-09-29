@@ -1,0 +1,21 @@
+# SIPAT-ETL — dependencias (fijadas para reproducibilidad)
+# Núcleo de datos
+pandas==3.0.5
+numpy==2.5.2
+pyarrow==24.0.0
+duckdb==1.5.6
+openpyxl==3.1.5
+PyYAML==6.0.2
+
+# Orquestación (Prefect 3; el pipeline degrada a secuencial si no está disponible)
+prefect==3.8.7
+
+# Visualización (perfiles HTML y notebooks de exploración)
+matplotlib==3.11.1
+plotly==6.9.0
+
+# Tests
+pytest==9.1.1
+
+# Observabilidad (UI mínima)
+streamlit==1.61.1

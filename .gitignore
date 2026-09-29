@@ -27,6 +27,10 @@ data/processed/dashboard/build.log
 data/processed/dashboard/modelo_multi.log
 data/processed/dashboard/api_check.json
 
+# Node / frontend (presentación)
+node_modules/
+.npm/
+
 # Sistema / IDE
 .opencode/
 .DS_Store

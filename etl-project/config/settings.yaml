@@ -1,0 +1,143 @@
+# SIPAT-ETL — configuración principal
+# Metodología: Kanban + CRISP-DM  (sección de "Metodología" del informe)
+project:
+  name: "SIPAT-ETL"
+  version: "1.0.0"
+  methodology: "KANBAN + CRISP-DM"
+  kdd: true
+
+paths:
+  # Ruta del workspace SIPAT (datos reales de origen). Se expande ${sipat_root}.
+  sipat_root: ".."
+  bronze: "data/bronze"
+  silver: "data/silver"
+  gold: "data/gold"
+  quarantine: "data/quarantine"
+  artifacts_runs: "artifacts/runs"
+  reports_profiling: "reports/profiling"
+  reports_quality: "reports/quality"
+  reports_pipeline: "reports/pipeline"
+
+etl:
+  backend: "pandas"        # v1: pandas. Migración a polars prevista (src/planeada en docs).
+  engine: "duckdb"         # Motor SQL analítico local (sección 16)
+  parquet_engine: "pyarrow"
+  quarantine_on_critical: true
+
+quality:
+  # Pesos del Data Quality Score (configurables, sección 7). La suma = 1.0.
+  weights:
+    completeness: 0.22
+    validity: 0.22
+    uniqueness: 0.15
+    consistency: 0.15
+    integrity: 0.18
+    freshness: 0.08
+  freshness_window_days: 365
+  outlier_policy: "report" # report | flag  (NUNCA drop automático sin evidencia; sección 12)
+  iqr_factor: 1.5
+
+cleaning:
+  fold_accents: true
+  case_normalize: "upper"           # categoricals -> mayúsculas consistentes
+  collapse_spaces: true
+  # Caracteres de ruido a eliminar antes de coerción numérica (ej. grados: '-71.3253°').
+  numeric_strip_chars: ["°", "º", ",", " ", "%"]
+  drop_columns_with_missing_pct_ge: 0.99   # columnas >99% nulas se documentan y descartan
+  fillna_default: "keep"
+  dedupe_keep: "first"
+
+datasets:
+  onsv:
+    name: "onsv"
+    label: "Siniestros fatales y lesionados ONSV (Red Vial / nacional) 2021-2025"
+    source: "onsv_xlsx"
+    contract: "onsv_contract.yaml"
+    version: "1.0"
+    target: "fallecidos"
+    dedup_keys: ["codigo"]
+    primary_key: "codigo"
+    freshness_column: "fecha"
+    rename:
+      "CÓDIGO SINIESTRO": "codigo"
+      "FECHA SINIESTRO": "fecha"
+      "HORA SINIESTRO": "hora"
+      "CLASE SINIESTRO": "clase"
+      "CANTIDAD DE FALLECIDOS": "fallecidos"
+      "CANTIDAD DE LESIONADOS": "lesionados"
+      "CANTIDAD DE VEHICULOS DAÑADOS": "vehiculos_danados"
+      "DEPARTAMENTO": "departamento"
+      "PROVINCIA": "provincia"
+      "DISTRITO": "distrito"
+      "ZONA": "zona"
+      "TIPO DE VÍA": "tipo_via"
+      "RED VIAL": "red_vial"
+      "COD CARRETERA": "cod_carretera"
+      "COORDENADAS LATITUD": "latitud"
+      "COORDENADAS  LONGITUD": "longitud"
+      "CONDICIÓN CLIMÁTICA": "condicion_climatica"
+      "ZONIFICACIÓN": "zonificacion"
+      "CARACTERÍSTICAS DE VÍA": "caracteristicas_via"
+      "PERFIL LONGITUDINAL VÍA": "perfil_via"
+      "SUPERFICIE DE CALZADA": "superficie_calzada"
+      "¿EXISTE SEÑAL VERTICAL?": "existe_senal_vertical"
+      "CLASIFICACIÓN DE LA SEÑAL VERTICAL Nº 1": "clasif_senal_vert_1"
+      "CLASIFICACIÓN DE LA SEÑAL VERTICAL Nº 2": "clasif_senal_vert_2"
+      "¿EXISTE SEÑAL HORIZONTAL?": "existe_senal_horizontal"
+      "CAUSA FACTOR PRINCIPAL": "causa_principal"
+      "CAUSA ESPECÍFICA": "causa_especifica"
+    date_columns:
+      "fecha": ["%d/%m/%Y", "%Y-%m-%d", "%d-%m-%Y"]
+    numeric: ["fallecidos", "lesionados", "vehiculos_danados", "latitud", "longitud"]
+    numeric_strip_chars: ["°", "º", ",", " "]
+    category_cols:
+      - "clase"
+      - "departamento"
+      - "provincia"
+      - "distrito"
+      - "zona"
+      - "tipo_via"
+      - "red_vial"
+      - "condicion_climatica"
+      - "zonificacion"
+      - "superficie_calzada"
+      - "existe_senal_vertical"
+      - "clasif_senal_vert_1"
+      - "clasif_senal_vert_2"
+      - "existe_senal_horizontal"
+      - "causa_principal"
+    fill:
+      "vehiculos_danados": {strategy: "median"}
+      "clase": {strategy: "keep"}
+      "condicion_climatica": {strategy: "domain_rule", value: "DESCONOCIDO"}
+    drop_columns: []
+
+  cinemometros:
+    name: "cinemometros"
+    label: "Papeletas por cinemómetros en Red Vial (SUTRAN) 2019-2021"
+    source: "cinemometros_csv"
+    contract: "cinemometros_contract.yaml"
+    version: "1.0"
+    target: "velocidad_detectada"
+    dedup_keys: ["nro_deteccion"]
+    primary_key: "nro_deteccion"
+    freshness_column: "fecha_papeleta"
+    rename:
+      "NRO_DETECCION": "nro_deteccion"
+      "FECHA_PAPELETA": "fecha_papeleta"
+      "REGION": "region"
+      "CARRETERA": "carretera"
+      "LATITUD": "latitud"
+      "LONGITUD": "longitud"
+      "LIMITE_VELOCIDAD": "limite_velocidad"
+      "VELOCIDAD_DETECTADA": "velocidad_detectada"
+      "FECHA_CORTE": "fecha_corte"
+    date_columns:
+      "fecha_papeleta": ["%Y%m%d", "%d/%m/%Y", "%Y-%m-%d"]
+      "fecha_corte": ["%Y%m%d", "%d/%m/%Y", "%Y-%m-%d"]
+    numeric: ["limite_velocidad", "velocidad_detectada", "latitud", "longitud"]
+    numeric_strip_chars: ["°", "º", ",", " "]
+    category_cols: ["region", "carretera"]
+    fill: {}
+    # lat/lon son copias exactas de latitud/longitud (verificado: pct igualdad = 1.0); se descartan.
+    drop_columns: ["lat", "lon"]
