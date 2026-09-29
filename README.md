@@ -78,6 +78,32 @@ tipos de incidente) desde cualquier resultado de análisis: `reporte_desde_resum
 
 ---
 
+## 2 bis. Capa de ingesta y calidad: `etl-project/`
+
+Antes de que la analítica procese los datos, [`etl-project/`](etl-project/README.md) los
+ingiere y **verifica que cumplen un contrato**. Es un subproyecto con su propio repo Git.
+
+| | SIPAT-ETL | SIPAT (este repo) |
+|---|---|---|
+| **Qué hace** | Extrae, limpia, valida y mide la calidad | Analiza, modela y genera rutas seguras |
+| **Salida** | Bronze/Silver/Gold en Parquet + SQL | Mapas, modelos, dashboard |
+| **Garantía** | Quality gate: publica o bloquea | Consume datos que pasaron el gate |
+
+```bash
+cd etl-project
+pip install -r requirements.txt
+python scripts/run_pipeline.py     # ONSV 9,106 + cinemómetros 160,018
+python scripts/verify_etl.py       # 4/4 checks
+python -m pytest tests -q          # 87 tests
+```
+
+Estado actual: ambos datasets pasan el gate (DQS 92.07 y 92.00), sin violaciones críticas.
+Documentación propia en [`etl-project/docs/`](etl-project/docs/), incluido el
+[informe técnico](etl-project/docs/informe_etl_v1.md) con los 10 defectos del propio sistema
+que se detectaron y corrigieron sobre datos reales.
+
+---
+
 ## 3. Cómo se manejan los datos (pipeline)
 
 ```mermaid
