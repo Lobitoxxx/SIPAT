@@ -291,7 +291,7 @@ def html_dqs_dimensions(dqs_by_dataset: Dict[str, Dict[str, Any]]) -> str:
 def _fig_dqs_dimensions(dqs_by_dataset: Dict[str, Dict[str, Any]]):
     if not _MPL or not dqs_by_dataset:
         return None
-    from src.quality.reliability import DIMS
+    from src.quality.auditoria import DIMS
 
     _style()
     datasets = list(dqs_by_dataset)
@@ -472,7 +472,7 @@ def plot_bootstrap_ci(
     """Forest plot: estimador puntual e IC por dimensión y global."""
     if not _MPL or not boot or not boot.get("enabled"):
         return None
-    from src.quality.reliability import DIMS
+    from src.quality.auditoria import DIMS
 
     claves = [k for k in list(DIMS) + ["dqs"] if k in boot]
     puntos = [float(boot[k]["punto"]) for k in claves]
@@ -503,7 +503,7 @@ def plot_bootstrap_ci(
 # --------------------------------------------------------------------------
 # 7) Afirmaciones de confiabilidad
 # --------------------------------------------------------------------------
-def plot_reliability_claims(
+def plot_auditoria_claims(
     claims: List[Dict[str, Any]],
     out_dir: Optional[Path] = None,
     dataset: Optional[str] = None,
@@ -599,7 +599,7 @@ def plot_temporal(
 def build_all(
     dataset: str,
     silver: pd.DataFrame,
-    reliability: Optional[Dict[str, Any]] = None,
+    auditoria: Optional[Dict[str, Any]] = None,
     other_silver: Optional[Dict[str, pd.DataFrame]] = None,
     root: Optional[Path] = None,
 ) -> Dict[str, str]:
@@ -621,22 +621,22 @@ def build_all(
     after = _read_json(prof_dir / f"{dataset}_after_profile.json")
     _try("nulos_antes_despues", lambda: plot_nulls_before_after(before, after, dataset, out))
 
-    if reliability:
-        d = reliability.get("detalle", {})
+    if auditoria:
+        d = auditoria.get("detalle", {})
         _try("confiabilidad_veredictos",
-             lambda: plot_reliability_claims(reliability.get("claims", []), out, dataset))
+             lambda: plot_auditoria_claims(auditoria.get("claims", []), out, dataset))
         # `assess` guarda la distribución de la sensibilidad FUERA del detalle
         # (para no duplicarla en el JSON); la figura la necesita, así que se
         # reinyecta antes de dibujar.
         sens = dict(d.get("weight_sensitivity", {}))
-        vals = reliability.get("detalle", {}).get("weight_sensitivity_distribucion")
+        vals = auditoria.get("detalle", {}).get("weight_sensitivity_distribucion")
         if vals and sens.get("enabled"):
             sens["distribucion_valores"] = vals
         _try("sensibilidad_pesos", lambda: plot_weight_sensitivity(sens, out, dataset))
         _try("dqs_ic_bootstrap", lambda: plot_bootstrap_ci(d.get("bootstrap", {}), out, dataset))
 
     # Evolución del DQS
-    serie = (reliability or {}).get("detalle", {}).get("drift", {}).get("serie", [])
+    serie = (auditoria or {}).get("detalle", {}).get("drift", {}).get("serie", [])
     _try("dqs_evolucion", lambda: plot_dqs_evolution(serie, out, dataset) if serie else None)
 
     # Frescura

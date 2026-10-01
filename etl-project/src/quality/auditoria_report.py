@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Genera el informe HTML de confiabilidad (autocontenido, con figuras base64).
+"""Genera el informe HTML de auditoría de la medición (autocontenido, con figuras base64)."
 
 Complementa a `src/reports/report.py` (que informa de la CALIDAD del dato):
 este informa de la CONFIANZA en las métricas. Son preguntas distintas y por eso
 son informes distintos.
 
     python scripts/graficos_etl.py   # genera primero las figuras
-    python -c "from src.quality.reliability_report import ...; ..."
+    python -c "from src.quality.auditoria_report import ...; ..."
 """
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ from src.quality import figures as F
 from src.utils import paths
 from src.utils.logging_util import get_logger
 
-logger = get_logger("etl.reliability_report")
+logger = get_logger("etl.auditoria_report")
 
 _ESC = str.maketrans({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})
 
@@ -101,14 +101,14 @@ def _fmt_evidence(ev: Dict[str, Any]) -> str:
     return "<br>".join(partes)
 
 
-def generate_reliability_report(
+def generate_auditoria_report(
     result: Dict[str, Any],
     dataset: str,
     fig_paths: Optional[Dict[str, Path]] = None,
     out_dir: Optional[Path] = None,
 ) -> Path:
     """Informe HTML autocontenido: tabla de afirmaciones + figuras embebidas."""
-    out_dir = out_dir or paths.reports_dir("reliability")
+    out_dir = out_dir or paths.reports_dir("auditoria")
     out_dir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     fig_paths = fig_paths or {}
@@ -150,7 +150,7 @@ def generate_reliability_report(
     # --- Figuras ---
     figs: List[str] = []
     for clave, titulo, caption in (
-        ("confiabilidad_veredictos", "Veredictos por eje de la confiabilidad",
+        ("auditoria_veredictos", "Veredictos por eje de la auditoría",
          "Cada eje del apartado, coloreado por su veredicto. No se colapsa en un "
          "número único a propósito."),
         ("nulos_antes_despues", "Nulos por columna, antes y después de la limpieza",
@@ -210,9 +210,9 @@ def generate_reliability_report(
 
     html_doc = f"""<!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8">
-<title>Confiabilidad de las métricas — {_esc(dataset)}</title>
+<title>Auditoría de la medición -étricas — {_esc(dataset)}</title>
 <style>{CSS}</style></head><body><div class="wrap">
-<h1>Confiabilidad de las métricas — {_esc(dataset)}</h1>
+<h1>Auditoría de la medición -étricas — {_esc(dataset)}</h1>
 <p class="sub">Generado {_esc(ts)} · {_esc(result.get("generado", "")[:19])} ·
 DQS {_esc(dqs.get("dqs"))} · {_esc(len(claims))} afirmaciones</p>
 
@@ -238,13 +238,13 @@ no hay garantías.</p>
 <div class="figs">{''.join(figs)}</div>
 
 <footer>
-<p>Generado por <code>src/quality/reliability.py</code> + <code>src/quality/reliability_report.py</code>.
-Umbrales y número de iteraciones en <code>config/quality/reliability_rules.yaml</code> (nada hardcodeado).</p>
+<p>Generado por <code>src/quality/auditoria.py</code> + <code>src/quality/auditoria_report.py</code>.
+Umbrales y número de iteraciones en <code>config/quality/auditoria_rules.yaml</code> (nada hardcodeado).</p>
 <p>Métodología CRISP-DM + KDD · SIPAT-ETL v1.0</p>
 </footer>
 </div></body></html>"""
 
-    path = out_dir / f"{dataset}_confiabilidad_{ts.replace(':', '').replace(' ', '_')}.html"
+    path = out_dir / f"{dataset}_auditoria_{ts.replace(':', '').replace(' ', '_')}.html"
     path.write_text(html_doc, encoding="utf-8")
-    logger.info("informe de confiabilidad: %s", path)
+    logger.info("informe de auditoría: %s", path)
     return path

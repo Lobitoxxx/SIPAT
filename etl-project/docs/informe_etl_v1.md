@@ -198,11 +198,11 @@ comprueba ahora el número de filas, no solo que el fichero exista.
 
 ---
 
-## 6 bis. Confiabilidad de las métricas (apartado transversal)
+## 6 bis. Auditoría de la medición (apartado transversal)étricas (apartado transversal)
 
 El DQS mide **propiedades del dato**. La confiabilidad mide **la confianza en las métricas**.
 Son preguntas distintas y el proyecto las trata por separado en
-[`docs/confiabilidad_etl.md`](confiabilidad_etl.md) y `src/quality/reliability.py`.
+[`docs/auditoria_medicion_etl.md`](auditoria_medicion_etl.md) y `src/quality/auditoria.py`.
 
 Resumen de los 8 ejes evaluados sobre datos reales (4 alta · 2 media · 2 baja · 2 no verificable):
 
@@ -228,7 +228,7 @@ Tres decisiones metodológicas que hubo que tomar (detalladas en el apartado de 
 
 1. **Huella de medición** (`versioning.measurement_fingerprint()`) en lugar de `git_commit`
    para agrupar corridas: tras integrar el ETL en el repositorio SIPAT, el commit del padre
-   cambia por motivos ajenos. `reliability.py` queda **fuera** de la huella a propósito: el
+   cambia por motivos ajenos. `auditoria.py` queda **fuera** de la huella a propósito: el
    auditor no produce la medición.
 2. **Bootstrap con `fix_dimensions`**: remuestrear con reemplazo duplica las PK y hunde la
    unicidad, dando un IC descentrado (punto 92.07 contra IC [86.45, 86.65]). Las dimensiones

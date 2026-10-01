@@ -604,13 +604,13 @@ validate(silver, "03_silver_dqs_gate")
 # con el mismo código que usa `scripts/graficos_etl.py`, y se incrustan desde
 # ahí: una sola implementación, no dos.
 
-_RELIABILITY_PRELUDE = [
+_AUDITORIA_PRELUDE = [
     "import base64 as _b64",
     "",
     "from IPython.display import Image as _Image, display",
     "",
     "from src.quality import figures as F",
-    "from src.quality import reliability as R",
+    "from src.quality import auditoria as R",
     "",
     "",
     "def _show(png_path):",
@@ -624,19 +624,28 @@ _RELIABILITY_PRELUDE = [
 
 rel = [
     md(
-        "# 04 · Confiabilidad de las métricas",
+        "# 04 · Auditoría de la medición",
         "",
-        "Fase CRISP-DM **Evaluation**. El DQS mide **propiedades del dato** (nulos,",
-        "rangos, unicidad). La confiabilidad mide **la confianza en las métricas**:",
-        "¿ese 92.07 es un hecho o el resultado de decisiones mías?, ¿cuánta",
-        "incertidumbre tiene?, ¿qué parte de la validación es tautológica?",
+        "Fase CRISP-DM **Evaluation**. Este notebook audita **las métricas que",
+        "calcula el ETL**, no el dato ni la predicción:",
+        "",
+        "| Apartado | Qué audita | Dónde vive |",
+        "|---|---|---|",
+        "| **Auditoría de la medición** (este) | Si el 92.07 y sus ejes son defendibles | ETL |",
+        "| **Fiabilidad de las fuentes** | Si los datos que entrega ONSV/SUTRAN/OSITRAN son de fiar | SIPAT raíz |",
+        "| **Validez predictiva** | Si la predicción aguanta fuera de la muestra | SIPAT raíz |",
+        "",
+        "El DQS mide **propiedades del dato** (nulos, rangos, unicidad). La auditoría",
+        "de la medición responde otra cosa: ¿ese 92.07 es un hecho o el resultado de",
+        "decisiones mías?, ¿cuánta incertidumbre tiene?, ¿qué parte de la validación",
+        "es tautológica?",
         "",
         "> **No se calcula un \"índice de confiabilidad\".** Un número único repetiría",
         "> el error que hace malinterpretable el DQS. En su lugar se produce una",
         "> **tabla de afirmaciones verificables**, cada una con su veredicto, su",
         "> evidencia medida y su límite conocido.",
         "",
-        "Todo lo que hay aquí se **calcula** con `src/quality/reliability.py`: no hay",
+        "Todo lo que hay aquí se **calcula** con `src/quality/auditoria.py`: no hay",
         "ni un solo número escrito a mano.",
         "",
         "Requisito previo: `python scripts/run_pipeline.py`",
@@ -660,7 +669,7 @@ rel = [
         "`no_verificable` no es un fallo: es una frontera honesta, el punto donde",
         "los datos disponibles dejan de poder responder.",
     ),
-    code(*PRELUDE, *_RELIABILITY_PRELUDE,
+    code(*PRELUDE, *_AUDITORIA_PRELUDE,
          "",
          "def _silver(ds):",
          "    v = SETTINGS['datasets'][ds]['version']",
@@ -708,7 +717,7 @@ rel = [
         "La pregunta que casi nunca se hace a un indicador ponderado: *el peso 0.22 de",
         "completitud lo elegiste tú, así que el 92.07 también es tuyo*. La respuesta se",
         "recalcula con 300 perturbaciones de los pesos y con cuatro escenarios declarados",
-        "en `config/quality/reliability_rules.yaml`."),
+        "en `config/quality/auditoria_rules.yaml`."),
     code("for ds, res in assess.items():",
          "    ws = res['detalle']['weight_sensitivity']",
          "    print(f\"\\n=== {ds} ===\")",
@@ -837,7 +846,7 @@ rel = [
         "(editar un README) y produciría falsos positivos de deriva.",
         "",
         "Por eso existe `versioning.measurement_fingerprint()`: un hash de los ficheros que",
-        "**producen** las métricas. `reliability.py` queda deliberadamente fuera de esa",
+        "**producen** las métricas. `auditoria.py` queda deliberadamente fuera de esa",
         "huella: el auditor no produce la medición, y si estuviera dentro, tocar el auditor",
         "invalidaría justo la comparabilidad que la huella debe proteger."),
     code("for ds, res in assess.items():",
@@ -870,7 +879,7 @@ rel = [
         "Una fila por afirmación. El gris (`no_verificable`) no es un fallo del sistema: es",
         "el punto donde los datos disponibles dejan de poder responder la pregunta."),
     code("for ds, res in assess.items():",
-         "    _show(F.plot_reliability_claims(res['claims'], F.figures_dir(), ds))"),
+         "    _show(F.plot_auditoria_claims(res['claims'], F.figures_dir(), ds))"),
     code("_matriz = pd.DataFrame({ds: {c['axis']: c['verdict'] for c in res['claims']}",
          "                     for ds, res in assess.items()})",
          "display(_matriz)",
@@ -903,7 +912,7 @@ rel = [
         "",
         "### 3. El auditor dentro de la huella que lo audita",
         "",
-        "Un glob `src/quality/*.py` incluía `reliability.py` en la huella. Consecuencia:",
+        "Un glob `src/quality/*.py` incluía `auditoria.py` en la huella. Consecuencia:",
         "tocar el auditor invalidaba la comparabilidad de las corridas, que es",
         "exactamente lo que la huella debe evitar.",
         "",
@@ -968,18 +977,18 @@ rel = [
         "python scripts/graficos_etl.py      # recalcula la tabla y dibuja",
         "```",
         "",
-        "Los umbrales están en `config/quality/reliability_rules.yaml`; el motor es",
-        "`src/quality/reliability.py`; el informe autocontenido se genera en",
-        "`reports/reliability/<dataset>_confiabilidad_*.html`."),
+        "Los umbrales están en `config/quality/auditoria_rules.yaml`; el motor es",
+        "`src/quality/auditoria.py`; el informe autocontenido se genera en",
+        "`reports/auditoria/<dataset>_auditoria_*.html`."),
 ]
 
-validate(rel, "04_confiabilidad_metricas")
+validate(rel, "04_auditoria_medicion")
 
 SPEC = (
     (onsv, "01_exploracion_onsv.ipynb"),
     (cine, "02_exploracion_cinemometros.ipynb"),
     (silver, "03_silver_dqs_gate.ipynb"),
-    (rel, "04_confiabilidad_metricas.ipynb"),
+    (rel, "04_auditoria_medicion.ipynb"),
 )
 
 

@@ -1,14 +1,20 @@
-# Confiabilidad de las métricas — SIPAT-ETL
+# Auditoría de la medición — SIPAT-ETL
 
-> **Este apartado no es sobre la calidad del dato, sino sobre la confianza en las métricas.**
-> Son dos preguntas distintas y confundirlas es el error más común al presentar un ETL.
+> **Este apartado audita las MÉTRICAS que calcula el ETL.** No audita el dato que entra
+> ni la predicción que sale. Son tres preguntas distintas, con tres nombres distintos.
 
-- **DQS** (`src/quality/dimensions.py`): ¿tiene nulos?, ¿los valores están en rango?, ¿la clave es única?
-  → Mide **propiedades del dato**.
-- **Confiabilidad** (`src/quality/reliability.py`): ¿ese DQS de 92.07 es un hecho o el
-  resultado de decisiones mías?, ¿cuánta incertidumbre tiene?, ¿qué parte de la validación
-  es tautológica?
-  → Mide **la confianza en la medición**.
+| Apartado | Pregunta que responde | Módulo |
+|---|---|---|
+| **Auditoría de la medición** (este) | ¿Ese DQS de 92.07 es un hecho o el resultado de decisiones mías? ¿Cuánta incertidumbre tiene? ¿Qué parte de la validación es tautológica? | `src/quality/auditoria.py` (ETL) |
+| **Fiabilidad de las fuentes** | ¿Los datos que entrega ONSV/SUTRAN/OSITRAN son de fiar? ¿La fuente está omitiendo siniestros? | `scripts/fiabilidad_fuentes.py` (SIPAT raíz) |
+| **Validez predictiva** | ¿La predicción del modelo aguanta fuera de la muestra con la que se ajustó? | `scripts/validez_predictiva.py` (SIPAT raíz) |
+
+Ni este ni los otros dos auditan el **dato**: eso es el DQS (`src/quality/dimensions.py`),
+que mide propiedades como nulos, rangos y unicidad.
+
+El nombre cambió a propósito. Antes este módulo se llamaba "confiabilidad", que es
+justo lo que alguien espera para las preguntas de fuentes y de predicción. Reservar el
+término es lo que permite que los otros dos apartados signifiquen algo preciso.
 
 Todo lo de aquí se **calcula**, no se escribe a mano:
 
@@ -16,8 +22,8 @@ Todo lo de aquí se **calcula**, no se escribe a mano:
 python scripts/graficos_etl.py       # recalcula, dibuja y genera el informe HTML
 ```
 
-Salidas: `reports/reliability/<dataset>_reliability_<ts>.json` (datos crudos),
-`reports/reliability/<dataset>_confiabilidad_<ts>.html` (informe autocontenido con figuras
+Salidas: `reports/auditoria/<dataset>_auditoria_<ts>.json` (datos crudos),
+`reports/auditoria/<dataset>_auditoria_<ts>.html` (informe autocontenido con figuras
 embebidas) y `docs/figuras/etl/*.png` (18 figuras).
 
 ---
@@ -146,7 +152,7 @@ porque borrar columnas es una decisión analítica, no de limpieza.
 
 ## 5. Cómo se midió (reproducibilidad de este apartado)
 
-| Eje | Método | Parámetros (en `config/quality/reliability_rules.yaml`) |
+| Eje | Método | Parámetros (en `config/quality/auditoria_rules.yaml`) |
 |---|---|---|
 | Sensibilidad a pesos | 300 perturbaciones Dirichlet alrededor de los pesos base + 4 escenarios declarados | `weight_sensitivity.n_samples: 300`, `seed: 42` |
 | Incertidumbre | Bootstrap con reemplazo, 300 remuestreos, IC 95 % | `bootstrap.n_resamples: 300`, `ci: 0.95` |
@@ -171,7 +177,7 @@ Se implementó `versioning.measurement_fingerprint()`: un hash de los ficheros q
 las métricas (`config/settings.yaml`, contratos, catálogos, `dimensions.py`, `domain_rules.py`,
 `gates.py`, `model_ready.py`, `validation/contract.py`, `cleaning/clean.py`).
 
-Decisión deliberada: **`reliability.py` NO está en esa lista**. El auditor no produce la
+Decisión deliberada: **`auditoria.py` NO está en esa lista**. El auditor no produce la
 medición; si estuviera, tocar el auditor invalidaría la comparabilidad de las corridas, que es
 justo lo que la huella debe evitar.
 
@@ -227,12 +233,12 @@ Ese segundo párrafo es el que distingue un trabajo sólido de uno que solo vend
 
 ## 8. Documentos relacionados
 
-- `notebooks/04_confiabilidad_metricas.ipynb` — este apartado, narrado celda a celda sobre los datos reales
+- `notebooks/04_auditoria_medicion.ipynb` — este apartado, narrado celda a celda sobre los datos reales
 - `docs/informe_etl_v1.md` — informe técnico; sección 6 con los 10 defectos del propio sistema
 - `docs/guia_sustentacion.md` — guía de preguntas y respuestas
 - `docs/figuras/etl/` — las 18 figuras
-- `reports/reliability/*.html` — informe autocontenido por dataset
+- `reports/auditoria/*.html` — informe autocontenido por dataset
 - `reports/quality/*.html` y `reports/profiling/*_after_profile.html` — reportes del pipeline, ya con las figuras embebidas
-- `config/quality/reliability_rules.yaml` — umbrales y parámetros
-- `src/quality/reliability.py` — el motor (8 ejes)
-- `tests/unit/test_reliability.py` — 34 tests
+- `config/quality/auditoria_rules.yaml` — umbrales y parámetros
+- `src/quality/auditoria.py` — el motor (8 ejes)
+- `tests/unit/test_auditoria.py` — 34 tests

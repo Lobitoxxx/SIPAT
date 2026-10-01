@@ -1,16 +1,21 @@
-# Reglas de confiabilidad (apartado "Confiabilidad" del informe).
+# Reglas de la auditoría de la medición (apartado "Auditoría de la medición").
 #
-# DISTINCIÓN IMPORTANTE:
-#   - El DQS (src/quality/dimensions.py) mide PROPIEDADES DEL DATO.
-#   - La confiabilidad (este fichero) mide LA CONFIANZA EN LAS MÉTRICAS.
-# No son lo mismo y no se mezclan: por eso aquí no se calcula un único número,
-# sino un conjunto de afirmaciones verificables, cada una con su evidencia, su
-# veredicto y su límite conocido.
+# DISTINCIÓN IMPORTANTE — el proyecto tiene cuatro preguntas y cuatro módulos:
+#   1. Calidad del dato     → dimensions.py (DQS): nulos, rangos, unicidad.
+#   2. ESTE FICHERO          → auditoria.py: ¿las métricas son defendibles?
+#                             Pesos, incertidumbre, circularidad, deriva.
+#   3. Fiabilidad de fuentes → SIPAT raíz, scripts/fiabilidad_fuentes.py.
+#   4. Validez predictiva   → SIPAT raíz, scripts/validez_predictiva.py.
+#
+# Aquí no se calcula un único número: un índice compacto se lee como
+# "probabilidad de que los datos sean ciertos", que es justo el malentendido.
+# Se produce un conjunto de afirmaciones verificables, cada una con su evidencia,
+# su veredicto y su límite conocido.
 #
 # Nada hardcodeado: umbrales, número de iteraciones y tolerancias viven aquí.
 # Verificado sobre datos reales el 29/09/2026.
 
-reliability:
+auditoria:
   # --- Veredictos posibles (de peor a mejor) ---
   verdicts:
     - "alta"

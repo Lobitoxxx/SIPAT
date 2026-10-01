@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Tests del motor de confiabilidad (src/quality/reliability.py).
+"""Tests del motor de confiabilidad (src/quality/auditoria.py).
 
 Foco: que cada eje mida lo que dice medir, que sea determinista y que
-aplique los umbrales leídos de config/quality/reliability_rules.yaml.
+aplique los umbrales leídos de config/quality/auditoria_rules.yaml.
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.quality import dimensions, reliability as R
+from src.quality import dimensions, auditoria as R
 from src.utils.configloader import load_settings
 from src.utils.paths import CONFIG
 
@@ -24,9 +24,9 @@ RULES = R._rules()
 # --------------------------------------------------------------------------
 # 0) La configuración de reglas es válida y sin números mágicos
 # --------------------------------------------------------------------------
-def test_reliability_rules_yaml_exists_and_has_all_axes():
-    f = CONFIG / "quality" / "reliability_rules.yaml"
-    assert f.exists(), "debe existir config/quality/reliability_rules.yaml"
+def test_auditoria_rules_yaml_exists_and_has_all_axes():
+    f = CONFIG / "quality" / "auditoria_rules.yaml"
+    assert f.exists(), "debe existir config/quality/auditoria_rules.yaml"
     d = R._rules()
     for eje in (
         "weight_sensitivity", "bootstrap", "catalog_circularity",
@@ -35,12 +35,12 @@ def test_reliability_rules_yaml_exists_and_has_all_axes():
         assert eje in d, f"falta el eje '{eje}' en la configuración"
 
 
-def test_reliability_rules_verdicts_are_ordered():
+def test_auditoria_rules_verdicts_are_ordered():
     v = RULES["verdicts"]
     assert v == ["alta", "media", "baja", "no_verificable"]
 
 
-def test_reliability_weight_scenarios_sum_to_one():
+def test_auditoria_weight_scenarios_sum_to_one():
     """Un escenario con pesos que no suman 1 produciría un DQS sin sentido."""
     for spec in RULES["weight_sensitivity"]["weight_scenarios"]:
         total = sum(spec["weights"].values())

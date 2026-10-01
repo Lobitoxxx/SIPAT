@@ -4,7 +4,7 @@
 Se ejecuta desde artefactos ya existentes (no reejecuta el pipeline):
     python scripts/graficos_etl.py                    # ambos datasets
     python scripts/graficos_etl.py --dataset onsv
-    python scripts/graficos_etl.py --skip-reliability # sin recalcular la tabla
+    python scripts/graficos_etl.py --skip-auditoria # sin recalcular la tabla
 
 Es el equivalente ETL de `scripts/graficos.py` del SIPAT raíz.
 """
@@ -35,7 +35,7 @@ def _silver_path(dataset: str, version: str) -> Path:
 def main() -> int:
     ap = argparse.ArgumentParser(description="Figuras del ETL en docs/figuras/etl/.")
     ap.add_argument("--dataset", default=None, help="Filtrar datasets (coma separada).")
-    ap.add_argument("--skip-reliability", action="store_true",
+    ap.add_argument("--skip-auditoria", action="store_true",
                     help="No recalcular la tabla de confiabilidad (usa la última si existe).")
     args = ap.parse_args()
 
@@ -62,12 +62,12 @@ def main() -> int:
     total = 0
     # Tabla de confiabilidad de TODOS los datasets primero: la figura de
     # dimensiones necesita el DQS completo (con sus 6 dimensiones) de cada uno.
-    from src.quality import reliability as R
+    from src.quality import auditoria as R
 
     assessments: dict[str, dict] = {}
     for ds, df in frames.items():
-        if args.skip_reliability:
-            cached = _last_reliability(ds)
+        if args.skip_auditoria:
+            cached = _last_auditoria(ds)
             if cached:
                 assessments[ds] = cached
                 print(f"  {ds}: confiabilidad (caché, {len(cached['claims'])} afirmaciones)")
@@ -89,7 +89,7 @@ def main() -> int:
     for ds, df in frames.items():
         print(f"\n=== {ds} ({len(df):,} filas x {df.shape[1]} columnas) ===")
         rel = assessments.get(ds)
-        rutas = F.build_all(ds, df, reliability=rel, other_silver={}, root=ROOT)
+        rutas = F.build_all(ds, df, auditoria=rel, other_silver={}, root=ROOT)
         for nombre, ruta in rutas.items():
             print(f"  [ok] {nombre}: {Path(ruta).name}")
             total += 1
@@ -97,14 +97,14 @@ def main() -> int:
         # Informe HTML autocontenido con las figuras embebidas.
         if rel:
             from pathlib import Path as _P
-            from src.quality import reliability_report as RR
+            from src.quality import auditoria_report as RR
 
             figs = {k: _P(v) for k, v in rutas.items()}
             figs["confiabilidad_veredictos"] = _P(
                 F.figures_dir() / f"{ds}_confiabilidad_veredictos.png"
             ) if (F.figures_dir() / f"{ds}_confiabilidad_veredictos.png").exists() else figs.get(
                 "confiabilidad_veredictos", _P("none"))
-            html_path = RR.generate_reliability_report(rel, ds, figs)
+            html_path = RR.generate_auditoria_report(rel, ds, figs)
             print(f"  [ok] informe HTML: {html_path.name}")
 
     # Contexto de negocio (solo con Silver, sin depender de confiabilidad).
@@ -149,9 +149,9 @@ def _stacked_by(ds: str):
     return "clase" if ds == "onsv" else "region"
 
 
-def _last_reliability(dataset: str):
+def _last_auditoria(dataset: str):
     """Reutiliza la última evaluación de confiabilidad guardada en disco."""
-    saved = sorted((ROOT / "reports" / "reliability").glob(f"{dataset}_reliability_*.json"),
+    saved = sorted((ROOT / "reports" / "auditoria").glob(f"{dataset}_auditoria_*.json"),
                    reverse=True)
     for p in saved:
         try:

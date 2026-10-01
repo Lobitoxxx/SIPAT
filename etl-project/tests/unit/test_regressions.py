@@ -289,10 +289,10 @@ def test_split_no_leakage_requires_target():
     with pytest.raises(KeyError):
         split_no_leakage(pd.DataFrame({"x": [1, 2]}), "no_existe")
 
-# --- Defectos del motor de confiabilidad (src/quality/reliability.py) -------
+# --- Defectos del motor de auditoria (src/quality/auditoria.py) -------
 # Documentados aquí por la regla del proyecto: cada defecto real que aparece
 # durante la validación queda registrado con su causa. El detalle funcional de
-# cada eje vive en tests/unit/test_reliability.py.
+# cada eje vive en tests/unit/test_auditoria.py.
 
 def test_bootstrap_must_not_be_biased_by_duplicate_primary_keys(onsv_rows):
     """REGRESIÓN: el bootstrap remuestreaba filas CON REPLAZO, lo que duplica
@@ -301,7 +301,7 @@ def test_bootstrap_must_not_be_biased_by_duplicate_primary_keys(onsv_rows):
 
     Consecuencia: un IC que no contiene al estimador puntual es un bootstrap
     sesgado, y publicarlo como "incertidumbre del DQS" habría sido falso."""
-    from src.quality import reliability as R
+    from src.quality import auditoria as R
     from src.utils.configloader import load_settings
 
     settings = load_settings()
@@ -320,7 +320,7 @@ def test_drift_must_use_current_measurement_fingerprint(onsv_rows, tmp_path):
     integrar el ETL en SIPAT son las corridas antiguas con la medición ya
     corregida. El veredicto de reproducibilidad se calculaba sobre datos
     obsoletos y salía 'baja' cuando la realidad era 'alta'."""
-    from src.quality import reliability as R
+    from src.quality import auditoria as R
     from src.utils import versioning
     from src.utils.configloader import load_settings
 
@@ -349,7 +349,7 @@ def test_reliability_must_not_produce_a_single_score(onsv_rows, tmp_path):
     número. Un 'índice de confiabilidad 87' repetiría el error que hace
     malinterpretable el DQS (leído como probabilidad de que los datos sean
     ciertos). Se produce una tabla de afirmaciones con evidencia y límite."""
-    from src.quality import reliability as R
+    from src.quality import auditoria as R
     from src.utils.configloader import load_settings
 
     res = R.assess("onsv", onsv_rows, settings=load_settings(), runs_dir=tmp_path)
@@ -369,7 +369,7 @@ def test_drift_evidence_min_max_must_be_scoped_to_the_current_fingerprint(onsv_r
     donde el pipeline es perfectamente determinista. La diferencia entre huellas
     es un cambio de MÉTODO (correcciones), no deriva, y no debe mezclarse con la
     reproducibilidad dentro de una misma huella."""
-    from src.quality import reliability as R
+    from src.quality import auditoria as R
     from src.utils import versioning
     from src.utils.configloader import load_settings
 

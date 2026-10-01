@@ -1,23 +1,34 @@
 # -*- coding: utf-8 -*-
-"""Confiabilidad de las métricas del pipeline (apartado "Confiabilidad").
+"""Auditoría de la medición del pipeline.
 
-DISTINCIÓN FUNDAMENTAL
-----------------------
-El DQS (`dimensions.py`) mide **propiedades del dato**: ¿tiene nulos?, ¿los
-valores están en rango?, ¿la clave es única?.
+QUÉ AUDITA Y QUÉ NO
+-------------------
+Este módulo audita **las métricas que calcula el ETL**. El proyecto tiene
+cuatro preguntas distintas y les dio cuatro nombres, porque llamarlas todas
+"confiabilidad" es lo que hace que un apartado termine significando nada:
 
-La confiabilidad (este módulo) mide **la confianza en las métricas**: ¿ese DQS
-de 92.07 es un hecho o el resultado de decisiones arbitrarias?, ¿cuánta
-incertidumbre tiene?, ¿qué parte de la validación es tautológica?
+1. **Calidad del dato** — `dimensions.py` (DQS): ¿tiene nulos?, ¿los valores
+   están en rango?, ¿la clave es única?
+2. **Auditoría de la medición** — este módulo: ¿ese DQS de 92.07 es un hecho o
+   el resultado de decisiones arbitrarias?, ¿cuánta incertidumbre tiene?, ¿qué
+   parte de la validación es tautológica?
+3. **Fiabilidad de las fuentes** — SIPAT raíz, `scripts/fiabilidad_fuentes.py`:
+   ¿los datos que entrega ONSV/SUTRAN/OSITRAN son de fiar?, ¿la fuente omite
+   siniestros?
+4. **Validez predictiva** — SIPAT raíz, `scripts/validez_predictiva.py`:
+   ¿la predicción del modelo aguanta fuera de la muestra con la que se ajustó?
 
-Por eso aquí NO se calcula un único número. Un "índice de confiabilidad 87"
+Este módulo cubre solo el punto 2. No dice nada sobre si los datos de la fuente
+son ciertos (3), ni sobre si el modelo predice bien (4).
+
+Por eso aquí NO se calcula un único número. Un "índice de confianza 87"
 repetiría exactamente el error que el DQS hace posible:
 un número compacto que la gente interpreta como probabilidad de que los datos
 sean ciertos. Aquí se produce un conjunto de **afirmaciones verificables**, cada
 una con su evidencia, su veredicto y su límite conocido.
 
 Los umbrales y el número de iteraciones se leen de
-`config/quality/reliability_rules.yaml`: nada está hardcodeado.
+`config/quality/auditoria_rules.yaml`: nada está hardcodeado.
 """
 from __future__ import annotations
 
@@ -35,7 +46,7 @@ from src.utils import paths
 from src.utils.configloader import load_catalogs, load_settings
 from src.utils.logging_util import get_logger
 
-logger = get_logger("etl.reliability")
+logger = get_logger("etl.auditoria")
 
 # Dimensiones del DQS, en el orden en que se reportan.
 DIMS = ("completeness", "validity", "uniqueness", "consistency", "integrity", "freshness")
@@ -50,10 +61,10 @@ VERDICT_NO_VERIFICABLE = "no_verificable"
 # utilidades
 # --------------------------------------------------------------------------
 def _rules() -> Dict[str, Any]:
-    """Carga config/quality/reliability_rules.yaml (umbrales, no hardcodeados)."""
+    """Carga config/quality/auditoria_rules.yaml (umbrales, no hardcodeados)."""
     from src.utils.configloader import load_yaml
 
-    return load_yaml(paths.CONFIG / "quality" / "reliability_rules.yaml")["reliability"]
+    return load_yaml(paths.CONFIG / "quality" / "auditoria_rules.yaml")["auditoria"]
 
 
 def _claim(
@@ -842,7 +853,7 @@ def assess(
             "se actualice con datos nuevos.",
         ))
 
-    # Resumen por eje (para el informe): NO es un número único de confiabilidad.
+    # Resumen por eje (para el informe): NO es un número único.
     por_verdict: Dict[str, int] = {}
     for c in claims:
         por_verdict[c["verdict"]] = por_verdict.get(c["verdict"], 0) + 1
@@ -871,8 +882,8 @@ def assess(
 # Persistencia
 # --------------------------------------------------------------------------
 def save_assessment(result: Dict[str, Any], dataset: str) -> Path:
-    out_dir = paths.reports_dir("reliability")
-    path = out_dir / f"{dataset}_reliability_{result['generado'][:19].replace(':', '').replace('-', '')}.json"
+    out_dir = paths.reports_dir("auditoria")
+    path = out_dir / f"{dataset}_auditoria_{result['generado'][:19].replace(':', '').replace('-', '')}.json"
     path.write_text(json.dumps(result, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
-    logger.info("confiabilidad escrita: %s", path)
+    logger.info("auditoría escrita: %s", path)
     return path

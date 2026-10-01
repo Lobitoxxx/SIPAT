@@ -185,11 +185,19 @@ el pipeline **no se detiene**: degrada a secuencial y lo deja registrado en el l
 
 ---
 
-## 4 bis. Confiabilidad de las métricas
+## 4 bis. Auditoría de la medición
 
-> **DQS ≠ confiabilidad.** El DQS mide *propiedades del dato* (nulos, rangos, unicidad).
-> La confiabilidad mide *la confianza en las métricas*: ¿el 92.07 es un hecho o el resultado
-> de decisiones mías?, ¿cuánta incertidumbre tiene?, ¿qué parte de la validación es tautológica?
+> **Este apartado audita las MÉTRICAS del ETL, no el dato ni la predicción.**
+> Hay tres auditorías distintas y por eso tienen tres nombres:
+>
+> | Apartado | Pregunta | Módulo |
+> |---|---|---|
+> | **Auditoría de la medición** (este) | ¿El 92.07 es un hecho o una decisión mía? | `src/quality/auditoria.py` |
+> | **Fiabilidad de las fuentes** | ¿Los datos de ONSV/SUTRAN/OSITRAN son de fiar? | `scripts/fiabilidad_fuentes.py` (SIPAT raíz) |
+> | **Validez predictiva** | ¿La predicción aguanta fuera de la muestra? | `scripts/validez_predictiva.py` (SIPAT raíz) |
+>
+> Y el DQS (`src/quality/dimensions.py`), que mide *propiedades del dato* (nulos, rangos,
+> unicidad): esa es una cuarta cosa, y no es ninguna de las tres.
 
 Se **calcula**, no se escribe a mano:
 
@@ -197,7 +205,7 @@ Se **calcula**, no se escribe a mano:
 python scripts/graficos_etl.py     # 18 figuras + informe HTML + tabla de afirmaciones
 ```
 
-Salidas: `reports/reliability/*.json` (datos), `reports/reliability/*_confiabilidad_*.html`
+Salidas: `reports/auditoria/*.json` (datos), `reports/auditoria/*_confiabilidad_*.html`
 (informe autocontenido con figuras embebidas) y `docs/figuras/etl/*.png`.
 
 ### Veredictos por eje — ONSV (DQS 92.07)
@@ -241,11 +249,11 @@ Mismos datos, mismo código: de **70.26 a 100.00** según los pesos. Por eso **n
 | `onsv_dqs_ic_bootstrap.png` | DQS 92.07 con IC de 0.03 puntos: estimador muy estable |
 | `dqs_evolucion_onsv.png` | Línea plana = determinismo medido |
 | `onsv_frescura_distribucion.png` | Por qué la frescura es baja: los datos son históricos |
-| `onsv_confiabilidad_veredictos.png` | Los veredictos, coloreados |
+| `onsv_auditoria_veredictos.png` | Los veredictos, coloreados |
 | `onsv_top_departamentos.png`, `onsv_top_clases.png` | Contexto de negocio |
 | `*_evolucion_anual.png` | Registros por año (2021–2025) |
 
-Detalle completo, método y decisiones metodológicas: **[`docs/confiabilidad_etl.md`](docs/confiabilidad_etl.md)**.
+Detalle completo, método y decisiones metodológicas: **[`docs/auditoria_medicion_etl.md`](docs/auditoria_medicion_etl.md)**.
 
 ---
 
@@ -481,7 +489,7 @@ python -m pytest tests -q          # 124 tests
 |---|---|
 | `tests/unit/test_core.py` (33) | extractores, contratos, limpieza, TransformationLog, features, DQS, reglas, gates, cuarentena, MODEL_READY, silver, hashing, run_id |
 | `tests/unit/test_regressions.py` (31) | regresiones de defectos reales: columnas `object` mixtas en Bronze, coordenadas negativas en `validity`, `freshness_column`, folding de acentos en catálogos, comparación tz-naive, reglas nuevas del validador, agregaciones configurables, split ML, **bootstrap sesgado por duplicar PK**, **huella de medición vs `git_commit`** |
-| `tests/unit/test_reliability.py` (34) | los 8 ejes de confiabilidad: sensibilidad de pesos, bootstrap, circularidad, cobertura, consistencia cruzada, deriva, integridad, imputación |
+| `tests/unit/test_auditoria.py` (34) | los 8 ejes de auditoría de la medición: sensibilidad de pesos, bootstrap, circularidad, cobertura, consistencia cruzada, deriva, integridad, imputación |
 | `tests/unit/test_smoke.py` (4) | importación de todos los módulos, extracción XLSX con preámbulo, corrida mini end-to-end |
 | `tests/integration` (9) | pipeline completo (15 etapas), manifest, silver/gold/reporte, idempotencia, lineage DuckDB, agregaciones SQL |
 | `tests/data_quality` (13) | contrato y reglas críticas sobre los **datos reales** (se saltan si la fuente no está) |
@@ -504,7 +512,7 @@ Ejecutan sin errores contra los datos reales (verificado con `nbclient`):
 | `01_exploracion_onsv.ipynb` | crudo XLSX | ¿dónde está la cabecera? ¿qué columnas mezclan tipos y por qué no son escribibles en Parquet? ¿qué pasa con acentos, fechas DD/MM y coordenadas negativas? |
 | `02_exploracion_cinemometros.ipynb` | crudo CSV de 160k filas | ¿cuántas filas sufre la doble caja en `REGION`? ¿`lat`/`lon` duplican exactamente? ¿cuál es la distribución del exceso de velocidad? |
 | `03_silver_dqs_gate.ipynb` | Silver + calidad | ¿qué limpió exactamente el pipeline? ¿cómo se descompone el DQS? **¿qué pasa si inyecto una violación crítica?** |
-| `04_confiabilidad_metricas.ipynb` | los 8 ejes de confiabilidad | ¿ese 92.07 es un hecho o una decisión mía? ¿cuánta incertidumbre tiene? ¿qué parte de la validación es tautológica? |
+| `04_confiabilidad_metricas.ipynb` | los 8 ejes de auditoría de la medición | ¿ese 92.07 es un hecho o una decisión mía? ¿cuánta incertidumbre tiene? ¿qué parte de la validación es tautológica? |
 
 Se regeneran con `python scripts/build_notebooks.py`, que valida la sintaxis de cada celda
 antes de escribir el `.ipynb` (un error solo aparecería al abrir el notebook, que es cuando

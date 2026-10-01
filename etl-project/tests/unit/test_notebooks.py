@@ -37,9 +37,9 @@ EXPECTED = {
     "01_exploracion_onsv.ipynb",
     "02_exploracion_cinemometros.ipynb",
     "03_silver_dqs_gate.ipynb",
-    "04_confiabilidad_metricas.ipynb",
+    "04_auditoria_medicion.ipynb",
 }
-NB04 = "04_confiabilidad_metricas.ipynb"
+NB04 = "04_auditoria_medicion.ipynb"
 
 
 @pytest.fixture(scope="module")
@@ -111,7 +111,7 @@ def test_repo_notebooks_are_not_hand_edited(build_all):
         ], f"{name} del repo difiere de scripts/build_notebooks.py"
 
 
-def test_reliability_notebook_reads_only_real_keys(build_all):
+def test_auditoria_notebook_reads_only_real_keys(build_all):
     """Ninguna de las claves que la celda imprime puede existir."""
     src = _sources(build_all[NB04], "code")
     for clave in ("n_a", "n_b", "n_interseccion"):
@@ -123,7 +123,7 @@ def test_reliability_notebook_reads_only_real_keys(build_all):
         assert clave in src, f"el notebook debe usar '{clave}'"
 
 
-def test_reliability_notebook_labels_are_not_misleading(build_all):
+def test_auditoria_notebook_labels_are_not_misleading(build_all):
     src = _sources(build_all[NB04], "code")
     assert "rango_anios" not in src, (
         "rango_anios solo tiene los dos extremos: no puede ir etiquetado como 'años'"
@@ -135,15 +135,23 @@ def test_reliability_notebook_labels_are_not_misleading(build_all):
     assert "huella vigente" in src
 
 
-def test_reliability_notebook_declares_dqs_is_not_reliability(build_all):
+def test_auditoria_notebook_declares_dqs_is_not_reliability(build_all):
     """La idea que sostiene el módulo: el DQS no se lee como probabilidad de que
-    los datos sean ciertos, y la confiabilidad tampoco se colapsa en un número."""
+    los datos sean ciertos, y la auditoría tampoco se colapsa en un número.
+
+    Además el notebook tiene que separar las cuatro preguntas del proyecto: si
+    vuelve a llamarse "confiabilidad" sin más, vuelve a ser ambiguo."""
     md = _sources(build_all[NB04], "markdown")
-    assert "confianza en las métricas" in md
+    assert "Auditoría de la medición" in md
+    assert "audita **las métricas" in md or "audita las **métricas" in md
     assert "No se calcula un" in md and "índice de confiabilidad" in md, (
         "el notebook debe dejar escrito que no hay un score único"
     )
     assert "score de confiabilidad" not in md.lower()
+    # Las otras dos auditorías deben existir nombradas, para que "confiabilidad"
+    # no vuelva a ser un cajón de sastre.
+    assert "Fiabilidad de las fuentes" in md
+    assert "Validez predictiva" in md
     # Y debe cubrir los dos mecanismos que hacen el DQS no determinista, más el
     # que lo hace circular: incertidumbre, robustez a pesos y circularidad.
     for eje in ("Incertidumbre", "Robustez", "Circularidad", "Cobertura"):
@@ -151,7 +159,7 @@ def test_reliability_notebook_declares_dqs_is_not_reliability(build_all):
     assert "bootstrap" in md.lower()
 
 
-def test_reliability_notebook_embeds_figures_as_base64(build_all):
+def test_auditoria_notebook_embeds_figures_as_base64(build_all):
     """Con el backend Agg, `plt.show()` no renderiza nada: las figuras viajan
     como PNG decodificado a `display(Image(...))`, que sí produce salida en el
     .ipynb."""
@@ -185,7 +193,7 @@ def _plt_show_calls(nb: Dict[str, Any]) -> list:
     return hits
 
 
-def test_reliability_notebook_never_calls_plt_show(build_all):
+def test_auditoria_notebook_never_calls_plt_show(build_all):
     """Con Agg, plt.show() no produce salida: las figuras se incrustan con
     display(Image(...)). Si alguien lo reintroduce, las celdas de figuras salen
     vacías sin ningún error visible."""
