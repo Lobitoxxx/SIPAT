@@ -504,10 +504,13 @@ Ejecutan sin errores contra los datos reales (verificado con `nbclient`):
 | `01_exploracion_onsv.ipynb` | crudo XLSX | ¿dónde está la cabecera? ¿qué columnas mezclan tipos y por qué no son escribibles en Parquet? ¿qué pasa con acentos, fechas DD/MM y coordenadas negativas? |
 | `02_exploracion_cinemometros.ipynb` | crudo CSV de 160k filas | ¿cuántas filas sufre la doble caja en `REGION`? ¿`lat`/`lon` duplican exactamente? ¿cuál es la distribución del exceso de velocidad? |
 | `03_silver_dqs_gate.ipynb` | Silver + calidad | ¿qué limpió exactamente el pipeline? ¿cómo se descompone el DQS? **¿qué pasa si inyecto una violación crítica?** |
+| `04_confiabilidad_metricas.ipynb` | los 8 ejes de confiabilidad | ¿ese 92.07 es un hecho o una decisión mía? ¿cuánta incertidumbre tiene? ¿qué parte de la validación es tautológica? |
 
 Se regeneran con `python scripts/build_notebooks.py`, que valida la sintaxis de cada celda
 antes de escribir el `.ipynb` (un error solo aparecería al abrir el notebook, que es cuando
-más molesta).
+más molesta). Se versionan **sin salidas** para no meter pesos ni resultados rancios en Git;
+para verlos renderizados: `python scripts/build_notebooks.py --execute --only 04` (usa
+`nbclient`, no `nbconvert`).
 
 ### Documentación
 

@@ -356,3 +356,50 @@ def test_reliability_must_not_produce_a_single_score(onsv_rows, tmp_path):
     assert len(res["claims"]) >= 5
     for clave in ("score", "confiabilidad", "indice", "reliability_score"):
         assert clave not in res, f"no debe existir un número único: '{clave}'"
+
+
+def test_drift_evidence_min_max_must_be_scoped_to_the_current_fingerprint(onsv_rows, tmp_path):
+    """REGRESIÓN: la evidencia de la afirmación de reproducibilidad (A1) mostraba
+    `dqs_min`/`dqs_max` calculados sobre TODAS las huellas de medición, junto al
+    rango de la huella vigente.
+
+    Con datos reales eso producía la evidencia
+        dqs_min=89.25, dqs_max=95.11, rango_dentro_de_la_huella_vigente=0.00
+    con veredicto 'alta': un lector deduce una inestabilidad de casi 6 puntos
+    donde el pipeline es perfectamente determinista. La diferencia entre huellas
+    es un cambio de MÉTODO (correcciones), no deriva, y no debe mezclarse con la
+    reproducibilidad dentro de una misma huella."""
+    from src.quality import reliability as R
+    from src.utils import versioning
+    from src.utils.configloader import load_settings
+
+    actual = versioning.measurement_fingerprint()
+    specs = [("huella_vieja_1", 94.97)] * 3 + [("huella_vieja_2", 89.25)] * 2 \
+        + [(actual, 92.07)] * 3
+    for i, (fp, dqs) in enumerate(specs):
+        d = tmp_path / f"run-20260929-00000{i}" / "manifest.json"
+        d.parent.mkdir(parents=True)
+        d.write_text(json.dumps({
+            "run_id": f"run-20260929-00000{i}", "version": "1.0.0",
+            "git_commit": "x", "measurement_fingerprint": fp,
+            "datasets": {"onsv": {"dqs": dqs, "gate": "PASSED"}},
+        }), encoding="utf-8")
+
+    det = R.run_drift(tmp_path, R._rules())["datasets"]["onsv"]
+
+    # La huella vigente es determinista: su rango es 0 y sus extremos coinciden.
+    assert det["rango_huella_vigente"] == 0.0
+    assert det["dqs_min_huella_vigente"] == det["dqs_max_huella_vigente"] == 92.07
+    # Y los extremos de TODAS las huellas siguen disponibles, con otro nombre
+    # explícito, para poder inspeccionar los cambios de método.
+    assert det["dqs_min"] == 89.25 and det["dqs_max"] == 94.97
+
+    # La evidencia publicada de A1 debe usar los extremos de la huella vigente:
+    # es la fila que afirma si el pipeline es reproducible.
+    res = R.assess("onsv", onsv_rows, settings=load_settings(), runs_dir=tmp_path)
+    a1 = next(c for c in res["claims"] if c["id"] == "A1")
+    assert a1["evidence"]["dqs_min"] == 92.07, (
+        "A1 debe acotar min/max a la huella vigente, no a todas las huellas"
+    )
+    assert a1["evidence"]["dqs_max_todas_las_huellas"] == 94.97
+    assert a1["verdict"] == "alta"

@@ -48,16 +48,16 @@ Resultado sobre datos reales, corrida `run-20260929-173626-41cd6f51`:
 
 | Id | Eje | Veredicto | Evidencia medida | Límite conocido |
 |---|---|---|---|---|
-| **A1** | Reproducibilidad | 🟢 **alta** | 3 corridas con la misma huella de medición → DQS idéntico (rango 0.00) | Se comprobó con el mismo fichero fuente; no con una fuente que cambie |
+| **A1** | Reproducibilidad | 🟢 **alta** | 4 corridas con la huella vigente → DQS idéntico (rango 0.00) | Se comprobó con el mismo fichero fuente; no con una fuente que cambie. El `min`/`max` global (89.25/95.11) es de **otras huellas**, o sea otro método: no cuenta como deriva |
 | **A2** | Trazabilidad | 🟢 **alta** | manifest por corrida, lineage DuckDB (4 tablas), `source_md5`, Bronze inmutable, TransformationLog | Acredita de dónde sale el dato, no que la fuente original sea correcta |
 | **A2b** | Robustez del DQS | 🟡 **media** | spread p05–p95 = **8.43** puntos con 300 perturbaciones de pesos | Mide sensibilidad a los **pesos**, no a los datos: un DQS robusto a los pesos puede seguir siendo irreal si el dataset tiene sesgo |
 | **A3** | Incertidumbre | 🟢 **alta** | DQS 92.07, IC 95 % = [92.06, 92.09], amplitud **0.03** puntos | El bootstrap mide variabilidad **muestral**; no cubre el sesgo de la fuente |
 | **A4** | Circularidad | 🔴 **baja** | **100 %** de los catálogos derivan del propio dataset | Validar contra un catálogo hecho con esos mismos datos es consistencia interna, no validación externa. Un valor erróneo de la fuente entra en el catálogo y se autovalida |
-| **A5** | Cobertura del universo | ⚪ **no verificable** | 2021-01-01 → 2025-12-30; 9,106 registros; 54.6 % en 2021 | La completitud mide nulos, **no** si la fuente publicó todos los siniestros. Falta el total oficial ONSV/MTC |
+| **A5** | Cobertura del universo | ⚪ **no verificable** | 2021-01-01 → 2025-12-30; 9,106 registros; año modal 2022 (27.23 %) | La completitud mide nulos, **no** si la fuente publicó todos los siniestros. Falta el total oficial ONSV/MTC |
 | **A6** | Integridad referencial | ⚪ **no verificable** | dimensión `integrity` = 100.0, FK configuradas = 0 | Está fijada a 100 porque no hay claves foráneas. **No debe leerse como "integridad perfecta"**: es una dimensión vacía |
 | **A7** | Consistencia cruzada | 🔴 **baja** | Jaccard ONSV↔cinemómetros = **0.40**; 15 departamentos de ONSV ausentes en cinemómetros | Sin maestro UBIGEO no se puede arbitrar cuál tiene razón: se **declara**, no se corrige |
 | **A8** | Imputación | 🟡 **media** | `vehiculos_danados` imputado con mediana (30.9 % nulos) | Las métricas de esa columna son **estimaciones**, no mediciones. Deben declararse al usarlas |
-| **A9** | Deriva temporal | 🟢 **alta** | 3 corridas del código vigente → sin variación | Trivialmente correcto: todas parten del mismo fichero fuente. Solo será información real cuando la fuente se actualice |
+| **A9** | Deriva temporal | 🟢 **alta** | sin variación dentro de la huella vigente | Trivialmente correcto: todas parten del mismo fichero fuente. Solo será información real cuando la fuente se actualice |
 
 **Resumen: 4 alta · 2 media · 2 baja · 2 no verificable.**
 
@@ -198,8 +198,16 @@ El DQS de ONSV pasó de 94.97 a 92.07 durante el desarrollo. Eso **no** es inest
 la corrección del defecto de las coordenadas negativas. Mezclar ambos casos daría un veredicto
 injustamente malo.
 
-`run_drift` separa por eso `deriva_por_huella` (dentro del mismo método: instability real) de
+`run_drift` separa por eso `deriva_por_huella` (dentro del mismo método: inestabilidad real) de
 `cambios_entre_huellas` (cambio de método: corrección).
+
+El defecto visible de esto estaba en la evidencia publicada, no en el cálculo: la afirmación A1
+acompañaba su rango de reproducibilidad con un `dqs_min`/`dqs_max` **global**. Con datos reales
+la fila decía `89.25 / 95.11` junto a `rango dentro de la huella vigente = 0.00`, y se leía como
+una inestabilidad de casi seis puntos en un pipeline perfectamente determinista. Ahora
+`run_drift` expone `dqs_min_huella_vigente`/`dqs_max_huella_vigente` y A1 usa esos; los extremos
+de todas las huellas siguen disponibles, con nombre explícito, para auditar los cambios de
+método (`tests/unit/test_regressions.py`).
 
 ---
 
@@ -219,10 +227,12 @@ Ese segundo párrafo es el que distingue un trabajo sólido de uno que solo vend
 
 ## 8. Documentos relacionados
 
+- `notebooks/04_confiabilidad_metricas.ipynb` — este apartado, narrado celda a celda sobre los datos reales
 - `docs/informe_etl_v1.md` — informe técnico; sección 6 con los 10 defectos del propio sistema
 - `docs/guia_sustentacion.md` — guía de preguntas y respuestas
 - `docs/figuras/etl/` — las 18 figuras
 - `reports/reliability/*.html` — informe autocontenido por dataset
+- `reports/quality/*.html` y `reports/profiling/*_after_profile.html` — reportes del pipeline, ya con las figuras embebidas
 - `config/quality/reliability_rules.yaml` — umbrales y parámetros
 - `src/quality/reliability.py` — el motor (8 ejes)
 - `tests/unit/test_reliability.py` — 34 tests

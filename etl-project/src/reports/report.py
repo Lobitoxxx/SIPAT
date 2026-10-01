@@ -8,12 +8,60 @@ from pathlib import Path
 from typing import Any, Optional
 
 from src.utils import paths
+from src.utils.logging_util import get_logger
+
+logger = get_logger("etl.report")
 
 _ESCAPE = str.maketrans({"&": "&amp;", "<": "&lt;", ">": "&gt;"})
 
 
 def _esc(v: Any) -> str:
     return str(v).translate(_ESCAPE)
+
+
+def _figures_html(dataset: str, dqs: Optional[dict]) -> str:
+    """Figuras embebidas en base64 para el reporte.
+
+    Se dibujan en memoria: los PNG del pipeline NO se escriben en
+    `docs/figuras/etl/`, porque ahí viven las figuras comparativas que genera
+    `scripts/graficos_etl.py` (con los dos datasets). Si el reporte escribiera
+    `dqs_dimensiones.png` con un único dataset, pisaría la comparativa.
+
+    Sin matplotlib (o sin `dqs`) devuelve cadena vacía: el reporte se sigue
+    generando en HTML puro. Una figura que no se puede dibujar nunca debe
+    tumbar un ETL.
+    """
+    if not dqs:
+        return ""
+    try:
+        from src.quality import figures as F
+
+        if not F.available():
+            return ""
+        before_profile, after_profile = _profiles(dataset)
+        bloques = [
+            F.html_dqs_dimensions({dataset: dqs}),
+            F.html_nulls_before_after(before_profile, after_profile, dataset),
+        ]
+        return "".join(b for b in bloques if b)
+    except Exception as exc:  # pragma: no cover - degradar, no romper
+        logger.warning("no se pudieron incrustar figuras en el reporte: %s", exc)
+        return ""
+
+
+def _profiles(dataset: str):
+    """(perfil_antes, perfil_después) desde reports/profiling/, o ({}, {})."""
+    import json as _json
+
+    base = paths.reports_dir("profiling")
+    salida = []
+    for stage in ("before", "after"):
+        p = base / f"{dataset}_{stage}_profile.json"
+        try:
+            salida.append(_json.loads(p.read_text(encoding="utf-8")))
+        except Exception:
+            salida.append({})
+    return tuple(salida)
 
 
 def generate_quality_report(
@@ -24,6 +72,7 @@ def generate_quality_report(
     profile_after: Optional[dict] = None,
     transform_log: Optional[dict] = None,
     out_dir: Optional[Path] = None,
+    dqs: Optional[dict] = None,
 ) -> Path:
     out_dir = out_dir or paths.reports_dir("quality")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -66,6 +115,10 @@ def generate_quality_report(
             "<th>estrategia</th></tr></thead><tbody>%s</tbody></table>"
         ) % (len(ops), rows)
 
+    # Las figuras se dibujan en memoria y se embeben en base64.
+    figs_html = _figures_html(dataset, dqs)
+    figs_html = f"<h2>Figuras</h2>{figs_html}" if figs_html else ""
+
     status_color = {"PASSED": "#16a34a", "WARNING": "#d97706", "FAILED": "#dc2626"}.get(
         gate.get("status", "FAILED"), "#dc2626"
     )
@@ -86,6 +139,7 @@ th{{background:#eef2ff;color:#312e81}} code{{background:#f1f5f9;padding:1px 4px;
 <p class="mono">run_id: {_esc(run_id)} · generado: {ts} · metodología: Kanban + CRISP-DM</p>
 <h2>Quality Gate</h2><table><tbody>{gate_html}</tbody></table>
 {dqs_html}
+{figs_html}
 {tlog_html}
 <p class="mono">Ver también: reports/profiling/{_esc(dataset)}_*_profile.html · manifest en artifacts/runs/{_esc(run_id)}/</p>
 </body></html>"""

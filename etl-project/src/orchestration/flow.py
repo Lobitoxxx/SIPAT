@@ -235,6 +235,9 @@ def run_dataset(
             profile_before=profile_before_ctx,
             profile_after=profile_after_ctx,
             transform_log=tlog,
+            # El reporte incrusta las figuras de DQS por dimensión y de nulos
+            # antes/después. Sin `dqs` el HTML sale igual, solo sin figuras.
+            dqs=quality["dqs"],
         )
         return {"report": str(out)}
 

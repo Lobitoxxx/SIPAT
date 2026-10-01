@@ -529,9 +529,17 @@ def run_drift(runs_dir: Optional[Path], rules: Dict[str, Any]) -> Dict[str, Any]
             "huella_vigente": vigente,
             "huella_es_actual": vigente == versioning.measurement_fingerprint(),
             "n_runs_huella_vigente": len(v_vig),
+            # `dqs_min`/`dqs_max` abarcan TODAS las huellas: sirven para ver el
+            # efecto de los cambios de método, y NO para judge reproducibilidad.
+            # Por eso se añaden también los valores acotados a la huella vigente:
+            # sin ellos, un par min/max de 89.25-95.11 junto a un rango vigente de
+            # 0.00 se lee como inestabilidad inexistente y da la impresión
+            # contraria a la del veredicto real.
             "dqs_min": round(min(vals), 2),
             "dqs_max": round(max(vals), 2),
             "dqs_medio": round(float(np.mean(vals)), 2),
+            "dqs_min_huella_vigente": round(min(v_vig), 2),
+            "dqs_max_huella_vigente": round(max(v_vig), 2),
             "rango_huella_vigente": round(max(v_vig) - min(v_vig), 2),
             "deriva_detectada": (max(v_vig) - min(v_vig)) > tol_dqs,
             "deriva_por_huella": intra,
@@ -702,7 +710,10 @@ def assess(
             {"corridas": det["n_runs"], "huellas_distintas": det["n_huellas"],
              "huella_vigente": det["huella_vigente"],
              "corridas_de_la_huella_vigente": det["n_runs_huella_vigente"],
-             "dqs_min": det["dqs_min"], "dqs_max": det["dqs_max"],
+             "dqs_min": det["dqs_min_huella_vigente"],
+             "dqs_max": det["dqs_max_huella_vigente"],
+             "dqs_min_todas_las_huellas": det["dqs_min"],
+             "dqs_max_todas_las_huellas": det["dqs_max"],
              "rango_dentro_de_la_huella_vigente": det["rango_huella_vigente"],
              "gates_observados": det["gates"]},
             "Se compara dentro de un mismo commit: las variaciones entre commits son "

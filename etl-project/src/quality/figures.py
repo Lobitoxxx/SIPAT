@@ -142,6 +142,16 @@ def plot_nulls_before_after(
     """
     if not _MPL:
         return None
+    fig = _fig_nulls_before_after(before, after, dataset)
+    if fig is None:
+        return None
+    return _save(fig, f"{dataset}_nulos_antes_despues.png", out_dir or figures_dir())
+
+
+def _fig_nulls_before_after(
+    before: Dict[str, Any], after: Dict[str, Any], dataset: str, top: int = 18
+):
+    """Construye (sin guardar) la figura de nulos. Devuelve None si no hay datos."""
     b_cols = (before or {}).get("columns", {})
     a_cols = (after or {}).get("columns", {})
     if not b_cols or not a_cols:
@@ -200,7 +210,33 @@ def plot_nulls_before_after(
             transform=ax.transAxes, ha="left", va="bottom", fontsize=7.5,
             color="#b45309",
         )
-    return _save(fig, f"{dataset}_nulos_antes_despues.png", out_dir or figures_dir())
+    return fig
+
+
+def html_nulls_before_after(
+    before: Dict[str, Any], after: Dict[str, Any], dataset: str
+) -> str:
+    """`<figure>` en base64 con la figura de nulos, para el HTML del pipeline.
+
+    No escribe ningún PNG en disco: los reportes del pipeline se embeben a
+    memoria, así que no aparece un `dqs_dimensiones.png` de un solo dataset
+    conviviendo con el comparativo de `scripts/graficos_etl.py`."""
+    if not _MPL:
+        return ""
+    fig = _fig_nulls_before_after(before, after, dataset)
+    if fig is None:
+        return ""
+    b64 = fig_to_base64(fig)
+    return (
+        f'<figure style="margin:0 0 1rem">'
+        f'<img src="data:image/png;base64,{b64}" '
+        f'alt="Nulos por columna antes y después de la limpieza" '
+        f'style="max-width:100%;border:1px solid #e2e8f0;border-radius:8px;">'
+        f"<figcaption style=\"font-size:.85rem;color:#475569;margin-top:.35rem\">"
+        f"Qué resolvió la limpieza y qué no: las columnas que siguen casi vacías no las "
+        f"arregla ningún <code>fillna</code>, sencillamente la fuente no las trae."
+        f"</figcaption></figure>"
+    )
 
 
 def _rename_map(dataset: str) -> Dict[str, str]:
@@ -223,6 +259,36 @@ def plot_dqs_dimensions(
     out_dir: Optional[Path] = None,
 ) -> Optional[Path]:
     """Las seis dimensiones del DQS por dataset, con el peso de cada una encima."""
+    if not _MPL or not dqs_by_dataset:
+        return None
+    fig = _fig_dqs_dimensions(dqs_by_dataset)
+    if fig is None:
+        return None
+    return _save(fig, "dqs_dimensiones.png", out_dir or figures_dir())
+
+
+def html_dqs_dimensions(dqs_by_dataset: Dict[str, Dict[str, Any]]) -> str:
+    """`<figure>` en base64 con las dimensiones del DQS, para el HTML del reporte."""
+    if not _MPL or not dqs_by_dataset:
+        return ""
+    fig = _fig_dqs_dimensions(dqs_by_dataset)
+    if fig is None:
+        return ""
+    b64 = fig_to_base64(fig)
+    return (
+        f'<figure style="margin:0 0 1rem">'
+        f'<img src="data:image/png;base64,{b64}" '
+        f'alt="Dimensiones del DQS con su peso" '
+        f'style="max-width:100%;border:1px solid #e2e8f0;border-radius:8px;">'
+        f'<figcaption style="font-size:.85rem;color:#475569;margin-top:.35rem">'
+        f"El DQS es una media ponderada de estas seis dimensiones. Mirarlas por separado "
+        f"explica mucho más que el número final: la frescura es baja porque la fuente es "
+        f"histórica, no por un defecto del proceso."
+        f"</figcaption></figure>"
+    )
+
+
+def _fig_dqs_dimensions(dqs_by_dataset: Dict[str, Dict[str, Any]]):
     if not _MPL or not dqs_by_dataset:
         return None
     from src.quality.reliability import DIMS
@@ -251,7 +317,7 @@ def plot_dqs_dimensions(
         "DQS por dimensión (etiqueta superior: valor · peso)", y=1.04, fontweight="bold",
     )
     fig.tight_layout()
-    return _save(fig, "dqs_dimensiones.png", out_dir or figures_dir())
+    return fig
 
 
 def _verdict(v: float) -> str:
