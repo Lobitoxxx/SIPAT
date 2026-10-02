@@ -33,7 +33,21 @@ tramos = pd.DataFrame([{
     "lon1": s["geom"].coords[-1][0],
     "lat1": s["geom"].coords[-1][1],
 } for i, s in enumerate(geocode._SEGMENTS)])
-tramos["long_km"] = tramos["km1"] - tramos["km0"]
+# 4 de los 3.750 segmentos están definidos al revés (km1 < km0), así que
+# `km1 - km0` da longitud NEGATIVA. Con `log(long_km)` en el offset eso es un
+# NaN silencioso: el GLM se ajustaba con exposición ~0 y los `alpha` salían en el
+# borde de la rejilla. Se toma el valor absoluto y `km0`/`km1` se dejan como
+# están, porque la proyección de accidentes (`km0 + proj*(km1-km0)`) depende de
+# su orden original.
+_tramo_km = pd.to_numeric(tramos["km1"], errors="coerce") - pd.to_numeric(
+    tramos["km0"], errors="coerce"
+)
+n_invertidos = int((_tramo_km <= 0).sum())
+tramos["long_km"] = _tramo_km.abs()
+tramos.loc[tramos["long_km"] <= 0, "long_km"] = np.nan
+if n_invertidos:
+    print(f"  [aviso] {n_invertidos} tramos con km1 <= km0 (segmentos invertidos); "
+          "long_km se toma como |km1-km0|")
 tramos.to_csv("data/processed/tramos_red.csv", index=False, encoding="utf-8-sig")
 print(f"tramos_red.csv: {len(tramos)} tramos, {tramos['ruta'].nunique()} rutas")
 
