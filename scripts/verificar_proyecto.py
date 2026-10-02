@@ -40,8 +40,12 @@ def check_data_assets():
         "data/processed/tramos_red.csv": (True, "tramos red vial"),
         "data/processed/onsv_nacional_geocod.csv": (True, "ONSV geocodificado"),
         "data/processed/sutran_accidentes_geocod.csv": (True, "SUTRAN geocodificado"),
-        "data/processed/dataset_modelo.csv": (True, "dataset modelo 3750x40"),
-        "data/processed/puntos_negros.csv": (True, "puntos negros"),
+        "data/processed/dataset_modelo.csv": (True, "dataset modelo 3750x48"),
+        # Antes comprobaba `data/processed/puntos_negros.csv`, que era el
+        # residuo obsoleto de `modelo_glm.py` (1,2 KB, criterio pearson>1.5).
+        # El archivo canonico lo produce `build_puntos_negros.py` con Empirical
+        # Bayes y vive junto al resto de datos ligeros del dashboard.
+        "data/processed/dashboard/puntos_negros.csv": (True, "puntos negros (EB)"),
         "data/processed/features_distancia.csv": (True, "features distancia"),
         "data/processed/ositran_accidentes.csv": (True, "OSITRAN accidentes"),
         "data/processed/ositran_tramos_geocod.csv": (True, "OSITRAN tramos"),

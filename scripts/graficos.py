@@ -46,7 +46,11 @@ plt.close(fig)
 print("mapa_siniestros_tramos.png OK")
 
 # ---------------- 2. Mapa puntos negros (residual > 1.5) ----------------
-cand = pd.read_csv("data/processed/puntos_negros.csv")
+# Figura LEGADA: muestra el criterio por residuo de Pearson de `modelo_glm.py`.
+# La lista canonica de puntos negros es la de Empirical Bayes
+# (`dashboard/puntos_negros.csv`, vía eb_tramos.py). Aquí se leen los residuales
+# a propósito, porque eso es lo que la figura representa.
+cand = pd.read_csv("data/processed/puntos_negros_legacy_residuales.csv")
 cand2 = cand.merge(d[["ruta", "km0", "km1", "lon_mid", "lat_mid"]], on=["ruta", "km0", "km1"], how="left")
 
 fig, ax = plt.subplots(figsize=(8, 12))

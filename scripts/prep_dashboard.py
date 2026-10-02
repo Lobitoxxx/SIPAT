@@ -95,7 +95,12 @@ with open(f"{OUT}/tramos_geo.json", "w", encoding="utf-8") as f:
 print(f"tramos_geo.json: {len(tramos)} tramos")
 
 # ---------- 3. Puntos negros con coords ----------
-pn = pd.read_csv("data/processed/puntos_negros.csv")
+# SCRIPT LEGADO, superado por `build_dashboard_data.py` + `build_puntos_negros.py`.
+# Este bloque necesita el esquema del residuo de Pearson (`pred`, `pearson`),
+# que solo produce `modelo_glm.py`; por eso lee el archivo de residuales y no
+# el canonico de Empirical Bayes. Para el dashboard vigente usa
+# `build_dashboard_data.py`, que escribe `dashboard/puntos_negros.csv`.
+pn = pd.read_csv("data/processed/puntos_negros_legacy_residuales.csv")
 pn2 = pn.merge(d[["ruta", "km0", "km1", "lon_mid", "lat_mid"]], on=["ruta", "km0", "km1"], how="left")
 puntos = []
 for _, r in pn2.iterrows():
