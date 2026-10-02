@@ -137,8 +137,16 @@ df.drop(columns=["tramo_idx"], inplace=True, errors="ignore")
 # OSITRAN merge por ruta - distribuir proporcionalmente entre tramos de la misma ruta
 df = df.merge(ositran_by_ruta, on="ruta", how="left")
 
+# `long_km` puede venir negativa desde `dataset_tramos.csv`: 4 de 3.750 segmentos
+# estan definidos al reves (km1 < km0). Con `replace(0, 0.001)` el negativo
+# sobrevive, y entonces (a) el reparto proporcional de OSITRAN usa pesos negativos
+# por ruta y (b) `siniestros_total_km` sale negativo. Se normaliza a |km1 - km0|.
+df["long_km"] = (pd.to_numeric(df["km1"], errors="coerce")
+                 - pd.to_numeric(df["km0"], errors="coerce")).abs()
+df.loc[df["long_km"] <= 0, "long_km"] = np.nan
+
 # Distribuir accidentes OSITRAN proporcionalmente a long_km dentro de cada ruta
-df["long_km_safe"] = df["long_km"].replace(0, 0.001)
+df["long_km_safe"] = df["long_km"].fillna(0.001).clip(lower=0.001)
 for ruta in df["ruta"].unique():
     mask = df["ruta"] == ruta
     total = df.loc[mask, "ositran_n_total"].iloc[0] if mask.any() and not pd.isna(df.loc[mask, "ositran_n_total"].iloc[0]) else 0
@@ -188,11 +196,19 @@ for c in cols_num:
 if "alertas_hist_peso" in df.columns:
     df["alertas_hist_peso"] = pd.to_numeric(df["alertas_hist_peso"], errors="coerce").fillna(0.0)
 
-# Totales
+# ─── Totales ──────────────────────────────────────────────────────────────
+# `onsv_n` cubre 2021-2025 y `sutran_n` 2020-2021Q3: periodos distintos, y un
+# mismo siniestro aparece en las dos. La suma ingenua (`siniestros_total`, que es
+# lo que el dashboard ya consume) mezcla dos periodos y double-countea los
+# emparejados. Se conservan las dos cifras, con nombres que dicen cuál es cuál:
+#   - `siniestros_total`      : suma ingenua por fuente (periodos mezclados).
+#   - `siniestros_union_comun`: ONSV ∪ SUTRAN deduplicado en la ventana común.
+# Que la diferencia entre ambas sea visible es el punto: esconderla dentro de un
+# "total" es lo que hace indefendible el número.
 df["siniestros_total"] = df["onsv_n"] + df["sutran_n"] + df["ositran_n"]
+df["siniestros_fuentes_suma"] = df["onsv_n"] + df["sutran_n"]
 df["fallecidos_total"] = df["onsv_fallecidos"] + df["sutran_fallecidos"]  # OSITRAN no distingue fallecidos
 df["lesionados_total"] = df["onsv_lesionados"] + df["sutran_heridos"] + df["ositran_heridos"]
-df["long_km"] = df["km1"] - df["km0"]
 df["siniestros_total_km"] = df["siniestros_total"] / df["long_km"].replace(0, np.nan)
 df["fallecidos_total_km"] = df["fallecidos_total"] / df["long_km"].replace(0, np.nan)
 
