@@ -1,0 +1,387 @@
+{
+  "protocolo_espacial": {
+    "tipo": "espacial",
+    "agrupacion": "corredor",
+    "n_corredores": 141,
+    "folds": [
+      {
+        "fold": 1,
+        "n_train": 15000,
+        "n_test": 3750,
+        "n_corredores_test": 19,
+        "eventos_test": 1037,
+        "modelos": {
+          "media": {
+            "n": 3750,
+            "mae": 0.4679366755555556,
+            "rmse": 0.9642656549589088,
+            "r2": -0.00015662073185174208,
+            "poisson_deviance": 1.2520578050233646,
+            "media_observada": 0.27653333333333335,
+            "media_predicha": 0.26446666666666674,
+            "sesgo": -0.01206666666666664
+          },
+          "mediana": {
+            "n": 3750,
+            "mae": 0.27653333333333335,
+            "rmse": 1.0030619788095516,
+            "r2": -0.08225638035027028,
+            "poisson_deviance": NaN,
+            "media_observada": 0.27653333333333335,
+            "media_predicha": 0.0,
+            "sesgo": -0.27653333333333335,
+            "poisson_deviance_no_aplica": "predice 0 en parte del test: la devianza de Poisson no esta definida"
+          },
+          "negbin": {
+            "n": 3750,
+            "mae": 0.34959740770021747,
+            "rmse": 0.9731213985672303,
+            "r2": -0.018611705526981215,
+            "poisson_deviance": 0.8415703289815923,
+            "media_observada": 0.27653333333333335,
+            "media_predicha": 0.22157955603892723,
+            "sesgo": -0.05495377729440608
+          }
+        }
+      },
+      {
+        "fold": 2,
+        "n_train": 15000,
+        "n_test": 3750,
+        "n_corredores_test": 26,
+        "eventos_test": 1866,
+        "modelos": {
+          "media": {
+            "n": 3750,
+            "mae": 0.6166487466666666,
+            "rmse": 1.3957442936775108,
+            "r2": -0.04459935130420978,
+            "poisson_deviance": 2.1154802982301595,
+            "media_observada": 0.4976,
+            "media_predicha": 0.2092,
+            "sesgo": -0.2884
+          },
+          "mediana": {
+            "n": 3750,
+            "mae": 0.4976,
+            "rmse": 1.453455652344898,
+            "r2": -0.132769638639336,
+            "poisson_deviance": NaN,
+            "media_observada": 0.4976,
+            "media_predicha": 0.0,
+            "sesgo": -0.4976,
+            "poisson_deviance_no_aplica": "predice 0 en parte del test: la devianza de Poisson no esta definida"
+          },
+          "negbin": {
+            "n": 3750,
+            "mae": 0.6241866431438633,
+            "rmse": 1.2751432378855665,
+            "r2": 0.12812148826829517,
+            "poisson_deviance": 1.3077279387406933,
+            "media_observada": 0.4976,
+            "media_predicha": 0.4605277130459139,
+            "sesgo": -0.03707228695408617
+          }
+        }
+      },
+      {
+        "fold": 3,
+        "n_train": 15000,
+        "n_test": 3750,
+        "n_corredores_test": 30,
+        "eventos_test": 684,
+        "modelos": {
+          "media": {
+            "n": 3750,
+            "mae": 0.4171008,
+            "rmse": 0.8347544149828339,
+            "r2": -0.01626360278377903,
+            "poisson_deviance": 1.0282863899350414,
+            "media_observada": 0.1824,
+            "media_predicha": 0.288,
+            "sesgo": 0.10559999999999997
+          },
+          "mediana": {
+            "n": 3750,
+            "mae": 0.1824,
+            "rmse": 0.8478993650978478,
+            "r2": -0.04852198847061384,
+            "poisson_deviance": NaN,
+            "media_observada": 0.1824,
+            "media_predicha": 0.0,
+            "sesgo": -0.1824,
+            "poisson_deviance_no_aplica": "predice 0 en parte del test: la devianza de Poisson no esta definida"
+          },
+          "negbin": {
+            "n": 3750,
+            "mae": 0.2703755023340367,
+            "rmse": 0.7587583258737375,
+            "r2": 0.16035469948636893,
+            "poisson_deviance": 0.6412436107493472,
+            "media_observada": 0.1824,
+            "media_predicha": 0.17716334636198078,
+            "sesgo": -0.005236653638019213
+          }
+        }
+      },
+      {
+        "fold": 4,
+        "n_train": 15000,
+        "n_test": 3750,
+        "n_corredores_test": 33,
+        "eventos_test": 577,
+        "modelos": {
+          "media": {
+            "n": 3750,
+            "mae": 0.38950112,
+            "rmse": 0.5849341729345848,
+            "r2": -0.061939119311930524,
+            "poisson_deviance": 0.841461958825834,
+            "media_observada": 0.15386666666666668,
+            "media_predicha": 0.29513333333333336,
+            "sesgo": 0.14126666666666662
+          },
+          "mediana": {
+            "n": 3750,
+            "mae": 0.15386666666666668,
+            "rmse": 0.5881042991397586,
+            "r2": -0.07348094307852815,
+            "poisson_deviance": NaN,
+            "media_observada": 0.15386666666666668,
+            "media_predicha": 0.0,
+            "sesgo": -0.15386666666666668,
+            "poisson_deviance_no_aplica": "predice 0 en parte del test: la devianza de Poisson no esta definida"
+          },
+          "negbin": {
+            "n": 3750,
+            "mae": 0.2884498475065487,
+            "rmse": 0.5404711904201355,
+            "r2": 0.09336865732107902,
+            "poisson_deviance": 0.5992603306314944,
+            "media_observada": 0.15386666666666668,
+            "media_predicha": 0.25786990002068905,
+            "sesgo": 0.1040032333540224
+          }
+        }
+      },
+      {
+        "fold": 5,
+        "n_train": 15000,
+        "n_test": 3750,
+        "n_corredores_test": 33,
+        "eventos_test": 840,
+        "modelos": {
+          "media": {
+            "n": 3750,
+            "mae": 0.42846165333333325,
+            "rmse": 0.7805320578511387,
+            "r2": -0.00473806424374601,
+            "poisson_deviance": 1.0226879582063493,
+            "media_observada": 0.224,
+            "media_predicha": 0.27760000000000007,
+            "sesgo": 0.05360000000000003
+          },
+          "mediana": {
+            "n": 3750,
+            "mae": 0.224,
+            "rmse": 0.8102674455593865,
+            "r2": -0.08274988565598274,
+            "poisson_deviance": NaN,
+            "media_observada": 0.224,
+            "media_predicha": 0.0,
+            "sesgo": -0.224,
+            "poisson_deviance_no_aplica": "predice 0 en parte del test: la devianza de Poisson no esta definida"
+          },
+          "negbin": {
+            "n": 3750,
+            "mae": 0.3154192749574843,
+            "rmse": 0.7666047813759401,
+            "r2": 0.03079775155389186,
+            "poisson_deviance": 0.7294954374708367,
+            "media_observada": 0.224,
+            "media_predicha": 0.23095885046751016,
+            "sesgo": 0.006958850467510143
+          }
+        }
+      }
+    ],
+    "agregado": {
+      "media": {
+        "n": 18750,
+        "mae": 0.4639297991111111,
+        "rmse": 0.9514308803060788,
+        "r2": -0.009417806899380654,
+        "poisson_deviance": 1.2519948820441498,
+        "media_observada": 0.26688,
+        "media_predicha": 0.26688,
+        "sesgo": 1.2126596023639043e-17
+      },
+      "mediana": {
+        "n": 18750,
+        "mae": 0.26688,
+        "rmse": 0.9838699100999074,
+        "r2": -0.07942341076616133,
+        "poisson_deviance": NaN,
+        "media_observada": 0.26688,
+        "media_predicha": 0.0,
+        "sesgo": -0.26688,
+        "poisson_deviance_no_aplica": "predice 0 en parte del test: la devianza de Poisson no esta definida"
+      },
+      "negbin": {
+        "n": 18750,
+        "mae": 0.36960573512843015,
+        "rmse": 0.8976036685598001,
+        "r2": 0.10156696286715805,
+        "poisson_deviance": 0.8238595293147928,
+        "media_observada": 0.26688,
+        "media_predicha": 0.2696198731870042,
+        "sesgo": 0.0027398731870042258
+      }
+    }
+  },
+  "protocolo_temporal": {
+    "tipo": "temporal",
+    "entrenamiento": "2021-2024",
+    "holdout": 2025,
+    "n_test": 3750,
+    "eventos_test": 383,
+    "modelos": {
+      "media": {
+        "n": 3750,
+        "mae": 0.3710960711111111,
+        "rmse": 0.601091218812364,
+        "r2": -0.13298293021323593,
+        "poisson_deviance": 0.8041722681172937,
+        "media_observada": 0.10213333333333334,
+        "media_predicha": 0.30806666666666666,
+        "sesgo": 0.2059333333333333
+      },
+      "mediana": {
+        "n": 3750,
+        "mae": 0.10213333333333334,
+        "rmse": 0.5738757124441958,
+        "r2": -0.032709779173479836,
+        "poisson_deviance": NaN,
+        "media_observada": 0.10213333333333334,
+        "media_predicha": 0.0,
+        "sesgo": -0.10213333333333334,
+        "poisson_deviance_no_aplica": "predice 0 en parte del test: la devianza de Poisson no esta definida"
+      },
+      "negbin": {
+        "n": 3750,
+        "mae": 0.361505701658753,
+        "rmse": 0.8910708239872883,
+        "r2": -1.489814819754816,
+        "poisson_deviance": 0.7277899187756564,
+        "media_observada": 0.10213333333333334,
+        "media_predicha": 0.3415284207663641,
+        "sesgo": 0.23939508743303073
+      },
+      "persistencia": {
+        "n": 3750,
+        "mae": 0.21226666666666666,
+        "rmse": 0.7759725081040779,
+        "r2": -0.8881446812742653,
+        "poisson_deviance": NaN,
+        "media_observada": 0.10213333333333334,
+        "media_predicha": 0.21466666666666667,
+        "sesgo": 0.11253333333333333,
+        "poisson_deviance_no_aplica": "predice 0 en parte del test: la devianza de Poisson no esta definida"
+      }
+    },
+    "serie_anual": [
+      {
+        "anio": 2021,
+        "eventos": 1346,
+        "fallecidos": 1666,
+        "tasa_mortalidad": 1.237741456166419,
+        "meses_cubiertos": 12,
+        "caida_vs_media_previa": NaN
+      },
+      {
+        "anio": 2022,
+        "eventos": 1386,
+        "fallecidos": 1721,
+        "tasa_mortalidad": 1.2417027417027418,
+        "meses_cubiertos": 12,
+        "caida_vs_media_previa": NaN
+      },
+      {
+        "anio": 2023,
+        "eventos": 1090,
+        "fallecidos": 1383,
+        "tasa_mortalidad": 1.2688073394495414,
+        "meses_cubiertos": 12,
+        "caida_vs_media_previa": NaN
+      },
+      {
+        "anio": 2024,
+        "eventos": 807,
+        "fallecidos": 1002,
+        "tasa_mortalidad": 1.241635687732342,
+        "meses_cubiertos": 12,
+        "caida_vs_media_previa": NaN
+      },
+      {
+        "anio": 2025,
+        "eventos": 385,
+        "fallecidos": 466,
+        "tasa_mortalidad": 1.2103896103896103,
+        "meses_cubiertos": 12,
+        "caida_vs_media_previa": -0.6673147548066537
+      }
+    ],
+    "advertencia": {
+      "caida_volumen_holdout": -0.6673147548066537,
+      "motivo": "ONSV registra -67% menos siniestros en 2025 que el promedio 2021-2024, con los 12 meses cubiertos y una tasa de mortalidad casi igual. Es un cambio de nivel de la fuente, no una mejora de la seguridad vial: el MAE del holdout mezcla error del modelo y error de la fuente y no se puede separar con estos datos."
+    }
+  },
+  "intervalos": {
+    "alpha": {
+      "alpha": 2.41205641069594
+    },
+    "cobertura": {
+      "80%": {
+        "nivel": 0.8,
+        "cobertura": 0.8841066666666667,
+        "cumplimiento": 1.1051333333333333
+      },
+      "95%": {
+        "nivel": 0.95,
+        "cobertura": 0.9099733333333333,
+        "cumplimiento": 0.9578666666666666
+      }
+    }
+  },
+  "veredicto": {
+    "afirmaciones": {
+      "El modelo usa las covariables para predecir mejor que la media": {
+        "veredicto": "SI",
+        "evidencia": "Espacial: devianza de Poisson 0.824 contra 1.252 de la media (MAE 0.370 contra 0.464).",
+        "limite": "La mejora es pequeña y el R2 sigue siendo negativo: el modelo ordena tramos mejor de lo que no lo hacia, pero no pronostica el numero. Sirve para priorizar, no para prever cantidad."
+      },
+      "El R2 justifica usarlo como pronostico": {
+        "veredicto": "NO",
+        "evidencia": "R2 espacial = +0.102.",
+        "limite": "Con 86% de celdas en cero, el R2 se apoya en la varianza de unos pocos tramos con eventos y no representa capacidad de predecir. El veredicto no depende del R2: con MAE sobre un conteo que casi siempre es 0, un R2 negativo no dice que el modelo no sirva para priorizar."
+      },
+      "El modelo supera a la persistencia en el holdout temporal": {
+        "veredicto": "AMBIGUO",
+        "evidencia": "Por MAE gana la persistencia (0.212 contra 0.362), pero eso premia predecir cero en las celdas mayoritarias: la persistencia se queda sin devianza de Poisson (no definida) mientras el NegBin obtiene 0.728, por debajo de 0.804. Cada metrica favorece a un modelo distinto y con estos datos no se puede elegir.",
+        "limite": "El holdout 2025 arrastra un cambio de nivel de la fuente, asi que la comparacion entre modelos es valida pero la magnitud del error no. Ademas, con 86% de celdas en cero el MAE y la devianza de Poisson pueden discordar: no se declara ganador cuando lo hacen."
+      },
+      "El holdout temporal mide capacidad de predecir a futuro": {
+        "veredicto": "NO",
+        "evidencia": "ONSV 2025 registra -67% menos siniestros que el promedio 2021-2024 con los 12 meses cubiertos y una tasa de mortalidad casi constante.",
+        "limite": "El error del holdout mezcla error del modelo y cambio de la fuente, y estos datos no permiten separarlos. Para medir capacidad de predecir hace falta ONSV con series estables o una fuente de contraste por departamento."
+      }
+    },
+    "nota": "Cada afirmacion tiene su propia evidencia y su propio limite. No se combina en una puntuacion: combinarlas exigiria decidir cuanto pesa cada riesgo, y esa decision no sale de estos datos."
+  },
+  "notas": {
+    "agrupacion": "Se agrupa por corredor, no por tramo: PE-1N y PE-1S son la misma carretera en sentidos opuestos y comparten tramo fisico. Agrupar solo por tramo haria que el fold de test fuese una copia del de train.",
+    "metrica": "Con 86% de celdas en cero el R2 depende de la varianza de pocos tramos y engaña. La devianza de Poisson media es la que separa 'aporta' de 'no aporta': la referencia es la devianza de la propia baseline media, no el 1.",
+    "fuentes": "Este módulo NO juzga si ONSV, SUTRAN u OSITRAN son confiables. Eso es scripts/fiabilidad_fuentes.py.",
+    "sesgo": "Con alpha estimado por cuasi-verosimilidad, los intervalos del GLM no tienen cobertura garantizada; la cobertura que se reporta es empirica, no la nominal del modelo."
+  }
+}

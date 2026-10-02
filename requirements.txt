@@ -1,0 +1,34 @@
+# SIPAT — dependencias del pipeline analítico (raíz)
+#
+# El subproyecto ETL tiene su propio requirements.txt en etl-project/ y no se
+# mezcla aquí: son capas distintas con ciclos de vida distintos.
+#
+# Fijar versiones exactamente (==) en un proyecto que se ejecuta sobre datos
+# reales y compara resultados entre ejecuciones. Las versiones son las con las
+# que se validó el pipeline; actualizarlas cambia los números de irrs_multi.csv
+# y de modelo_stats_multi.json, así que eso es un cambio que hay que revisar,
+# no un bump de mantenimiento.
+
+# --- Base -------------------------------------------------------------------
+pandas>=2.0            # 3.0.5 validado
+numpy>=1.26            # 2.5.2 validado
+
+# --- Modelado ----------------------------------------------------------------
+statsmodels>=0.14      # 0.14.6 validado: GLM NegBin, verosimilitud, AIC
+scikit-learn>=1.3      # 1.9.1 validado: GroupKFold para el holdout espacial
+
+# --- Validación --------------------------------------------------------------
+scipy>=1.11            # 1.18.0 validado: nbinom para cobertura de intervalos
+
+# --- Geoespacial y rutas (módulo "ruta segura") ------------------------------
+# Descomentar si se va a reconstruir OSM/OSRM o los mapas. Docker + estos
+# paquetes forman el motor de rutas; ver README.
+# geopandas>=0.14
+# shapely>=2.0
+# pyproj>=3.6
+# networkx>=3.0
+# osmnx>=1.9
+
+# --- Servicio ----------------------------------------------------------------
+# uvicorn, fastapi, streamlit, plotly, requests: ver dashboard/ y api/.
+# No se fijan aquí porque el dashboard se ejecuta desde su propio entorno.
