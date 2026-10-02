@@ -36,6 +36,7 @@ Salidas: `irrs_multi.csv`, `modelo_stats_multi.json`.
 import json
 import os
 import sys
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -188,8 +189,16 @@ def alpha_por_verosimilitud(y, X_c, expo, rejilla=None):
     mejor = None
     for a in rejilla:
         try:
-            res = _ajustar_glm_nb(y, X_c, expo, float(a))
-            ll = _llf(res)
+            # La verosimilitud NB2 evaluada en `mu` muy pequeño produce
+            # log(0) y divisiones por cero. Son ruido del numerico, no un
+            # fallo del ajuste: esos valores de la rejilla se descartan igual
+            # por no ser finitos, asi que el warning solo ensucia la salida.
+            # `errstate` restaura la configuracion previa al salir; asignar a
+            # mano `np.seterr` dejaria el estado global cambiado.
+            with warnings.catch_warnings(), np.errstate(all="ignore"):
+                warnings.simplefilter("ignore")
+                res = _ajustar_glm_nb(y, X_c, expo, float(a))
+                ll = _llf(res)
         except Exception:  # pragma: no cover - rejilla robusta
             continue
         if np.isfinite(ll) and (mejor is None or ll > mejor["ll"]):
