@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-08-22T17:25:20.912150",
+  "timestamp": "2026-10-01T20:34:33.391230",
   "total": 30,
-  "passed": 30,
+  "passed": 22,
   "required_total": 30,
-  "required_passed": 30,
-  "all_required_ok": true,
+  "required_passed": 22,
+  "all_required_ok": false,
   "checks": [
     {
       "id": "data:data/processed/tramos_red.csv",
@@ -24,21 +24,21 @@
       "id": "data:data/processed/sutran_accidentes_geocod.csv",
       "name": "Data asset: SUTRAN geocodificado",
       "ok": true,
-      "detail": "944 KB",
+      "detail": "936 KB",
       "required": true
     },
     {
       "id": "data:data/processed/dataset_modelo.csv",
-      "name": "Data asset: dataset modelo 3750x40",
+      "name": "Data asset: dataset modelo 3750x48",
       "ok": true,
-      "detail": "1386 KB",
+      "detail": "1541 KB",
       "required": true
     },
     {
-      "id": "data:data/processed/puntos_negros.csv",
-      "name": "Data asset: puntos negros",
+      "id": "data:data/processed/dashboard/puntos_negros.csv",
+      "name": "Data asset: puntos negros (EB)",
       "ok": true,
-      "detail": "1 KB",
+      "detail": "38 KB",
       "required": true
     },
     {
@@ -52,7 +52,7 @@
       "id": "data:data/processed/ositran_accidentes.csv",
       "name": "Data asset: OSITRAN accidentes",
       "ok": true,
-      "detail": "10291 KB",
+      "detail": "10251 KB",
       "required": true
     },
     {
@@ -73,7 +73,7 @@
       "id": "data:data/processed/ositran_trafico.csv",
       "name": "Data asset: OSITRAN tráfico",
       "ok": true,
-      "detail": "13717 KB",
+      "detail": "13651 KB",
       "required": true
     },
     {
@@ -107,64 +107,64 @@
     {
       "id": "svc:port5000",
       "name": "Servicio: OSRM routing :5000",
-      "ok": true,
-      "detail": "UP",
+      "ok": false,
+      "detail": "DOWN",
       "required": true
     },
     {
       "id": "svc:port8000",
       "name": "Servicio: API FastAPI :8000",
-      "ok": true,
-      "detail": "UP",
+      "ok": false,
+      "detail": "DOWN",
       "required": true
     },
     {
       "id": "svc:port8501",
       "name": "Servicio: Streamlit Dashboard :8501",
-      "ok": true,
-      "detail": "UP",
+      "ok": false,
+      "detail": "DOWN",
       "required": true
     },
     {
       "id": "api:health",
       "name": "API endpoint: health",
-      "ok": true,
-      "detail": "HTTP 200 | puntos=18807 uptime=1204s",
+      "ok": false,
+      "detail": "<urlopen error [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dich",
       "required": true
     },
     {
       "id": "api:alertas",
       "name": "API endpoint: alertas SUTRAN",
-      "ok": true,
-      "detail": "HTTP 200 | alertas=2",
+      "ok": false,
+      "detail": "<urlopen error [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dich",
       "required": true
     },
     {
       "id": "api:avisos",
       "name": "API endpoint: avisos SENAMHI+COEN",
-      "ok": true,
-      "detail": "HTTP 200 | senamhi=0 coen=0",
+      "ok": false,
+      "detail": "<urlopen error [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dich",
       "required": true
     },
     {
       "id": "api:ruta_segura_completa",
       "name": "API POST /ruta_segura_completa (Lima->Huancayo)",
-      "ok": true,
-      "detail": "hist=8.5726 [Alto] pred=0.6733 [Medio] cov=41.6% clima=True",
+      "ok": false,
+      "detail": "<urlopen error [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dich",
       "required": true
     },
     {
       "id": "dash:apptest",
       "name": "Dashboard AppTest (7 tabs + Analizar mi ruta)",
-      "ok": true,
-      "detail": "OK: Dashboard 7 tabs + Analizar mi ruta -> 0 excepciones",
+      "ok": false,
+      "detail": "FAIL: ruta_res no quedó en session_state",
       "required": true
     },
     {
       "id": "graph:graph_json",
       "name": "Grafo graphify actualizado",
       "ok": true,
-      "detail": "nodos=446 enlaces=0",
+      "detail": "nodos=456 enlaces=0",
       "required": true
     },
     {
@@ -178,7 +178,7 @@
       "id": "export:Lima_Huancayo.json",
       "name": "Exportación Lima→Huancayo .JSON",
       "ok": true,
-      "detail": "667 KB",
+      "detail": "632 KB",
       "required": true
     },
     {
@@ -192,7 +192,7 @@
       "id": "export:Trujillo_Chiclayo.json",
       "name": "Exportación Trujillo→Chiclayo .JSON",
       "ok": true,
-      "detail": "299 KB",
+      "detail": "284 KB",
       "required": true
     },
     {
@@ -206,14 +206,14 @@
       "id": "report:Lima_Huancayo",
       "name": "Reporte HTML Lima→Huancayo",
       "ok": true,
-      "detail": "850 KB",
+      "detail": "838 KB",
       "required": true
     },
     {
       "id": "report:Trujillo_Chiclayo",
       "name": "Reporte HTML Trujillo→Chiclayo",
       "ok": true,
-      "detail": "498 KB",
+      "detail": "491 KB",
       "required": true
     }
   ]

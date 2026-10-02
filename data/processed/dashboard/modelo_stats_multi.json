@@ -1,32 +1,199 @@
 {
-  "onsv": {
-    "n_tramos": 1278,
-    "n_accidentes": 5004,
-    "pseudo_r2": null
+  "respuestas": {
+    "onsv": {
+      "exposicion": "offset=log(long_km)",
+      "variables": [
+        "carriles",
+        "vel_proy",
+        "topografia_ondulado",
+        "topografia_montanoso",
+        "sup_buena",
+        "sup_regular",
+        "dist_ingemmet_km_log",
+        "dist_peajes_km_log",
+        "dist_cinemometros_km_log",
+        "es_panamericana"
+      ],
+      "estimador": "sm.GLM(NegativeBinomial) + alpha por ML en rejilla",
+      "alpha": 1.807168494761547,
+      "alpha_estimado": true,
+      "alpha_rejilla": [
+        0.01,
+        50.0,
+        60
+      ],
+      "pseudo_r2_mcfadden": 0.12456073277310653,
+      "pearson_chi2_sobre_df": 1.1829780931877714,
+      "llf": -4338.360477082902,
+      "aic": 8698.720954165805,
+      "n": 3750,
+      "n_tramos": 3750,
+      "n_tramos_con_eventos": 1278,
+      "n_eventos": 5004,
+      "anos_exposicion": 4.9884,
+      "ajustado": true
+    },
+    "sutran": {
+      "exposicion": "offset=log(long_km)",
+      "variables": [
+        "carriles",
+        "vel_proy",
+        "topografia_ondulado",
+        "topografia_montanoso",
+        "sup_buena",
+        "sup_regular",
+        "dist_ingemmet_km_log",
+        "dist_peajes_km_log",
+        "dist_cinemometros_km_log",
+        "es_panamericana"
+      ],
+      "estimador": "sm.GLM(NegativeBinomial) + alpha por ML en rejilla",
+      "alpha": 2.0878200001430502,
+      "alpha_estimado": true,
+      "alpha_rejilla": [
+        0.01,
+        50.0,
+        60
+      ],
+      "pseudo_r2_mcfadden": 0.1301158303614396,
+      "pearson_chi2_sobre_df": 1.6178847506992735,
+      "llf": -3441.2704464184153,
+      "aic": 6904.540892836831,
+      "n": 3750,
+      "n_tramos": 3750,
+      "n_tramos_con_eventos": 933,
+      "n_eventos": 3932,
+      "anos_exposicion": 0.7447,
+      "ajustado": true
+    },
+    "total": {
+      "exposicion": "offset=log(long_km)",
+      "variables": [
+        "carriles",
+        "vel_proy",
+        "topografia_ondulado",
+        "topografia_montanoso",
+        "sup_buena",
+        "sup_regular",
+        "dist_ingemmet_km_log",
+        "dist_peajes_km_log",
+        "dist_cinemometros_km_log",
+        "es_panamericana"
+      ],
+      "estimador": "sm.GLM(NegativeBinomial) + alpha por ML en rejilla",
+      "alpha": 1.5642430708753388,
+      "alpha_estimado": true,
+      "alpha_rejilla": [
+        0.01,
+        50.0,
+        60
+      ],
+      "pseudo_r2_mcfadden": 0.13560668918485796,
+      "pearson_chi2_sobre_df": 1.50980877665304,
+      "llf": -4022.289981281001,
+      "aic": 8066.579962562002,
+      "n": 3750,
+      "n_tramos": 3750,
+      "n_tramos_con_eventos": 1180,
+      "n_eventos": 4899,
+      "anos_exposicion": 0.7447,
+      "ajustado": true
+    },
+    "ositran": {
+      "exposicion": "offset=log(long_km)",
+      "variables": [
+        "carriles",
+        "vel_proy",
+        "topografia_ondulado",
+        "topografia_montanoso",
+        "sup_buena",
+        "sup_regular",
+        "dist_ingemmet_km_log",
+        "dist_peajes_km_log",
+        "dist_cinemometros_km_log",
+        "es_panamericana"
+      ],
+      "estimador": "sm.GLM(NegativeBinomial) + alpha por ML en rejilla",
+      "alpha": 3.2194098919077643,
+      "alpha_estimado": true,
+      "alpha_rejilla": [
+        0.01,
+        50.0,
+        60
+      ],
+      "pseudo_r2_mcfadden": 0.08710150405870354,
+      "pearson_chi2_sobre_df": 0.8704262236337896,
+      "llf": -6057.86574771376,
+      "aic": 12137.73149542752,
+      "n": 3750,
+      "n_tramos": 3750,
+      "n_tramos_con_eventos": 1317,
+      "n_eventos": 17943,
+      "anos_exposicion": 4.9884,
+      "ajustado": true
+    }
   },
-  "sutran": {
-    "n_tramos": 1188,
-    "n_accidentes": 4116,
-    "pseudo_r2": null
+  "ventanas": {
+    "ONSV": [
+      "2021-01-01",
+      "2025-12-28"
+    ],
+    "SUTRAN": [
+      "2020-01-01",
+      "2021-09-30"
+    ],
+    "ventana_comun": [
+      "2021-01-01",
+      "2021-09-30"
+    ]
   },
-  "total": {
-    "n_tramos": 2467,
-    "n_accidentes": 27206,
-    "pseudo_r2": NaN
+  "deduplicacion": {
+    "n_onsv": 970,
+    "n_sutran": 4119,
+    "n_ambos": 26,
+    "n_unico_total": 5115,
+    "suma_naiva": 5141,
+    "doble_conteo_evitado": 26
+  },
+  "ositran_cobertura": {
+    "accidentes_fuente": 41833,
+    "accidentes_asignados": 17943,
+    "cobertura": 0.4289197523486243,
+    "rutas_fuente": 103,
+    "rutas_con_coincidencia": 26,
+    "rutas_sin_coincidencia": 77,
+    "ejemplos_rutas_sin_coincidencia": [
+      "0",
+      "030A",
+      "100",
+      "109.95",
+      "118.2",
+      "120",
+      "127.4",
+      "130",
+      "1327.6",
+      "1334"
+    ]
+  },
+  "notas": {
+    "y_total": "Unión deduplicada ONSV ∪ SUTRAN dentro de la ventana común 2021-01-01→2021-09-30. OSITRAN queda fuera: es un agregado sin fecha ni coordenadas y no se puede deduplicar.",
+    "seudo_r2": "McFadden (1 - llf/llnull) sobre la verosimilitud NB2, con el modelo nulo con offset. Es verosimilitud, NO error de prediccion: para eso esta scripts/validez_predictiva.py.",
+    "exposicion": "offset = log(long_km × años de esa respuesta); cada respuesta usa la duración de SU periodo, no la del panel.",
+    "y_onsv": "Recuento ONSV del periodo completo de ONSV.",
+    "y_sutran": "SUTRAN recortado a la ventana común.",
+    "y_ositran": "Reparto proporcional a la longitud DENTRO de las rutas que casan con la red del proyecto: 42.9% de los 41833 accidentes de la fuente (26 de 103 rutas). NO es el total de OSITRAN. Los codigos OSITRAN son numericos (030A, 118.2) y los del proyecto son de MTC (PE-02); sin tabla de equivalencias, el resto no se puede ubicar. Ver `ositran_cobertura`.",
+    "filas": "Modelos ajustados sobre los 3.750 tramos, incluidos los de y = 0 (no se filtra por y > 0)."
   },
   "features": [
     "carriles",
     "vel_proy",
     "topografia_ondulado",
     "topografia_montanoso",
-    "topografia_llanura",
     "sup_buena",
     "sup_regular",
     "dist_ingemmet_km_log",
     "dist_peajes_km_log",
     "dist_cinemometros_km_log",
-    "es_panamericana",
-    "es_ruta_nacional",
-    "long_km"
+    "es_panamericana"
   ]
 }
