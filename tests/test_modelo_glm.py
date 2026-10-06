@@ -151,10 +151,15 @@ def test_ya_no_pisa_el_puntos_negros_canonico():
 
 
 def test_el_script_completo_corre_y_reporta_alpha_estimado():
+    # `errors="replace"`: el subproceso escribe en la codificacion de la consola
+    # de Windows (cp1252) y las "ñ" de su salida no son utf-8 validas. Sin esto
+    # la lectura del pipe revienta con UnicodeDecodeError, `stdout` queda en
+    # None y el fallo se reporta como TypeError en la linea siguiente, que
+    # esconde la causa real.
     r = subprocess.run([sys.executable, str(SCRIPT)], cwd=ROOT, capture_output=True,
-                       text=True, encoding="utf-8", timeout=3600)
+                       text=True, encoding="utf-8", errors="replace", timeout=3600)
     assert r.returncode == 0, r.stderr[-3000:]
-    salida = r.stdout
+    salida = r.stdout or ""
     assert "log(expo_km_anio)" in salida
     assert "alpha estimado" in salida
     assert "LEGADO" in salida
