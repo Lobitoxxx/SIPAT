@@ -213,5 +213,9 @@ def datos_reales_tramos():
     with open(f, encoding="utf-8") as fh:
         df = pd.DataFrame(json.load(fh))
     df["long_km"] = pd.to_numeric(df["long_km"], errors="coerce").fillna(0).clip(lower=1e-3)
-    df["siniestros_total"] = pd.to_numeric(df["siniestros_total"], errors="coerce").fillna(0)
+    # `tramos_geo.json` ya no publica `siniestros_total`: esa columna mezclaba
+    # periodos y doble-conteaba, asi que se llama `siniestros_suma_fuentes`. Es
+    # la misma serie, con un nombre que no invita a leerla como total.
+    assert "siniestros_total" not in df.columns
+    df["siniestros_total"] = pd.to_numeric(df["siniestros_suma_fuentes"], errors="coerce").fillna(0)
     return df

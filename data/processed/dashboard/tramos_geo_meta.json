@@ -1,0 +1,32 @@
+{
+  "generado_por": "scripts/build_dashboard_data.py",
+  "n_tramos": 3750,
+  "ventana_comun_onsv_sutran": {
+    "inicio": "2021-01-01",
+    "fin": "2021-09-30",
+    "meses": 8.9
+  },
+  "union_onsv_sutran": {
+    "n_unicos_ventana_comun": 5115,
+    "n_onsv_exclusivo": 970,
+    "n_sutran_exclusivo": 4119,
+    "n_vistos_por_ambas": 26,
+    "n_asignados_a_tramo": 4899,
+    "n_sin_tramo_asignable": 216,
+    "criterio": "radio 0.25 km, tolerancia 1 dia, emparejamiento uno a uno",
+    "suma_ingenua_onsv_sutran": 9129
+  },
+  "columnas_de_conteo": {
+    "onsv_n": "Accidentes ONSV, 2021-2025, asignados a su tramo.",
+    "sutran_n": "Accidentes SUTRAN, 2020-2021Q3, asignados a su tramo.",
+    "ositran_n": "Accidentes OSITRAN 2019-2026 repartidos por longitud de tramo dentro de la ruta. No se puede deduplicar contra ONSV/SUTRAN (agregado anual sin fecha de evento).",
+    "siniestros_suma_fuentes": "Suma de las TRES fuentes anteriores. NO es un total de siniestros: mezcla periodos y cuenta dos veces los emparejados. Referencia, no cifra de referencia.",
+    "siniestros_suma_fuentes_km": "siniestros_suma_fuentes / long_km.",
+    "fallecidos_suma_fuentes": "onsv_fallecidos + sutran_fallecidos (OSITRAN no separa fallecidos).",
+    "lesionados_suma_fuentes": "onsv_lesionados + sutran_heridos + ositran_heridos (OSITRAN reporta afectados, no lesionados).",
+    "siniestros_union_comun": "ONSV ∪ SUTRAN deduplicado dentro de la ventana comun. Unico recuento sin doble conteo, y sobre una ventana mas corta que las fuentes.",
+    "fallecidos_union_comun": "Fallecidos de la union (maximo de las dos fuentes por evento, no la suma).",
+    "siniestros_union_comun_km": "siniestros_union_comun / long_km."
+  },
+  "por_que_no_hay_un_total": "Las tres fuentes cubren periodos distintos y dos de ellas registran el mismo accidente con unidades de registro distintas. Un unico total seria una magnitud sin ventana definida. Ver docs/fiabilidad_fuentes.md."
+}

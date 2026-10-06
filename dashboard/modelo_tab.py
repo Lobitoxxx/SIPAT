@@ -117,16 +117,19 @@ def tab_modelo(irrs, stats_modelo, tramos_f, sel_rutas):
         cols_sel = st.multiselect(
             "Columnas",
             ["ruta", "km0", "km1", "region", "topografia", "superficie", "onsv_n", "sutran_n",
-             "ositran_n", "siniestros_total", "fallecidos_total", "siniestros_total_km",
+             "ositran_n", "siniestros_union_comun", "fallecidos_union_comun",
+             "siniestros_union_comun_km", "siniestros_suma_fuentes",
+             "siniestros_suma_fuentes_km",
              "vel_proy", "carriles", "sinuosidad", "alertas_hist_n", "es_panamericana"],
-            default=["ruta", "km0", "km1", "region", "siniestros_total", "siniestros_total_km",
-                     "vel_proy"])
+            default=["ruta", "km0", "km1", "region", "siniestros_union_comun",
+                     "siniestros_union_comun_km", "vel_proy"])
         cols_sel = [c for c in cols_sel if tramos_f and c in tramos_f[0]]
         if cols_sel:
             df_t = pd.DataFrame([{k: t.get(k) for k in cols_sel} for t in tramos_f])
             if "ruta" in cols_sel and sel_rutas:
                 df_t = df_t[df_t["ruta"].isin(sel_rutas)]
-            sort_col = ("siniestros_total_km" if "siniestros_total_km" in cols_sel else cols_sel[0])
+            sort_col = ("siniestros_union_comun_km" if "siniestros_union_comun_km" in cols_sel
+                        else cols_sel[0])
             df_t = df_t.sort_values(sort_col, ascending=False)
             st.dataframe(df_t.head(500), width='stretch', hide_index=True)
             st.download_button("⬇️ Descargar tramos (CSV)", df_t.to_csv(index=False).encode("utf-8-sig"),

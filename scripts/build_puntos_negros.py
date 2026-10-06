@@ -119,17 +119,22 @@ df["concentracion_buffer"] = tramo_counts
 print("[4/6] Empirical Bayes (Hauer, Gamma-Poisson) con prior leave-one-out...")
 
 df["long_km"] = pd.to_numeric(df["long_km"], errors="coerce").fillna(0).clip(lower=1e-3)
-df["siniestros_total"] = pd.to_numeric(df["siniestros_total"], errors="coerce").fillna(0)
+# El observado del EB es la SUMA POR FUENTE, no un total: mezcla la ventana de
+# ONSV (2021-2025) con la de SUTRAN (2020-2021Q3) y deja el solape entre ambas sin
+# resolver. Es la serie que siempre se ha usado aqui y cambiar de serie
+# cambiaria todos los puntos negros; lo que se corrige es el nombre, para que
+# nadie lea este conteo como el total de siniestros de la red.
+df["siniestros_suma_fuentes"] = pd.to_numeric(df["siniestros_suma_fuentes"], errors="coerce").fillna(0)
 
 df = eb_tramos.eb_sobre_tramos(
     df,
     grupo="region",
-    col_conteo="siniestros_total",
+    col_conteo="siniestros_suma_fuentes",
     col_km="long_km",
 )
 df["pred_km"] = df["prior_km"]
 df["pred_total"] = df["prior_km"] * df["long_km"]
-df["obs_total"] = df["siniestros_total"]
+df["obs_total"] = df["siniestros_suma_fuentes"]
 # Exceso observado contra el prior: NO es el mismo criterio que `exceso_eb`.
 # El EB ya se contrajo; aquí se compara el dato crudo con la tasa de la región.
 df["exceso_obs"] = (df["obs_total"] - df["pred_total"]) / df["pred_total"].replace(0, np.nan)
@@ -144,7 +149,7 @@ print("[5/6] Percentil 95 por región/clase...")
 
 MIN_SINUESTROS = 3          # menos de 3 no es una concentración, es ruido de conteo
 PERCENTIL = 0.95            # cola del 5 %: el criterio, no una constante inventada
-SUFICIENTE = df["siniestros_total"].to_numpy() >= MIN_SINUESTROS
+SUFICIENTE = df["siniestros_suma_fuentes"].to_numpy() >= MIN_SINUESTROS
 
 # Umbrales **derivados de los datos**, no escritos a mano: antes el criterio era
 # `exceso_eb > 1.0`, un número redondo que con un prior que ya no es degenerado
@@ -153,9 +158,9 @@ SUFICIENTE = df["siniestros_total"].to_numpy() >= MIN_SINUESTROS
 thr_eb = float(df.loc[SUFICIENTE, "exceso_eb"].quantile(PERCENTIL))
 thr_obs = float(df.loc[SUFICIENTE, "exceso_obs"].quantile(PERCENTIL))
 
-p95 = df.groupby("region")["siniestros_total_km"].transform(lambda x: x.quantile(PERCENTIL))
+p95 = df.groupby("region")["siniestros_suma_fuentes_km"].transform(lambda x: x.quantile(PERCENTIL))
 df["p95_region"] = p95
-df["is_punto_negro"] = (df["siniestros_total_km"] > df["p95_region"]) & SUFICIENTE
+df["is_punto_negro"] = (df["siniestros_suma_fuentes_km"] > df["p95_region"]) & SUFICIENTE
 print(f"     Umbrales (p{int(PERCENTIL*100)}): exceso_eb>{thr_eb:.2f}, exceso_obs>{thr_obs:.2f}")
 
 # ─── 6. Combinar criterios y exportar ───────────────────────────────────
@@ -196,12 +201,12 @@ for _, row in pn.iterrows():
         "km0": float(row["km0"]),
         "km1": float(row["km1"]),
         "region": row["region"],
-        "siniestros": int(row["siniestros_total"]),
-        "fallecidos": int(row["fallecidos_total"]),
+        "siniestros": int(row["siniestros_suma_fuentes"]),
+        "fallecidos": int(row["fallecidos_suma_fuentes"]),
         "onsv_n": int(row["onsv_n"]),
         "sutran_n": int(row["sutran_n"]),
         "ositran_n": int(row["ositran_n"]),
-        "siniestros_km": float(row["siniestros_total_km"]),
+        "siniestros_km": float(row["siniestros_suma_fuentes_km"]),
         "prior_km_region_loo": float(row["prior_km"]),
         "pred_km": float(row["pred_km"]),
         "eb_km": float(row["eb_km"]),

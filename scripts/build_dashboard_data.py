@@ -18,6 +18,13 @@ os.chdir(ROOT)
 sys.path.insert(0, str(ROOT))
 
 from scripts.riesgo_red import RiesgoIndex
+from scripts.deduplicacion_eventos import (
+    resumen_unificacion,
+    unificar_onsv_sutran,
+    ventana_comun,
+    ventanas_de_fuente,
+)
+from scripts.panel_anual import asignar_por_km_red
 
 OUT_DIR = ROOT / "data" / "processed" / "dashboard"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -198,21 +205,71 @@ if "alertas_hist_peso" in df.columns:
 
 # ─── Totales ──────────────────────────────────────────────────────────────
 # `onsv_n` cubre 2021-2025 y `sutran_n` 2020-2021Q3: periodos distintos, y un
-# mismo siniestro aparece en las dos. La suma ingenua (`siniestros_total`, que es
-# lo que el dashboard ya consume) mezcla dos periodos y double-countea los
-# emparejados. Se conservan las dos cifras, con nombres que dicen cuál es cuál:
-#   - `siniestros_total`      : suma ingenua por fuente (periodos mezclados).
-#   - `siniestros_union_comun`: ONSV ∪ SUTRAN deduplicado en la ventana común.
+# mismo siniestro aparece en las dos. La suma ingenua mezcla dos periodos y
+# double-countea los emparejados. Por eso NO se llama `siniestros_total`:
+#
+#   - `siniestros_suma_fuentes`      : suma ingenua de las TRES fuentes, con
+#                                     periodos mezclados y solape sin resolver.
+#                                     Es una magnitud de referencia, no un total.
+#   - `siniestros_union_comun`       : ONSV ∪ SUTRAN deduplicado dentro de la
+#                                     ventana común (8,9 meses). Es el único
+#                                     recuento de siniestros sin doble conteo,
+#                                     y cubre una ventana más corta que la
+#                                     anterior. OSITRAN no entra: es un
+#                                     agregado sin fecha de evento y no se
+#                                     puede deduplicar contra nada.
 # Que la diferencia entre ambas sea visible es el punto: esconderla dentro de un
 # "total" es lo que hace indefendible el número.
-df["siniestros_total"] = df["onsv_n"] + df["sutran_n"] + df["ositran_n"]
-df["siniestros_fuentes_suma"] = df["onsv_n"] + df["sutran_n"]
-df["fallecidos_total"] = df["onsv_fallecidos"] + df["sutran_fallecidos"]  # OSITRAN no distingue fallecidos
-df["lesionados_total"] = df["onsv_lesionados"] + df["sutran_heridos"] + df["ositran_heridos"]
-df["siniestros_total_km"] = df["siniestros_total"] / df["long_km"].replace(0, np.nan)
-df["fallecidos_total_km"] = df["fallecidos_total"] / df["long_km"].replace(0, np.nan)
 
-print(f"     Tramos con siniestros_total>0: {(df.siniestros_total > 0).sum()}")
+# ─── Unión ONSV ∪ SUTRAN en la ventana común ─────────────────────────────
+print("[6b/9] Unionando ONSV y SUTRAN en la ventana comun...")
+# Se usa el SUTRAN COMPLETO, no el_geocodificado: una fila sin coordenadas no
+# puede emparejarse con ONSV, pero sigue siendo un evento de SUTRAN y
+# excluirla inflaría el solape artificialmente.
+sutran_completo = pd.read_csv(ROOT / "data" / "processed" / "sutran_accidentes_geocod.csv")
+unif = unificar_onsv_sutran(onsv, sutran_completo)
+res_unif = resumen_unificacion(onsv, sutran_completo, unif=unif)
+ini_comun, fin_comun = ventana_comun(ventanas_de_fuente(onsv, sutran_completo))
+
+# Asignación canónica por (ruta, km en la red) — la misma de `features_tramos` y
+# de `panel_anual`. Con el método de centroides, 1.183 de los 3.750 tramos
+# cambiaban de conteo, y entonces el mapa y `dataset_modelo.csv` dirían dos cosas
+# distintas sobre el mismo tramo.
+df = df.reset_index(drop=True)
+asig = asignar_por_km_red(unif, df[["ruta", "km0", "km1"]].reset_index(drop=True))
+con_tramo = asig.dropna(subset=["idx_tramo"])
+agg_union = con_tramo.groupby("idx_tramo").agg(
+    siniestros_union_comun=("fuentes", "size"),
+    fallecidos_union_comun=("fallecidos", "sum"),
+).reset_index()
+
+n_union = int(len(unif))
+n_union_tramo = int(len(con_tramo))
+n_union_sin_tramo = n_union - n_union_tramo
+
+print(f"     Union ONSV+SUTRAN: {n_union} unicos "
+      f"({res_unif['n_ambos']} vistos por ambas, {n_union_sin_tramo} sin tramo asignable)")
+print(f"     Ventana comun: {ini_comun} -> {fin_comun}")
+
+df["siniestros_union_comun"] = 0
+df["fallecidos_union_comun"] = 0
+if len(agg_union):
+    idx = agg_union["idx_tramo"].astype(int).to_numpy()
+    df.loc[idx, "siniestros_union_comun"] = agg_union["siniestros_union_comun"].to_numpy()
+    df.loc[idx, "fallecidos_union_comun"] = agg_union["fallecidos_union_comun"].fillna(0).to_numpy()
+
+df["siniestros_suma_fuentes"] = df["onsv_n"] + df["sutran_n"] + df["ositran_n"]
+df["siniestros_suma_fuentes_onsv_sutran"] = df["onsv_n"] + df["sutran_n"]
+df["fallecidos_suma_fuentes"] = df["onsv_fallecidos"] + df["sutran_fallecidos"]  # OSITRAN no distingue fallecidos
+df["lesionados_suma_fuentes"] = df["onsv_lesionados"] + df["sutran_heridos"] + df["ositran_heridos"]
+den = df["long_km"].replace(0, np.nan)
+df["siniestros_suma_fuentes_km"] = df["siniestros_suma_fuentes"] / den
+df["fallecidos_suma_fuentes_km"] = df["fallecidos_suma_fuentes"] / den
+df["siniestros_union_comun_km"] = df["siniestros_union_comun"] / den
+
+print(f"     Tramos con siniestros_union_comun>0: {(df.siniestros_union_comun > 0).sum()}")
+print(f"     Suma por fuente={int(df.siniestros_suma_fuentes.sum())}  "
+      f"union comun={int(df.siniestros_union_comun.sum())}")
 
 # ─── 7. Preparar salida JSON para dashboard ─────────────────────────────
 print("[7/8] Preparando tramos_geo.json...")
@@ -248,12 +305,16 @@ for _, t in df.iterrows():
         "ositran_n": int(t["ositran_n"]),
         "ositran_fallecidos": int(t["ositran_fallecidos"]),
         "ositran_heridos": int(t["ositran_heridos"]),
-        # Totales
-        "siniestros_total": int(t["siniestros_total"]),
-        "fallecidos_total": int(t["fallecidos_total"]),
-        "lesionados_total": int(t["lesionados_total"]),
-        "siniestros_total_km": float(t["siniestros_total_km"]) if not np.isnan(t["siniestros_total_km"]) else 0.0,
-        "fallecidos_total_km": float(t["fallecidos_total_km"]) if not np.isnan(t["fallecidos_total_km"]) else 0.0,
+        # Suma por fuente (NO es un total: periodos mezclados, solape sin resolver)
+        "siniestros_suma_fuentes": int(t["siniestros_suma_fuentes"]),
+        "fallecidos_suma_fuentes": int(t["fallecidos_suma_fuentes"]),
+        "lesionados_suma_fuentes": int(t["lesionados_suma_fuentes"]),
+        "siniestros_suma_fuentes_km": float(t["siniestros_suma_fuentes_km"]) if not np.isnan(t["siniestros_suma_fuentes_km"]) else 0.0,
+        "fallecidos_suma_fuentes_km": float(t["fallecidos_suma_fuentes_km"]) if not np.isnan(t["fallecidos_suma_fuentes_km"]) else 0.0,
+        # Union ONSV + SUTRAN deduplicada en la ventana comun (8,9 meses)
+        "siniestros_union_comun": int(t["siniestros_union_comun"]),
+        "fallecidos_union_comun": int(t["fallecidos_union_comun"]),
+        "siniestros_union_comun_km": float(t["siniestros_union_comun_km"]) if not np.isnan(t["siniestros_union_comun_km"]) else 0.0,
         # Alertas
         "alertas_hist_n": int(t.get("alertas_hist_n", 0)),
         "alertas_hist_peso": float(t.get("alertas_hist_peso", 0.0)),
@@ -268,6 +329,50 @@ for _, t in df.iterrows():
 with open(OUT_DIR / "tramos_geo.json", "w", encoding="utf-8") as f:
     json.dump(tramos_out, f, ensure_ascii=False)
 print(f"     Guardado: {OUT_DIR / 'tramos_geo.json'} ({len(tramos_out)} tramos)")
+
+# `tramos_geo.json` es una lista de tramos y no admite un bloque de
+# metadatos. El significado de cada columna vive aqui, para que ninguna se lea
+# como "el total de siniestros" sin mirar su ventana.
+meta = {
+    "generado_por": "scripts/build_dashboard_data.py",
+    "n_tramos": len(tramos_out),
+    "ventana_comun_onsv_sutran": {
+        "inicio": None if ini_comun is None else str(pd.Timestamp(ini_comun).date()),
+        "fin": None if fin_comun is None else str(pd.Timestamp(fin_comun).date()),
+        "meses": round((pd.Timestamp(fin_comun) - pd.Timestamp(ini_comun)).days / 30.44, 1)
+        if ini_comun is not None else None,
+    },
+    "union_onsv_sutran": {
+        "n_unicos_ventana_comun": n_union,
+        "n_onsv_exclusivo": int(res_unif["n_onsv"]),
+        "n_sutran_exclusivo": int(res_unif["n_sutran"]),
+        "n_vistos_por_ambas": int(res_unif["n_ambos"]),
+        "n_asignados_a_tramo": n_union_tramo,
+        "n_sin_tramo_asignable": n_union_sin_tramo,
+        "criterio": "radio 0.25 km, tolerancia 1 dia, emparejamiento uno a uno",
+        "suma_ingenua_onsv_sutran": int(df["onsv_n"].sum() + df["sutran_n"].sum()),
+    },
+    "columnas_de_conteo": {
+        "onsv_n": "Accidentes ONSV, 2021-2025, asignados a su tramo.",
+        "sutran_n": "Accidentes SUTRAN, 2020-2021Q3, asignados a su tramo.",
+        "ositran_n": "Accidentes OSITRAN 2019-2026 repartidos por longitud de tramo dentro de la ruta. No se puede deduplicar contra ONSV/SUTRAN (agregado anual sin fecha de evento).",
+        "siniestros_suma_fuentes": "Suma de las TRES fuentes anteriores. NO es un total de siniestros: mezcla periodos y cuenta dos veces los emparejados. Referencia, no cifra de referencia.",
+        "siniestros_suma_fuentes_km": "siniestros_suma_fuentes / long_km.",
+        "fallecidos_suma_fuentes": "onsv_fallecidos + sutran_fallecidos (OSITRAN no separa fallecidos).",
+        "lesionados_suma_fuentes": "onsv_lesionados + sutran_heridos + ositran_heridos (OSITRAN reporta afectados, no lesionados).",
+        "siniestros_union_comun": "ONSV ∪ SUTRAN deduplicado dentro de la ventana comun. Unico recuento sin doble conteo, y sobre una ventana mas corta que las fuentes.",
+        "fallecidos_union_comun": "Fallecidos de la union (maximo de las dos fuentes por evento, no la suma).",
+        "siniestros_union_comun_km": "siniestros_union_comun / long_km.",
+    },
+    "por_que_no_hay_un_total": (
+        "Las tres fuentes cubren periodos distintos y dos de ellas registran el "
+        "mismo accidente con unidades de registro distintas. Un unico total seria "
+        "una magnitud sin ventana definida. Ver docs/fiabilidad_fuentes.md."
+    ),
+}
+with open(OUT_DIR / "tramos_geo_meta.json", "w", encoding="utf-8") as f:
+    json.dump(meta, f, ensure_ascii=False, indent=2)
+print(f"     Guardado: {OUT_DIR / 'tramos_geo_meta.json'}")
 
 # ─── 8. Exportar eventos CSV por fuente ─────────────────────────────────
 print("[8/8] Exportando eventos CSV por fuente...")
@@ -353,8 +458,10 @@ print(f"     ositran_events.csv: {len(ositran_out)} eventos")
 # Stats resumen
 df_stats = df[["id_tramo", "ruta", "km0", "km1", "region", "long_km",
                "onsv_n", "onsv_fallecidos", "sutran_n", "sutran_fallecidos",
-               "ositran_n", "ositran_fallecidos", "siniestros_total", "fallecidos_total",
-               "siniestros_total_km", "fallecidos_total_km",
+               "ositran_n", "ositran_fallecidos",
+               "siniestros_union_comun", "fallecidos_union_comun", "siniestros_union_comun_km",
+               "siniestros_suma_fuentes", "fallecidos_suma_fuentes",
+               "siniestros_suma_fuentes_km", "fallecidos_suma_fuentes_km",
                "alertas_hist_n", "alertas_hist_peso", "dist_peajes_km"]].copy()
 df_stats.to_csv(OUT_DIR / "tramos_stats.csv", index=False, encoding="utf-8-sig")
 print(f"     tramos_stats.csv: {len(df_stats)} tramos")

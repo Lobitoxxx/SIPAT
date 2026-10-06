@@ -27,23 +27,29 @@ def _color_ramp(v):
     return "#991b1b"
 
 
-def tab_mapa(tramos_f, puntos, alertas_hist):
+def tab_mapa(tramos_f, puntos, alertas_hist, meta_tramos=None):
+    meta_tramos = meta_tramos or {}
     st.markdown("### 🗺️ Red vial nacional según siniestros")
-    st.caption("Gris = sin siniestros → amarillo → rojo (más peligroso). "
-               "Activa las capas para ver puntos negros y alertas SUTRAN.")
+    st.caption("El color usa el recuento **sin doble conteo**: ONSV ∪ SUTRAN deduplicado "
+               "dentro de la ventana común. Activa las capas para ver puntos negros y "
+               "alertas SUTRAN.")
     m = folium.Map(location=[-11.5, -74.5], zoom_start=5, tiles="CartoDB positron", prefer_canvas=True)
     fg_tramos = folium.FeatureGroup(name="Tramos con siniestros")
     fg_puntos = folium.FeatureGroup(name="Puntos negros")
     fg_alertas = folium.FeatureGroup(name="Alertas históricas SUTRAN")
 
     for t in tramos_f:
-        sini = t.get("siniestros_total", t.get("onsv_n", 0))
-        if sini <= 0:
+        uni = t.get("siniestros_union_comun", 0)
+        uni_km = t.get("siniestros_union_comun_km", 0.0) or 0.0
+        if uni <= 0:
             continue
-        col = _color_ramp(t.get("siniestros_total_km", t.get("siniestros_km", 0)))
+        col = _color_ramp(uni_km)
         popup_html = (f"<b>{t['ruta']} km {t['km0']:.1f}-{t['km1']:.1f}</b> ({t['region']})<br>"
-                      f"{sini} siniestros | {t.get('fallecidos_total', 0)} fallecidos | "
-                      f"{t.get('siniestros_total_km', t.get('siniestros_km', 0)):.2f} sini/km<br>"
+                      f"<b>{uni} siniestros (unión ONSV+SUTRAN)</b> | "
+                      f"{t.get('fallecidos_union_comun', 0)} fallecidos | "
+                      f"{uni_km:.2f} sini/km<br>"
+                      f"Suma por fuente: {t.get('siniestros_suma_fuentes', 0)} "
+                      f"(no comparable: periodos mezclados)<br>"
                       f"ONSV: {t.get('onsv_n', 0)} | SUTRAN: {t.get('sutran_n', 0)} | "
                       f"OSITRAN: {t.get('ositran_n', 0)}")
         folium.PolyLine(t["coords"], color=col, weight=2.5, opacity=.85,
@@ -78,6 +84,48 @@ def tab_mapa(tramos_f, puntos, alertas_hist):
     with open("dashboard/_map_siniestros.html", "w", encoding="utf-8") as f:
         f.write(m._repr_html_())
     st.iframe(src=Path("dashboard/_map_siniestros.html"), height=640)
+
+    _recuentos_comparables(tramos_f, meta_tramos)
+
+
+def _recuentos_comparables(tramos_f, meta_tramos):
+    """Las dos cifras que no se pueden sumar, una al lado de la otra.
+
+    Publicar solo `siniestros_suma_fuentes` invita a leerla como el total de
+    siniestros de la red: no lo es, porque mezcla la ventana de ONSV (2021-2025)
+    con la de SUTRAN (2020-2021Q3) y cuenta dos veces los 26 accidentes que ambas
+    registran. La union comun es el unico recuento sin doble conteo, y cubre
+    8,9 meses, no cinco años.
+    """
+    with st.expander("Recuentos comparables: por qué no hay un único total"):
+        uni = sum(t.get("siniestros_union_comun", 0) for t in tramos_f)
+        suma = sum(t.get("siniestros_suma_fuentes", 0) for t in tramos_f)
+        onsv = sum(t.get("onsv_n", 0) for t in tramos_f)
+        sutran = sum(t.get("sutran_n", 0) for t in tramos_f)
+        ositran = sum(t.get("ositran_n", 0) for t in tramos_f)
+        c1, c2 = st.columns(2)
+        with c1:
+            st.metric("Siniestros unión ONSV ∪ SUTRAN", f"{uni:,}".replace(",", "."),
+                      help="Deduplicado dentro de la ventana común. Es el recuento "
+                           "que no cuenta dos veces el mismo accidente.")
+            st.caption(f"Sin doble conteo · ventana común "
+                       f"{meta_tramos.get('ventana_comun_onsv_sutran', {}).get('inicio', '?')} → "
+                       f"{meta_tramos.get('ventana_comun_onsv_sutran', {}).get('fin', '?')}")
+        with c2:
+            st.metric("Suma por fuente (no comparable)", f"{suma:,}".replace(",", "."),
+                      help=f"ONSV {onsv} + SUTRAN {sutran} + OSITRAN {ositran}. Mezcla "
+                           "periodos distintos y no deduplica. No es un total.")
+            st.caption(f"ONSV {onsv:,} + SUTRAN {sutran:,} + OSITRAN {ositran:,}".replace(",", "."))
+        un = meta_tramos.get("union_onsv_sutran", {})
+        if un:
+            st.caption(
+                f"En toda la red: {un.get('n_unicos_ventana_comun', '?')} siniestros únicos "
+                f"({un.get('n_onsv_exclusivo', '?')} solo ONSV, "
+                f"{un.get('n_sutran_exclusivo', '?')} solo SUTRAN, "
+                f"{un.get('n_vistos_por_ambas', '?')} por ambas), de los que "
+                f"{un.get('n_sin_tramo_asignable', '?')} caen fuera de la red de estudio. "
+                f"Criterio de emparejamiento: {un.get('criterio', '?')}.")
+            st.caption(meta_tramos.get("por_que_no_hay_un_total", ""))
 
 
 def tab_puntos(puntos):
