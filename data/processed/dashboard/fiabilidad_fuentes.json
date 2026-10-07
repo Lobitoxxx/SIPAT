@@ -1,236 +1,323 @@
 {
+  "generado": "2026-10-07T12:33:32",
   "ventanas": {
-    "por_fuente": {
-      "ONSV": [
-        "2021-01-01",
-        "2025-12-28"
-      ],
-      "SUTRAN": [
-        "2020-01-01",
-        "2021-09-30"
-      ]
-    },
-    "comun_onsv_sutran": {
-      "inicio": "2021-01-01",
-      "fin": "2021-09-30",
-      "meses": 8.9,
-      "hay_solape": true
-    }
-  },
-  "calidad_coordenadas": {
-    "onsv": {
-      "fuente": "ONSV",
-      "n_eventos": 5014,
-      "lat_nulos": 0,
-      "lon_nulos": 0,
-      "sin_coordenada_usable": 0,
-      "pct_sin_coordenada": 0.0,
-      "con_coordenada_usable": 5014,
-      "fuera_de_peru": 0,
-      "pct_fuera_de_peru": 0.0,
-      "pct_fuera_de_peru_del_total": 0.0,
-      "nota_denominador": "`pct_fuera_de_peru` se calcula sobre las filas CON coordenada; `pct_fuera_de_peru_del_total` sobre todas. Confundirlos convierte coordenadas ausentes en coordenadas erroneous.",
-      "duplicados_exactos_posicion": 2,
-      "pct_duplicados": 0.04,
-      "lat_rango": [
-        -18.299647,
-        -3.48288912295238
-      ],
-      "lon_rango": [
-        -81.18214129984908,
-        -69.04112213057007
-      ]
-    },
-    "sutran": {
-      "fuente": "SUTRAN",
-      "n_eventos": 8155,
-      "lat_nulos": 499,
-      "lon_nulos": 499,
-      "sin_coordenada_usable": 499,
-      "pct_sin_coordenada": 6.12,
-      "con_coordenada_usable": 7656,
-      "fuera_de_peru": 0,
-      "pct_fuera_de_peru": 0.0,
-      "pct_fuera_de_peru_del_total": 0.0,
-      "nota_denominador": "`pct_fuera_de_peru` se calcula sobre las filas CON coordenada; `pct_fuera_de_peru_del_total` sobre todas. Confundirlos convierte coordenadas ausentes en coordenadas erroneous.",
-      "duplicados_exactos_posicion": 3786,
-      "pct_duplicados": 46.43,
-      "lat_rango": [
-        -18.310510278999917,
-        -3.509999052862203
-      ],
-      "lon_rango": [
-        -81.22080952668647,
-        -69.06147842743208
-      ]
-    }
-  },
-  "ositran": {
-    "n_eventos": 41833,
-    "n_filas": 41833,
-    "nota_unidad": "Los conteos son accidentes (suma de `cant_accidentes`), no filas. Con la fuente real ambos numeros coinciden porque cada fila vale 1; la distincion se mantiene para que el indicador no dependa de eso.",
-    "n_anos": 8,
-    "anos": [
-      2019,
-      2020,
-      2021,
-      2022,
-      2023,
-      2024,
-      2025,
-      2026
+    "ONSV": [
+      "2021-01-01",
+      "2025-12-28"
     ],
-    "concesiones_siglas": 16,
-    "eventos_sin_info_ruta": 16544,
-    "pct_sin_info_ruta": 39.5,
-    "eventos_con_ruta": 25289,
-    "rutas_distintas_con_ruta": 102,
-    "rutas_que_coinciden_con_red": 26,
-    "eventos_sobre_ruta_de_red": 17943,
-    "cobertura_pct_del_total": 42.9,
-    "cobertura_pct_de_los_con_ruta": 71.0,
-    "nota_denominador": "Cobertura sobre el total y sobre los eventos con ruta difieren mucho: el 39.5% de registros sin atribucion hace que la cobertura real sea 71% de lo utilizable y 42.9% de lo publicado. Publicar solo una de las dos cifras induce a error."
+    "SUTRAN": [
+      "2020-01-01",
+      "2021-09-30"
+    ]
   },
-  "solape": {
-    "parametros": {
-      "radio_km": 0.25,
-      "tolerancia_dias": 1
+  "ventana_comun_onsv_sutran": [
+    "2021-01-01",
+    "2021-09-30"
+  ],
+  "calidad_coordenadas": {
+    "ONSV": {
+      "filas": 5014,
+      "sin_coordenada": 0,
+      "pct_sin_coordenada": 0.0,
+      "fuera_de_peru": 0,
+      "puntos_repetidos": 1,
+      "coincidencias_mismo_km_fecha": 1,
+      "coincidencias_misma_modalidad": 1,
+      "nota_puntos_repetidos": "Coordenada compartida entre filas; en SUTRAN es esperable porque la coordenada viene del km del tramo, no de un GPS del accidente."
     },
+    "SUTRAN": {
+      "filas": 8155,
+      "sin_coordenada": 499,
+      "pct_sin_coordenada": 6.12,
+      "fuera_de_peru": 0,
+      "puntos_repetidos": 3786,
+      "coincidencias_mismo_km_fecha": 320,
+      "coincidencias_misma_modalidad": 204,
+      "nota_puntos_repetidos": "Coordenada compartida entre filas; en SUTRAN es esperable porque la coordenada viene del km del tramo, no de un GPS del accidente."
+    }
+  },
+  "cobertura_ositran": {
+    "columna_union": "ruta",
+    "rutas_ositran": 103,
+    "concesiones_ositran_siglas": 16,
+    "rutas_red": 150,
+    "rutas_comunes": 26,
+    "pct_rutas_comunes": 17.3,
+    "rutas_ositran_fuera_de_la_red": [
+      "0",
+      "030A",
+      "100",
+      "109.95",
+      "118.2",
+      "120",
+      "127.4",
+      "130",
+      "1327.6",
+      "1334",
+      "1346.718",
+      "1352.5",
+      "145",
+      "152",
+      "161",
+      "163.15",
+      "164",
+      "178.95",
+      "186.7",
+      "191.6",
+      "196.6",
+      "199.2",
+      "21",
+      "215.3",
+      "218.5",
+      "220.8",
+      "221.4",
+      "222.6",
+      "224.6",
+      "238.5",
+      "240.2",
+      "268.8",
+      "29.95",
+      "32",
+      "33.5",
+      "35.5",
+      "36",
+      "36.8",
+      "39.23",
+      "52",
+      "66.2",
+      "72",
+      "73.8",
+      "74.1",
+      "75",
+      "76",
+      "77.1",
+      "8.5",
+      "89",
+      "95.3",
+      "98.4",
+      "98.5",
+      "99.5",
+      "P-30A",
+      "P3-0A",
+      "PE - 08A",
+      "PE - 1N",
+      "PE--34",
+      "PE--34A",
+      "PE--36A",
+      "PE-04 B",
+      "PE-1N J",
+      "PE-1NC",
+      "PE-20 A",
+      "PE-2A",
+      "PE-30 C",
+      "PE-31",
+      "PE-32S",
+      "PE-3A",
+      "PE-5N B",
+      "PE-IS",
+      "PE.-3S",
+      "PE022",
+      "PE03",
+      "PE03N",
+      "PE_1N",
+      "SIN INFO"
+    ],
+    "accidentes_totales": 41833.0
+  },
+  "solape_onsv_sutran": {
     "n_onsv": 970,
     "n_sutran": 4119,
     "n_ambos": 26,
     "n_unico_total": 5115,
     "suma_naiva": 5141,
-    "doble_conteo_evitado": 26,
-    "lincoln_petersen": {
-      "n_a": 996,
-      "n_b": 4145,
-      "n_ab": 26,
-      "n_a_exclusivo": 970,
-      "n_b_exclusivo": 4119,
-      "nota_marginales": "`n_a`/`n_b` de Lincoln-Petersen son marginales inclusivos (= exclusivo + `n_ab`); las claves `*_exclusivo` dejan ver la reconciliacion con `resumen_unificacion`.",
-      "n_estimado_lincoln_petersen": 158785.4,
-      "se_log": 0.304,
-      "ic95_bajo": 87516.1,
-      "ic95_alto": 288093.3,
-      "factor_oculto_sobre_observado": 31.0
-    }
+    "doble_conteo_evitado": 26
   },
-  "independencia": {
-    "rutas_onsv": 131,
-    "rutas_sutran": 174,
-    "rutas_comunes": 93,
-    "jaccard_rutas": 0.439,
-    "rutas_onsv_en_red": 126,
-    "rutas_sutran_en_red": 99,
-    "coincidencia_de_eventos_pct": 0.51,
-    "supuesto_independencia_verificable": false,
-    "motivo": "Lincoln-Petersen asume dos capturas independientes de la MISMA poblacion. ONSV es un registro nacional de siniestros con enfoque fatal; SUTRAN es un registro de alertas de operador para un conjunto de corredores. Las rutas SI se solapan (Jaccard 0.44) y sin embargo solo coincide el 0.5% de los eventos: las dos fuentes recorren las mismas carreteras pero no registran los mismos accidentes, porque la unidad de registro de una es el siniestro y la de la otra es la alerta del operador. Aplicar LP daria un factor de poblacion oculta de 31.0x, que no es subnotificacion sino dos fuentes no comparables sumadas. Por eso se reporta 'no estimable'."
+  "supuesto_independencia": {
+    "rutas_solo_onsv": 38,
+    "rutas_solo_sutran": 81,
+    "pct_rutas_no_comunes": 56.1,
+    "meses_solo_onsv": 51,
+    "meses_solo_sutran": 12,
+    "pct_meses_no_comunes": 87.5,
+    "supuesto_razonable": false
   },
-  "sensibilidad_matching": [
+  "lincoln_petersen": {
+    "estimable": true,
+    "n_a": 970,
+    "n_b": 4119,
+    "n_ab": 26,
+    "n_estimado": 153670.4,
+    "se_log_n": 0.309,
+    "ic95_low": 83868.1,
+    "ic95_high": 281568.1,
+    "aplicable": false
+  },
+  "sensitividad_matching": [
     {
       "radio_km": 0.1,
       "tolerancia_dias": 0,
       "n_ambos": 13,
-      "n_unico_total": 5128
+      "n_unico_total": 5128,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 13
     },
     {
       "radio_km": 0.1,
       "tolerancia_dias": 1,
       "n_ambos": 15,
-      "n_unico_total": 5126
+      "n_unico_total": 5126,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 15
     },
     {
       "radio_km": 0.1,
       "tolerancia_dias": 3,
       "n_ambos": 16,
-      "n_unico_total": 5125
+      "n_unico_total": 5125,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 16
+    },
+    {
+      "radio_km": 0.1,
+      "tolerancia_dias": 7,
+      "n_ambos": 20,
+      "n_unico_total": 5121,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 20
     },
     {
       "radio_km": 0.25,
       "tolerancia_dias": 0,
       "n_ambos": 22,
-      "n_unico_total": 5119
+      "n_unico_total": 5119,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 22
     },
     {
       "radio_km": 0.25,
       "tolerancia_dias": 1,
       "n_ambos": 26,
-      "n_unico_total": 5115
+      "n_unico_total": 5115,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 26
     },
     {
       "radio_km": 0.25,
       "tolerancia_dias": 3,
       "n_ambos": 29,
-      "n_unico_total": 5112
+      "n_unico_total": 5112,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 29
+    },
+    {
+      "radio_km": 0.25,
+      "tolerancia_dias": 7,
+      "n_ambos": 34,
+      "n_unico_total": 5107,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 34
     },
     {
       "radio_km": 0.5,
       "tolerancia_dias": 0,
       "n_ambos": 44,
-      "n_unico_total": 5097
+      "n_unico_total": 5097,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 44
     },
     {
       "radio_km": 0.5,
       "tolerancia_dias": 1,
       "n_ambos": 50,
-      "n_unico_total": 5091
+      "n_unico_total": 5091,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 50
     },
     {
       "radio_km": 0.5,
       "tolerancia_dias": 3,
       "n_ambos": 53,
-      "n_unico_total": 5088
+      "n_unico_total": 5088,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 53
+    },
+    {
+      "radio_km": 0.5,
+      "tolerancia_dias": 7,
+      "n_ambos": 60,
+      "n_unico_total": 5081,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 60
     },
     {
       "radio_km": 1.0,
       "tolerancia_dias": 0,
       "n_ambos": 75,
-      "n_unico_total": 5066
+      "n_unico_total": 5066,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 75
     },
     {
       "radio_km": 1.0,
       "tolerancia_dias": 1,
       "n_ambos": 85,
-      "n_unico_total": 5056
+      "n_unico_total": 5056,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 85
     },
     {
       "radio_km": 1.0,
       "tolerancia_dias": 3,
       "n_ambos": 95,
-      "n_unico_total": 5046
+      "n_unico_total": 5046,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 95
+    },
+    {
+      "radio_km": 1.0,
+      "tolerancia_dias": 7,
+      "n_ambos": 108,
+      "n_unico_total": 5033,
+      "suma_naiva": 5141,
+      "doble_conteo_evitado": 108
     }
   ],
   "afirmaciones": [
     {
-      "afirmacion": "Las coordenadas de ONSV y SUTRAN son utilizables para geolocalizar sobre la red vial",
-      "veredicto": "ONSV SI / SUTRAN CON RESERVAS",
-      "evidencia": "ONSV: 0 nulos, 0.0% fuera de Peru, 0.04% duplicados. SUTRAN: 499 filas sin coordenada (6.12%), 0.0% fuera de Peru y 46.43% de duplicados exactos de posicion.",
-      "limite": "ONSV se puede usar tal cual. SUTRAN no: el 46.43% de sus filas repite la misma coordenada y el 6.12% se queda sin coordenadas, asi que cualquier agregado por posicion necesita deduplicar y descartar esas filas antes. Lo que se ha medido es plausibilidad geografica: las coordenadas que si existen estan dentro del Peru. El error de posicion contra una fuente de verdad no se ha auditado."
+      "afirmacion": "Las coordenadas de ONSV son utilizables para geocodificar por km",
+      "veredicto": "SI",
+      "evidencia": "5014 de 5014 filas con coordenada (100.00% útil), todas dentro del bounding box del Perú.",
+      "limite": "Tener coordenada no implica que el km asignado sea el correcto: esa exactitud la mide `dist_linea_km` en la geocodificación lineal, no este módulo."
     },
     {
-      "afirmacion": "ONSV y SUTRAN registran los mismos siniestros",
-      "veredicto": "NO",
-      "evidencia": "Las rutas se solapan bastante (Jaccard 0.439: 93 de 305 rutas son comunes), pero solo el 0.51% de los eventos coincide.",
-      "limite": "Que las rutas coincidan y los eventos no significa que SUTRAN registra otra poblacion de siniestros: significa que **captura las mismas carreteras de otra manera** (un registro por alerta del operador, no por siniestro). Con 8,9 meses de solape temporal, el criterio de emparejamiento no es lo que explica el desajuste, asi que la conclusion es que el conteo de ambas fuentes no es sumable."
+      "afirmacion": "Las coordenadas de SUTRAN son utilizables para geocodificar por km",
+      "veredicto": "CON RESERVAS",
+      "evidencia": "7656 de 8155 filas con coordenada (93.88% útil) y 0 fuera del Perú.",
+      "limite": "499 filas (6.12%) van sin coordenada. Además 3786 filas comparten coordenada con otra, y eso no es un defecto: la coordenada de SUTRAN viene del km del tramo, no de un GPS del lugar del accidente, así que no sirve para medir dispersión espacial. Hay 320 coincidencias de km y fecha, pero solo 204 comparten también modalidad."
     },
     {
-      "afirmacion": "Se puede estimar la subnotificacion con Lincoln-Petersen",
+      "afirmacion": "El doble reporte dentro de cada fuente es marginal",
+      "veredicto": "SI",
+      "evidencia": "Mismo km, misma fecha y misma modalidad: 1 casos en ONSV y 204 en SUTRAN, sobre 5014 y 8155 filas.",
+      "limite": "Sin hora ni código de siniestro no se puede ir más allá: en SUTRAN coinciden km y fecha 320 veces, pero solo 204 comparten modalidad, y las restantes son muy probablemente accidentes distintos en el mismo tramo. Mide el doble reporte dentro de cada fuente, no el solape entre ellas: ese va en la afirmación aparte."
+    },
+    {
+      "afirmacion": "OSITRAN puede usarse como capa de contraste de la red nacional",
+      "veredicto": "NO COMO CAPA COMPLETA",
+      "evidencia": "Solo 26 de 150 rutas de la red aparecen en OSITRAN (17.3% de las rutas), cruzando por la columna `ruta`.",
+      "limite": "OSITRAN cubre solo concesiones, no la red vial: sirve para describir la accidentabilidad en caminos concedidos, no para corregir el total nacional. La cobertura por ruta no dice nada sobre la cobertura por accidente: las rutas concedidas concentran tráfico y registrar 41833 accidentes en ellas es esperable aunque su cobertura en rutas sea baja."
+    },
+    {
+      "afirmacion": "Se puede estimar cuánta siniestralidad se deja fuera por subnotificación",
       "veredicto": "NO ESTIMABLE",
-      "evidencia": "n_a=996, n_b=4145, n_ab=26; el estimador sale con factor oculto 31.0x sobre lo observado.",
-      "limite": "Lincoln-Petersen asume dos capturas independientes de la MISMA poblacion. ONSV es un registro nacional de siniestros con enfoque fatal; SUTRAN es un registro de alertas de operador para un conjunto de corredores. Las rutas SI se solapan (Jaccard 0.44) y sin embargo solo coincide el 0.5% de los eventos: las dos fuentes recorren las mismas carreteras pero no registran los mismos accidentes, porque la unidad de registro de una es el siniestro y la de la otra es la alerta del operador. Aplicar LP daria un factor de poblacion oculta de 31.0x, que no es subnotificacion sino dos fuentes no comparables sumadas. Por eso se reporta 'no estimable'."
+      "evidencia": "Solo 26 eventos los registran las dos fuentes. El estimador exige que compartan población, y 56.1% de las rutas y 87.5% de los meses no son comunes.",
+      "limite": "ONSV y SUTRAN no son dos muestreos de la misma población: difieren en ámbito de red y en ventana temporal, así que Lincoln-Petersen mediría esa diferencia, no lo no reportado. Even si el intervalo fuese estrecho (aquí lo es), el estimador sigue sin ser aplicable."
     },
     {
-      "afirmacion": "El solape de eventos entre ONSV y SUTRAN es estable al criterio de emparejamiento",
-      "veredicto": "NO",
-      "evidencia": "n_ab va de 13 a 95 al variar radio 0.1-1.0 km y tolerancia 0-3 dias: un factor 7.",
-      "limite": "No es estable: duplicar el radio de emparejamiento multiplica el solape, lo que significa que parte del 'solape' son accidentes distantes en la misma carretera y no el mismo accidente. Por eso el valor de n_ab (26 a radio 0,25 km) es una decision de parametro, no una medida, y usarlo como n_ab en un estimador importa. Es el mismo motivo por el que la afirmacion anterior se responde 'no' en vez de 'si'."
-    },
-    {
-      "afirmacion": "OSITRAN aporta una senal espacial de magnitud comparable a ONSV",
-      "veredicto": "PARCIAL",
-      "evidencia": "41833 eventos; 39.5% sin atribucion de ruta; cobertura 42.9% del total / 71.0% de los eventos con ruta.",
-      "limite": "Es un agregado anual por concesion, sin fecha de evento ni fatalities separados, asi que sirve como carga relativa por tramo y no como serie de siniestros."
+      "afirmacion": "El solape entre ONSV y SUTRAN es una propiedad de los datos, no un artefacto del umbral de emparejamiento",
+      "veredicto": "SI",
+      "evidencia": "Al variar el radio de 0,1 a 1 km y la tolerancia de 0 a 7 días, n_ambos se mueve entre 13 y 108 (8.3x), con la unión entre 5033 y 5128 eventos.",
+      "limite": "Que el solape sea estable no lo convierte en una medición de subnotificación: dos fuentes que rara vez coinciden siguen sin ser submuestreos de la misma población."
     }
   ]
 }
