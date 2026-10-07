@@ -1,0 +1,508 @@
+﻿/* ==========================================================================
+   SIPAT Â· tema de la presentaciÃ³n
+   Paleta derivada del dashboard (indigo #4f46e5, claro, alto contraste)
+   ========================================================================== */
+
+:root {
+  --sipat-indigo: #4f46e5;
+  --sipat-indigo-dark: #3730a3;
+  --sipat-indigo-light: #eef2ff;
+  --sipat-green: #059669;
+  --sipat-amber: #d97706;
+  --sipat-red: #dc2626;
+  --sipat-slate-900: #0f172a;
+  --sipat-slate-700: #334155;
+  --sipat-slate-500: #64748b;
+  --sipat-slate-300: #cbd5e1;
+  --sipat-slate-200: #e2e8f0;
+  --sipat-slate-50: #f8fafc;
+}
+
+.slidev-layout {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- TipografÃ­a ---------- */
+.slidev-layout h1 {
+  color: var(--sipat-slate-900);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+.slidev-layout h2 {
+  color: var(--sipat-slate-900);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.slidev-layout p,
+.slidev-layout li { color: var(--sipat-slate-700); line-height: 1.55; }
+.slidev-layout strong { color: var(--sipat-slate-900); font-weight: 700; }
+.slidev-layout code {
+  background: var(--sipat-indigo-light);
+  color: var(--sipat-indigo-dark);
+  padding: 1.5px 6px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: .88em;
+}
+.slidev-layout a { color: var(--sipat-indigo); font-weight: 600; }
+
+/* ---------- Portada y secciones ---------- */
+.sipat-cover {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 3.2rem;
+  background:
+    radial-gradient(1100px 520px at 12% 8%, rgba(99,102,241,.30), transparent 62%),
+    radial-gradient(900px 480px at 88% 92%, rgba(14,165,233,.24), transparent 60%),
+    linear-gradient(140deg, #1e1b4b 0%, #312e81 46%, #4338ca 100%);
+  color: #fff;
+  overflow: hidden;
+}
+.sipat-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at 50% 45%, #000 30%, transparent 78%);
+  pointer-events: none;
+}
+/* El tema de Slidev aplica color a `p` con mas especificidad que una clase suelta,
+   asi que el texto sobre fondo oscuro se fija con selectores compuestos. */
+.sipat-cover h1 {
+  color: #fff;
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+}
+.sipat-cover p.sipat-cover__sub,
+.sipat-cover .sipat-cover__sub {
+  font-size: 1.02rem;
+  color: rgba(255,255,255,.88) !important;
+  font-weight: 500;
+  line-height: 1.55;
+  max-width: 500px;
+  margin: .9rem 0 0;
+  position: relative;
+  z-index: 2;
+}
+.sipat-cover b, .sipat-cover strong { color: #fff; font-weight: 700; }
+.sipat-cover__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 1.5rem;
+  max-width: 500px;
+  position: relative;
+  z-index: 2;
+}
+.sipat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.13);
+  border: 1px solid rgba(255,255,255,.24);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 600;
+  padding: 5px 13px;
+  border-radius: 999px;
+}
+.sipat-chip--accent {
+  background: rgba(255,255,255,.96);
+  color: var(--sipat-indigo-dark);
+  border-color: transparent;
+}
+.sipat-shield {
+  font-size: 3.1rem;
+  line-height: 1;
+  position: relative;
+  z-index: 2;
+  margin-bottom: .5rem;
+}
+
+.sipat-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 3.2rem;
+  position: relative;
+  background: linear-gradient(120deg, #f8fafc 0%, #eef2ff 100%);
+  border-left: 6px solid var(--sipat-indigo);
+}
+.sipat-section__kicker {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--sipat-indigo);
+  margin: 0 0 .7rem;
+}
+.sipat-section h2 {
+  font-size: 2.15rem;
+  margin: 0;
+  line-height: 1.12;
+}
+.sipat-section__desc {
+  font-size: 1.02rem;
+  color: var(--sipat-slate-500);
+  margin: .8rem 0 0;
+  max-width: 52ch;
+  line-height: 1.55;
+}
+.sipat-section__num {
+  position: absolute;
+  right: 2.4rem;
+  bottom: .6rem;
+  font-size: 7rem;
+  font-weight: 800;
+  color: rgba(79,70,229,.07);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Cabecera de slide ---------- */
+.sipat-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .85rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px solid var(--sipat-slate-200);
+}
+.sipat-head h1 {
+  font-size: 1.52rem;
+  margin: 0;
+  line-height: 1.15;
+}
+.sipat-head__kicker {
+  display: block;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--sipat-indigo);
+  margin-bottom: .28rem;
+}
+.sipat-head__aside {
+  font-size: .74rem;
+  color: var(--sipat-slate-500);
+  text-align: right;
+  line-height: 1.45;
+  flex-shrink: 0;
+  max-width: 30ch;
+}
+.sipat-head__aside code { font-size: .68rem; }
+
+/* ---------- Tarjetas ---------- */
+.sipat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+.sipat-card {
+  background: #fff;
+  border: 1px solid var(--sipat-slate-200);
+  border-left: 4px solid var(--sipat-indigo);
+  border-radius: 11px;
+  padding: 13px 15px;
+  box-shadow: 0 1px 2px rgba(15,23,42,.05);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.sipat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -8px rgba(15,23,42,.2);
+}
+.sipat-card__t {
+  font-weight: 700;
+  font-size: .88rem;
+  color: var(--sipat-slate-900);
+  margin-bottom: 3px;
+}
+.sipat-card__d {
+  font-size: .78rem;
+  color: var(--sipat-slate-500);
+  line-height: 1.45;
+}
+.sipat-card--green { border-left-color: var(--sipat-green); }
+.sipat-card--amber { border-left-color: var(--sipat-amber); }
+.sipat-card--red   { border-left-color: var(--sipat-red); }
+.sipat-card--sky   { border-left-color: #0ea5e9; }
+
+/* ---------- Tablas ---------- */
+.sipat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .79rem;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15,23,42,.05);
+}
+.sipat-table th {
+  background: #f1f5f9;
+  color: var(--sipat-slate-700);
+  font-weight: 700;
+  text-align: left;
+  padding: 7px 10px;
+  border-bottom: 1.5px solid var(--sipat-slate-200);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.sipat-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--sipat-slate-700);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.sipat-table tr:last-child td { border-bottom: none; }
+.sipat-table tbody tr:hover td { background: #fafbff; }
+.sipat-table td strong { color: var(--sipat-slate-900); }
+.sipat-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--sipat-indigo);
+}
+
+/* Tabla densa: para listados largos (verificaciÃ³n, contratos) */
+.sipat-table--tight { font-size: .66rem; }
+.sipat-table--tight th { padding: 5px 7px; font-size: .62rem; }
+.sipat-table--tight td { padding: 4px 7px; line-height: 1.3; }
+
+/* ---------- Notas / callouts ---------- */
+.sipat-note {
+  border-left: 3px solid var(--sipat-indigo);
+  background: var(--sipat-indigo-light);
+  padding: 9px 14px;
+  border-radius: 0 9px 9px 0;
+  font-size: .82rem;
+  color: var(--sipat-slate-700);
+  line-height: 1.5;
+}
+.sipat-note--warn { border-left-color: var(--sipat-amber); background: #fffbeb; }
+.sipat-note--ok   { border-left-color: var(--sipat-green); background: #f0fdf4; }
+.sipat-note--bad  { border-left-color: var(--sipat-red);   background: #fef2f2; }
+.sipat-note strong { color: var(--sipat-slate-900); }
+
+/* ---------- Figuras ---------- */
+.sipat-fig {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 0;
+}
+.sipat-fig img {
+  max-width: 100%;
+  max-height: 330px;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 1px solid var(--sipat-slate-200);
+  background: #fff;
+  box-shadow: 0 2px 10px -4px rgba(15,23,42,.14);
+}
+.sipat-fig figcaption {
+  font-size: .72rem;
+  color: var(--sipat-slate-500);
+  text-align: center;
+  line-height: 1.4;
+}
+.sipat-fig--naked img { border: none; box-shadow: none; background: transparent; }
+
+/* ---------- Figura + lista ---------- */
+.sipat-split {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 1.1rem;
+  align-items: start;
+  width: 100%;
+}
+.sipat-split--even { grid-template-columns: 1fr 1fr; }
+.sipat-split--wide { grid-template-columns: 1.4fr .6fr; }
+
+/* ---------- Listas ---------- */
+.sipat-list { font-size: .92rem; }
+.sipat-list li { margin-bottom: .42rem; }
+.sipat-list--tight li { margin-bottom: .2rem; }
+.sipat-list--sm { font-size: .83rem; }
+
+/* ---------- Marcador de slide esencial ---------- */
+.sipat-essential {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--sipat-indigo);
+  padding: 2px 8px;
+  border-radius: 999px;
+  vertical-align: middle;
+  margin-left: .55rem;
+}
+.sipat-optional {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--sipat-slate-500);
+  background: var(--sipat-slate-200);
+  padding: 2px 8px;
+  border-radius: 999px;
+  vertical-align: middle;
+  margin-left: .55rem;
+}
+
+/* ---------- Animaciones globales ---------- */
+@keyframes sipat-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes sipat-pop {
+  from { opacity: 0; transform: scale(.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes sipat-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes sipat-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes sipat-pulse-ring {
+  0%   { transform: scale(.82); opacity: .85; }
+  70%  { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+@keyframes sipat-flow {
+  from { background-position: 0 0; }
+  to   { background-position: 44px 0; }
+}
+
+/* Clics de Slidev: entrada suave por defecto */
+.slidev-vclick-target { transition: opacity 320ms ease, transform 320ms ease; }
+
+/* ---------- Mermaid ----------
+   Los diagramas se mantiene intencionalmente compactos en horizontal: un flujo
+   de 15 etapas en vertical no cabe (ni se lee) en una slide. NUNCA se recorta
+   con overflow:hidden, porque eso esconderia etapas del diagrama. */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+/* Diagrama que necesita un poco mas de margen: se estrecha y, al conservar la
+   proporcion del viewBox, tambien baja en alto. */
+.mermaid--narrow { max-width: 86%; margin: 0 auto; }
+
+/* ---------- Imagen en movimiento de la portada ---------- */
+.sipat-hero {
+  position: absolute;
+  right: 2.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42%;
+  max-width: 520px;
+  z-index: 1;
+  padding: 10px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 24px 60px -24px rgba(0,0,0,.55);
+}
+.sipat-hero img {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  background: #fff;
+}
+.sipat-hero__cap {
+  display: block;
+  margin-top: 7px;
+  font-size: .64rem;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ---------- Cierre ---------- */
+.sipat-end {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 3rem;
+  background:
+    radial-gradient(900px 460px at 50% 0%, rgba(99,102,241,.26), transparent 60%),
+    linear-gradient(150deg, #0f172a 0%, #1e1b4b 55%, #312e81 100%);
+  color: #fff;
+}
+.sipat-end h1 { color: #fff; font-size: 2.5rem; margin: 0; }
+.sipat-end p { color: rgba(255,255,255,.8); font-size: 1.02rem; }
+.sipat-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.sipat-links a {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.24);
+  color: #fff;
+  padding: 7px 15px;
+  border-radius: 999px;
+  font-size: .84rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .2s ease, transform .2s ease;
+}
+.sipat-links a:hover {
+  background: rgba(255,255,255,.24);
+  transform: translateY(-2px);
+}
+
+/* ---------- Code blocks: mÃ¡s compactos ---------- */
+.slidev-layout pre {
+  font-size: .74rem;
+  line-height: 1.5;
+  border-radius: 10px;
+}
+.slidev-layout .slidev-code { font-size: .74rem; }
+

@@ -496,42 +496,52 @@ def cobertura_intervalos(y: np.ndarray, mu: np.ndarray, nivel: float,
             "cumplimiento": float(dentro / nivel)}
 
 
-def main() -> int:
+def analizar(verbose: bool = True) -> Dict:
+    """Corre los dos protocolos y devuelve el informe. No escribe nada.
+
+    `main()` es solo `analizar()` + volcar el JSON. La separación importa porque el
+    notebook 06 llama a esta función para **recalcular** los resultados en vez de
+    leer el JSON que otro dejó escrito: si el módulo cambia, el notebook cambia.
+    """
+    def _p(*a):
+        if verbose:
+            print(*a)
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    print("[1/4] Cargando dataset y reconstruyendo el panel tramo x anio...")
+    _p("[1/4] Cargando dataset y reconstruyendo el panel tramo x anio...")
     d = pd.read_csv(PROC / "dataset_modelo.csv")
     panel = panel_de_eventos(d)
     datos = unir_panel_diseno(d, panel)
     frac_cero = float((datos["n_eventos"] == 0).mean())
-    print(f"      {len(datos)} celdas (tramo x anio), "
-          f"{datos['idx_tramo'].nunique()} tramos, {datos['anio'].nunique()} anios")
-    print(f"      celdas con cero: {frac_cero*100:.1f}%")
-    print(f"      corredores: {datos['corredor'].nunique()} (de {d['ruta'].nunique()} rutas)")
+    _p(f"      {len(datos)} celdas (tramo x anio), "
+       f"{datos['idx_tramo'].nunique()} tramos, {datos['anio'].nunique()} anios")
+    _p(f"      celdas con cero: {frac_cero*100:.1f}%")
+    _p(f"      corredores: {datos['corredor'].nunique()} (de {d['ruta'].nunique()} rutas)")
 
-    print("\n[2/4] Protocolo ESPACIAL (corredores no vistos)...")
+    _p("\n[2/4] Protocolo ESPACIAL (corredores no vistos)...")
     esp = validar_espacial(datos)
-    print(f"      {esp['n_corredores']} corredores, "
-          f"{len(esp['folds'])} folds")
+    _p(f"      {esp['n_corredores']} corredores, "
+       f"{len(esp['folds'])} folds")
     for nombre, m in esp["agregado"].items():
-        print(f"      {nombre:22s} {formato(m)}")
-    print("      (Poisson menor que el de la media = el modelo aporta;")
-    print("       la referencia es la devianza de la propia baseline, no el 1)")
+        _p(f"      {nombre:22s} {formato(m)}")
+    _p("      (Poisson menor que el de la media = el modelo aporta;")
+    _p("       la referencia es la devianza de la propia baseline, no el 1)")
 
-    print("\n[3/4] Protocolo TEMPORAL (holdout 2025)...")
+    _p("\n[3/4] Protocolo TEMPORAL (holdout 2025)...")
     onsv = pd.read_csv(PROC / "onsv_nacional_geocod.csv")
     onsv["fecha_dt"] = pd.to_datetime(onsv["fecha"], errors="coerce")
     onsv["fallecidos"] = pd.to_numeric(onsv["fallecidos"], errors="coerce")
     tmp = validar_temporal(datos, onsv)
-    print(f"      entrenamiento {tmp['entrenamiento']}, holdout {tmp['holdout']} "
-          f"({tmp['n_test']} celdas, {tmp['eventos_test']} siniestros)")
+    _p(f"      entrenamiento {tmp['entrenamiento']}, holdout {tmp['holdout']} "
+       f"({tmp['n_test']} celdas, {tmp['eventos_test']} siniestros)")
     for nombre, m in tmp["modelos"].items():
         if isinstance(m, dict) and "error" in m:
-            print(f"      {nombre:22s} no aplicable: {m['error']}")
+            _p(f"      {nombre:22s} no aplicable: {m['error']}")
         else:
-            print(f"      {nombre:22s} {formato(m)}")
-    print(f"      [aviso] {tmp['advertencia']['motivo']}")
+            _p(f"      {nombre:22s} {formato(m)}")
+    _p(f"      [aviso] {tmp['advertencia']['motivo']}")
 
-    print("\n[4/4] Cobertura de intervalos (NegBin, dispersion alpha del ajuste)...")
+    _p("\n[4/4] Cobertura de intervalos (NegBin, dispersion alpha del ajuste)...")
     cov = {}
     alb = {}
     try:
@@ -548,19 +558,19 @@ def main() -> int:
         for a in NIVELES_INTERVALO:
             cov[f"{int(a*100)}%"] = cobertura_intervalos(y, mu, a, modelo.alpha_)
             c = cov[f"{int(a*100)}%"]
-            print(f"      nominal {c['nivel']*100:.0f}%: observada {c['cobertura']*100:.1f}% "
-                  f"(cumplimiento {c['cumplimiento']*100:.0f}%)")
+            _p(f"      nominal {c['nivel']*100:.0f}%: observada {c['cobertura']*100:.1f}% "
+               f"(cumplimiento {c['cumplimiento']*100:.0f}%)")
     except Exception as exc:
         cov["error"] = f"{type(exc).__name__}: {exc}"
 
     veredicto = _veredicto(esp, tmp, frac_cero)
-    print("\n== Veredicto ==")
+    _p("\n== Veredicto ==")
     for k, v in veredicto["afirmaciones"].items():
-        print(f"  {k}: {v['veredicto']}")
-        print(f"      evidencia: {v['evidencia']}")
-        print(f"      limite: {v['limite']}")
+        _p(f"  {k}: {v['veredicto']}")
+        _p(f"      evidencia: {v['evidencia']}")
+        _p(f"      limite: {v['limite']}")
 
-    salida = {
+    return {
         "protocolo_espacial": esp,
         "protocolo_temporal": tmp,
         "intervalos": {"alpha": alb, "cobertura": cov},
@@ -577,11 +587,15 @@ def main() -> int:
                         "el 1."),
             "fuentes": ("Este módulo NO juzga si ONSV, SUTRAN u OSITRAN son "
                         "confiables. Eso es scripts/fiabilidad_fuentes.py."),
-            "sesgo": ("Con alpha estimado por cuasi-verosimilidad, los intervalos del "
+            "sesgo": ("Con alpha estimado por cuasi-verosimilitud, los intervalos del "
                       "GLM no tienen cobertura garantizada; la cobertura que se reporta "
                       "es empirica, no la nominal del modelo."),
         },
     }
+
+
+def main() -> int:
+    salida = analizar(verbose=True)
     with open(OUT_JSON, "w", encoding="utf-8") as f:
         json.dump(salida, f, ensure_ascii=False, indent=2, default=_json_default)
     print(f"\nGuardado: {OUT_JSON}")

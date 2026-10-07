@@ -67,7 +67,7 @@ tipos de incidente) desde cualquier resultado de análisis: `reporte_desde_resum
 | **ONSV** (Observatorio Nacional de Seguridad Vial) | Siniestros fatales/lesionados 2021-2025 con clase, causa, hora, clima | 5,014 geocodificados | `data/processed/onsv_nacional_geocod.csv` |
 | **SUTRAN** (Superintendencia de Transporte Terrestre) | Accidentes 2020-2021 + **alertas de tránsito en vivo** (interrumpido/restringido) | 7,656 registros · 4,116 en dashboard · alertas históricas acumuladas | `data/processed/sutran_accidentes_geocod.csv`, `dashboard/sutran_alertas_historico.json` |
 | **OSITRAN** (Organismo Supervisor de Inversión en Infraestructura) | Accidentes en 16 concesiones viales 2019-2025 + flujo vehicular (AADT) por peaje | 41,833 accidentes · 55 peajes con tráfico · 71 tramos geocodificados | `data/processed/ositran_*.csv` |
-| **MTC** (Ministerio de Transportes) | Red vial nacional segmentada por kilómetro | 3,750 tramos · ~28,900 km | `data/processed/tramos_red.csv` |
+| **MTC** (Ministerio de Transportes) | Red vial nacional segmentada por kilómetro | 3,750 tramos · ~28,918.5 km | `data/processed/tramos_red.csv` |
 | **INGEMMET** | Peligros geológicos (para distancia a zonas de riesgo) | capa espacial | `features_distancia.csv` |
 | **SENAMHI** (WFS oficial) | Avisos meteorológicos a 24 h (nivel, fecha, recomendación) | cache TTL | cache `clima/` |
 | **Open-Meteo** | Pronóstico temperatura/lluvia/viento muestreado sobre la geometría de la ruta | cache TTL | cache `clima/` |
@@ -112,7 +112,7 @@ flowchart LR
         ONSV["ONSV<br/>5,014 siniestros"]
         SUTRAN["SUTRAN<br/>7,656 + alertas"]
         OSITRAN["OSITRAN<br/>41,833 + peajes"]
-        MTC["MTC red vial<br/>3,750 tramos · 28,900 km"]
+        MTC["MTC red vial<br/>3,750 tramos · 28,918.5 km"]
         INGEMMET["INGEMMET<br/>peligros geológicos"]
     end
 
@@ -281,7 +281,7 @@ La API es el único punto que orquesta las capas de datos y expone endpoints a l
 | Diagrama | Contenido | Ver en línea |
 |---|---|---|
 | **Arquitectura** | Topología estrella completa: API como hub, flujos con OSRM/OSITRAN/alertas | [sipat-architecture.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-architecture.html) |
-| **Flujo de datos** | De las 3 fuentes geocodificadas al dataset 3,750×40 y a los servicios | [sipat-dataflow.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-dataflow.html) |
+| **Flujo de datos** | De las 3 fuentes geocodificadas al dataset 3,750×48 y a los servicios | [sipat-dataflow.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-dataflow.html) |
 | **Secuencia "Viaja seguro"** | Solicitud → cálculo de riesgo (motor+IA+clima) → respuesta integrada | [sipat-sequence.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-sequence.html) |
 | **Workflow del reporte ciudadano** | Formulario → validación+dedupe → almacén append-only → mapa | [sipat-workflow.html](https://htmlpreview.github.io/?https://github.com/Lobitoxxx/SIPAT/blob/main/docs/archify/sipat-workflow.html) |
 
@@ -300,7 +300,7 @@ los datos y cuándo) y SCRUM organiza la *entrega de producto* (quién hace qué
 ```mermaid
 flowchart TB
     A["1 · Entendimiento del negocio<br/>Prevenir accidentes antes de viajar"] --> B["2 · Entendimiento de los datos<br/>51,000+ siniestros en 3 fuentes"]
-    B --> C["3 · Preparación de los datos<br/>Geocodificación lineal · limpieza · dataset 3,750×40"]
+    B --> C["3 · Preparación de los datos<br/>Geocodificación lineal · limpieza · dataset 3,750×48"]
     C --> D["4 · Modelado<br/>NegBin por fuente → IRRs + predictor"]
     D --> E["5 · Evaluación<br/>AIC · 12 + 129 puntos · cobertura 42%"]
     E --> F["6 · Despliegue<br/>Datos ligeros → dashboard · API · reporte HTML"]

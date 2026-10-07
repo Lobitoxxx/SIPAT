@@ -7,10 +7,10 @@
 
 ## 1. Resumen ejecutivo
 
-- Se construyó el **dataset espacial** de la siniestralidad fatal en la Red Vial Nacional: **3,750 tramos de la red** (dic16, 150 rutas, 28,502 km) enriquecidos con **5,014 siniestros fatales ONSV 2021–2025**, **7,605 accidentes SUTRAN 2020–2021** geocodificados, y exposiciones espaciales (peajes, cinemómetros, peligros geológicos INGEMMET).
+- Se construyó el **dataset espacial** de la siniestralidad fatal en la Red Vial Nacional: **3,750 tramos de la red** (dic16, 150 rutas, 28,918.5 km) enriquecidos con **5,014 siniestros fatales ONSV 2021–2025**, **7,605 accidentes SUTRAN 2020–2021** geocodificados, y exposiciones espaciales (peajes, cinemómetros, peligros geológicos INGEMMET).
 - **La geocodificación por kilómetro fue validada**: 98.1% de los siniestros ONSV están a <100 m de la geometría de red (mediana 4 m); el método de interpolación logra errores de **14 m** contra peajes MTC con km exacto.
 - **Modelo de regresión NegBin** (con exposición por km y errores cluster por ruta) identificó los factores asociados a mayor siniestralidad fatal.
-- Se priorizaron **12 puntos negros** (tramos con exceso de siniestros sobre lo esperado; top 8 en sección 4).
+- Se priorizaron **133 puntos negros** (tramos con exceso de siniestros sobre lo esperado; top 8 en sección 4).
 
 ---
 
@@ -121,7 +121,7 @@ streamlit run dashboard/app.py          # abre el navegador en http://localhost:
 |---|---|
 | Dashboard | `dashboard/app.py` |
 | Datos del dashboard | `data/processed/dashboard/` |
-| Dataset maestro (3,750×40) | `data/processed/dataset_modelo.csv` |
+| Dataset maestro (3,750×48) | `data/processed/dataset_modelo.csv` |
 | SUTRAN geocodificado | `data/processed/sutran_accidentes_geocod.csv` |
 | ONSV nacional + km | `data/processed/onsv_nacional_geocod.csv` |
 | Puntos negros | `data/processed/puntos_negros.csv` |

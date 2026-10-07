@@ -1,0 +1,14 @@
+# dependencias
+node_modules/
+
+# build
+dist/
+
+# PDF exportado
+*.pdf
+
+# artefactos temporales de generación y verificación
+.gif-frames/
+.verify/
+.devserver.log
+pal-*.png

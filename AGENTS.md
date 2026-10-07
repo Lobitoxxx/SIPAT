@@ -48,8 +48,8 @@ Documentación clave: `etl-project/README.md` (arquitectura con Mermaid), `etl-p
 Objetivo: analítica de siniestralidad vial en la Red Vial Nacional de Perú + módulo de "ruta segura".
 
 Completado:
-- Fase 0 (inventario de datos) y Fase 1 (geocodificación lineal por km, dataset espacial, modelo NegBin con IRRs, 12 puntos negros, 6 figuras).
-- Datasets procesados en `data/processed/` (`tramos_red.csv`, `onsv_nacional_geocod.csv` 5,014, `sutran_accidentes_geocod.csv` 7,656, `dataset_modelo.csv` 3,750x40, `puntos_negros.csv`, `features_distancia.csv`).
+- Fase 0 (inventario de datos) y Fase 1 (geocodificación lineal por km, dataset espacial, modelo NegBin con IRRs, 133 puntos negros, 6 figuras).
+- Datasets procesados en `data/processed/` (`tramos_red.csv`, `onsv_nacional_geocod.csv` 5,014, `sutran_accidentes_geocod.csv` 7,656, `dataset_modelo.csv` 3,750x48, `dashboard/puntos_negros.csv` (133, salida EB canónica), `features_distancia.csv`).
 - Dashboard Streamlit en `dashboard/app.py` (6 pestañas rediseñadas; datos ligeros en `data/processed/dashboard/`).
 - Informes: `docs/informe_sipat.md`, `docs/matriz_tecnica.md`; figuras en `docs/figuras/`.
 

@@ -1,0 +1,19 @@
+{
+  "name": "sipat-presentacion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Presentacion interactiva de SIPAT - Sistema de Prevencion de Accidentes de Transito",
+  "type": "module",
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export --with-clicks --output sipat-presentacion",
+    "export:pdf": "slidev export --with-clicks --output sipat-presentacion",
+    "export:dark": "slidev export --with-clicks --dark --output sipat-presentacion-dark"
+  },
+  "dependencies": {
+    "@slidev/cli": "^52.19.1",
+    "@slidev/theme-seriph": "^0.25.0",
+    "playwright-chromium": "^1.49.0"
+  }
+}
