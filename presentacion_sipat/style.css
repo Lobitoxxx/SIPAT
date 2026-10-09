@@ -1,5 +1,5 @@
-﻿/* ==========================================================================
-   SIPAT Â· tema de la presentaciÃ³n
+/* ==========================================================================
+   SIPAT · tema de la presentación
    Paleta derivada del dashboard (indigo #4f46e5, claro, alto contraste)
    ========================================================================== */
 
@@ -23,7 +23,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- TipografÃ­a ---------- */
+/* ---------- Tipografía ---------- */
 .slidev-layout h1 {
   color: var(--sipat-slate-900);
   font-weight: 800;
@@ -283,7 +283,7 @@
   color: var(--sipat-indigo);
 }
 
-/* Tabla densa: para listados largos (verificaciÃ³n, contratos) */
+/* Tabla densa: para listados largos (verificación, contratos) */
 .sipat-table--tight { font-size: .66rem; }
 .sipat-table--tight th { padding: 5px 7px; font-size: .62rem; }
 .sipat-table--tight td { padding: 4px 7px; line-height: 1.3; }
@@ -498,7 +498,7 @@
   transform: translateY(-2px);
 }
 
-/* ---------- Code blocks: mÃ¡s compactos ---------- */
+/* ---------- Code blocks: más compactos ---------- */
 .slidev-layout pre {
   font-size: .74rem;
   line-height: 1.5;

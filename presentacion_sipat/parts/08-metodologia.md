@@ -29,9 +29,9 @@ transition: slide-left
 ```mermaid
 flowchart LR
   A["<b>1 · Negocio</b><br/>Prevenir accidentes<br/>antes de viajar"] --> B["<b>2 · Datos</b><br/>51.000+ siniestros<br/>3 fuentes"]
-  B --> C["<b>3 · Preparación</b><br/>Geocodificación lineal<br/>dataset 3.750×40"]
+  B --> C["<b>3 · Preparación</b><br/>Geocodificación lineal<br/>dataset 3.750×48"]
   C --> D["<b>4 · Modelado</b><br/>NegBin por fuente<br/>IRRs + predictor"]
-  D --> E["<b>5 · Evaluación</b><br/>AIC 8.663 vs 11.984<br/>12 + 129 puntos"]
+  D --> E["<b>5 · Evaluación</b><br/>AIC 8.663 vs 11.984<br/>133 puntos negros<br/>validez fuera de muestra"]
   E --> F["<b>6 · Despliegue</b><br/>Dashboard · API<br/>reporte HTML"]
   F -. "lecciones → nuevo sprint" .-> A
 ```

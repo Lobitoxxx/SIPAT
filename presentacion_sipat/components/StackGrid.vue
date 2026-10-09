@@ -83,4 +83,5 @@ defineProps({
 .stack__item--infra  { border-left: 3px solid #f59e0b; }
 .stack__item--stats  { border-left: 3px solid #a855f7; }
 .stack__item--ml     { border-left: 3px solid #ec4899; }
+.stack__item--red    { border-left: 3px solid #dc2626; }
 </style>

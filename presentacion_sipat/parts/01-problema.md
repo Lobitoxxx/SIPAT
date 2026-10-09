@@ -7,7 +7,7 @@ transition: slide-left
   <p class="sipat-section__kicker">Bloque 01 · Contexto <span class="sipat-essential">esencial</span></p>
   <h2>El problema que SIPAT ataca</h2>
   <p class="sipat-section__desc">
-    Una red vial de ~28.900 km reparte entre 3 fuentes oficiales que no hablan entre sí.
+    Una red vial de ~28.918,5 km reparte entre 3 fuentes oficiales que no hablan entre sí.
     Ninguna fuente, por sí sola, permite responder la pregunta que se hace un viajero:
     <b>«¿por dónde me conviene ir, y qué me va a pasar por el camino?»</b>
   </p>
@@ -29,8 +29,8 @@ transition: slide-left
 
 <div class="sipat-cards" style="margin-bottom:14px">
   <KpiCard :value="51000" suffix="+" label="Siniestros analizados" hint="ONSV + SUTRAN + OSITRAN" tone="indigo" />
-  <KpiCard :value="28900" suffix=" km" label="Red Vial Nacional" hint="Segmentada en 3.750 tramos" tone="sky" />
-  <KpiCard :value="3750" label="Tramos con features" hint="40 variables por tramo" tone="green" />
+  <KpiCard :value="28918" suffix=" km" label="Red Vial Nacional" hint="Segmentada en 3.750 tramos" tone="sky" />
+  <KpiCard :value="3750" label="Tramos con features" hint="48 variables por tramo" tone="green" />
   <KpiCard :value="3" label="Fuentes oficiales" hint="Con datos de 2019 a 2025" tone="amber" />
 </div>
 

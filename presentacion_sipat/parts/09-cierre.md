@@ -19,7 +19,7 @@ transition: slide-left
 <div class="sipat-head">
   <div>
     <span class="sipat-head__kicker">Verificación <span class="sipat-essential">esencial</span></span>
-    <h1>30 de 30 comprobaciones en verde</h1>
+    <h1>30 de 30 comprobaciones: qué verifica y qué no</h1>
   </div>
   <div class="sipat-head__aside">
     <code>scripts/verificar_proyecto.py</code><br>
@@ -27,11 +27,19 @@ transition: slide-left
   </div>
 </div>
 
-<div class="sipat-cards" style="margin-bottom:13px">
-  <KpiCard :value="30" suffix="/30" label="Checks en verde" hint="all_required_ok: true" tone="green" />
+<div class="sipat-cards" style="margin-bottom:12px">
+  <KpiCard :value="30" suffix="/30" label="Checks en verde" hint="Última corrida con el stack activo" tone="green" />
+  <KpiCard :value="22" suffix="/30" label="Con el stack caído" hint="Los 8 que fallan son de API y servicios" tone="amber" />
   <KpiCard :value="3" label="Servicios UP" hint="OSRM :5000 · API :8000 · Streamlit :8501" tone="green" />
   <KpiCard :value="7" label="Pestañas probadas" hint="AppTest headless, 0 excepciones" tone="green" />
-  <KpiCard :value="2" label="Reportes HTML" hint="Lima→Huancayo 850 KB · Trujillo→Chiclayo 498 KB" tone="indigo" />
+</div>
+
+<div class="sipat-note sipat-note--warn" style="margin-bottom:12px">
+  <b>El 30/30 es con los tres servicios encendidos.</b> Con el stack apagado la corrida da
+  <b>22/30</b> y <code>all_required_ok: false</code>: los 8 checks que fallan son los de API
+  (<code>/health</code>, <code>/alertas</code>, <code>/avisos</code>,
+  <code>/ruta_segura_completa</code>) y los de servicios. <b>Es dependencia de entorno, no una
+  regresión</b> — y conviene decirlo, porque un 22/30 sin explicación parece un fallo del sistema.
 </div>
 
 <table class="sipat-table sipat-table--tight">
@@ -52,7 +60,8 @@ transition: slide-left
     <tr><td><b>Reportes</b></td><td class="num">2</td>
       <td>Reporte HTML autocontenido de ambas rutas</td></tr>
     <tr><td><b>Grafo de conocimiento</b></td><td class="num">2</td>
-      <td><code>graph.json</code> regenerado (456 nodos) · vault Obsidian con 392 notas</td></tr>
+      <td><code>graph.json</code> regenerado (456 nodos) · vault Obsidian con 392 notas.
+      <b>El check no valida las aristas</b> — ver la slide siguiente</td></tr>
   </tbody>
 </table>
 
@@ -246,6 +255,8 @@ flowchart LR
         <code>docs/informe_sipat.md</code> informe técnico<br>
         <code>docs/matriz_tecnica.md</code> decisiones por componente<br>
         <code>docs/modulo_ruta_segura.md</code> manual del motor<br>
+        <b style="color:#4f46e5"><code>docs/fiabilidad_fuentes.md</code> auditoría de fuentes</b><br>
+        <b style="color:#4f46e5"><code>docs/validez_predictiva.md</code> validación fuera de muestra</b><br>
         <code>docs/archify/</code> 4 diagramas interactivos
       </div>
     </div>
@@ -278,12 +289,13 @@ flowchart LR
   <div class="sipat-shield" style="font-size:2.6rem">🛡️</div>
   <h1>Gracias</h1>
   <p style="max-width:52ch;margin-top:.6rem">
-    51.000+ siniestros reales · 3 fuentes oficiales · 2 subsistemas ·
-    <b>30/30 verificaciones en verde</b>
+    51.000+ siniestros reales · 3 fuentes oficiales · 133 puntos negros ·
+    <b>30/30 verificaciones</b> · <b>4 módulos de auditoría</b>
   </p>
-  <p style="font-size:.88rem;max-width:56ch;margin-top:.3rem">
-    La idea en una frase: <b>el riesgo histórico no es una predicción</b>,
-    y un sistema que lo dice en voz alta vale más que uno que no lo dice.
+  <p style="font-size:.88rem;max-width:58ch;margin-top:.3rem">
+    La idea en una frase: <b>el riesgo histórico no es una predicción</b>, y el modelo
+    <b>ordena tramos pero no pronostica cantidades</b>. Un sistema que dice las dos cosas
+    en voz alta vale más que uno que solo muestra la primera.
   </p>
   <div class="sipat-links">
     <a href="https://github.com/Lobitoxxx/SIPAT" target="_blank">github.com/Lobitoxxx/SIPAT</a>

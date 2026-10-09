@@ -28,10 +28,10 @@ transition: slide-left
 
 ```mermaid
 flowchart LR
-  F["<b>Fuentes oficiales</b><br/>ONSV 5.014<br/>SUTRAN 7.656 + alertas<br/>OSITRAN 41.833 + peajes<br/>MTC 3.750 tramos<br/>INGEMMET peligros"] --> G["<b>Geocodificación lineal</b><br/>abscisado: ruta + km → lat/lon<br/>error ~14 m"]
-  G --> D["<b>dataset_modelo.csv</b><br/>3.750 × 40 variables<br/>con offset de exposición"]
+  F["<b>Fuentes oficiales</b><br/>ONSV 5.014<br/>SUTRAN 7.656 + alertas<br/>OSITRAN 41.833 + peajes<br/>MTC 3.750 tramos<br/>28.918,5 km<br/>INGEMMET peligros"] --> G["<b>Geocodificación lineal</b><br/>abscisado: ruta + km → lat/lon<br/>error ~14 m"]
+  G --> D["<b>dataset_modelo.csv</b><br/>3.750 × 48 variables<br/>con offset de exposición"]
   D --> B["<b>Unificación multi-fuente</b><br/>build_dashboard_data.py<br/>→ tramos_geo.json"]
-  D --> P["<b>Puntos negros</b><br/>EB de Hauer<br/>→ 129 puntos"]
+  D --> P["<b>Puntos negros</b><br/>EB de Hauer<br/>→ 133 puntos"]
   D --> N["<b>Modelo NegBin</b><br/>modelo_multi.py<br/>→ IRRs + predictor"]
   B & P & N --> S["<b>Servicios</b><br/>OSRM :5000<br/>FastAPI :8000<br/>Streamlit :8501"]
 ```
@@ -89,7 +89,7 @@ flowchart LR
 <div class="sipat-head">
   <div>
     <span class="sipat-head__kicker">Pipeline <span class="sipat-essential">esencial</span></span>
-    <h1>El dataset espacial: 3.750 tramos × 40 variables</h1>
+    <h1>El dataset espacial: 3.750 tramos × 48 variables</h1>
   </div>
   <div class="sipat-head__aside">
     <code>data/processed/dataset_modelo.csv</code><br>
@@ -138,7 +138,62 @@ flowchart LR
 <div class="sipat-head">
   <div>
     <span class="sipat-head__kicker">Pipeline <span class="sipat-essential">esencial</span></span>
-    <h1>Puntos negros: 12 en Fase 1, 129 en la versión multi-fuente</h1>
+    <h1>Por qué el dashboard no publica un «total»</h1>
+  </div>
+  <div class="sipat-head__aside">
+    Contrato documentado en<br>
+    <code>tramos_geo_meta.json</code>
+  </div>
+</div>
+
+<div class="sipat-cards" style="margin-bottom:12px">
+  <KpiCard :value="9129" label="Suma ingenua ONSV+SUTRAN" hint="Cuenta dos veces los emparejados" tone="red" />
+  <KpiCard :value="5115" label="Unión deduplicada" hint="Único recuento sin doble conteo" tone="green" />
+  <KpiCard :value="26" label="Vistos por ambas fuentes" hint="radio 0,25 km · tolerancia 1 día" tone="slate" />
+  <KpiCard :value="216" label="Sin tramo asignable" hint="No entran en ningún tramo de la red" tone="amber" />
+</div>
+
+<div class="sipat-split sipat-split--even">
+  <div>
+    <div class="sipat-card" style="margin-bottom:10px">
+      <div class="sipat-card__t">Lo que sí se publica</div>
+      <div class="sipat-card__d">
+        <code>siniestros_union_comun</code> = ONSV ∪ SUTRAN deduplicado dentro de la
+        <b>ventana común</b> (2021-01 → 2021-09). Es el único recuento sin doble conteo,
+        con <code>fallecidos_union_comun</code> tomado como el <b>máximo</b> de las dos fuentes
+        por evento, no la suma.
+      </div>
+    </div>
+    <div class="sipat-card">
+      <div class="sipat-card__t">Lo que se marca como referencia, no como cifra</div>
+      <div class="sipat-card__d">
+        <code>siniestros_suma_fuentes</code> suma las tres fuentes. El propio
+        <code>tramos_geo_meta.json</code> lo documenta: <b>«NO es un total de siniestros:
+        mezcla periodos y cuenta dos veces los emparejados»</b>.
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="sipat-note sipat-note--bad">
+      <b>La invariante que los tests blindan:</b> la unión <b>nunca</b> puede superar la suma
+      ingenua, porque deduplicar resta o iguala. <code>tests/test_dashboard_kpis.py</code> verifica
+      además que la unión coincide exactamente con lo que produce el módulo de deduplicación.
+    </div>
+    <div class="sipat-note" style="margin-top:10px">
+      <b>El motivo estructural:</b> las tres fuentes cubren periodos distintos y dos de ellas
+      registran el mismo accidente con unidades de registro distintas. Un único total sería una
+      magnitud <b>sin ventana definida</b>. Es el mismo argumento que sostiene el veredicto
+      «subnotificación no estimable» del bloque de auditoría.
+    </div>
+  </div>
+</div>
+
+---
+
+<div class="sipat-head">
+  <div>
+    <span class="sipat-head__kicker">Pipeline <span class="sipat-essential">esencial</span></span>
+    <h1>Puntos negros: 133 tramos, salida canónica única</h1>
   </div>
   <div class="sipat-head__aside">
     <code>build_puntos_negros.py</code><br>
@@ -152,32 +207,33 @@ flowchart LR
     <figcaption>Puntos negros detectados por exceso Empirical Bayes (método de Hauer)</figcaption>
   </figure>
   <div>
+    <div class="sipat-cards" style="grid-template-columns:1fr 1fr;margin-bottom:10px">
+      <KpiCard :value="133" label="Puntos negros" hint="Salida EB canónica" tone="indigo" />
+      <KpiCard :value="150" label="Corredores" hint="Red vial nacional" tone="slate" />
+    </div>
     <p class="sipat-list sipat-list--sm"><b>Ventana deslizante de 1 km</b> + tres criterios simultáneos:</p>
-    <v-clicks>
-      <div class="sipat-card" style="margin-bottom:8px">
-        <div class="sipat-card__t">1 · Percentil 95 regional</div>
-        <div class="sipat-card__d">Supera el percentil 95 de su región: descarta ruido estadístico.</div>
-      </div>
-      <div class="sipat-card" style="margin-bottom:8px">
-        <div class="sipat-card__t">2 · Exceso Empirical Bayes &gt; 1.0</div>
-        <div class="sipat-card__d">Método de Hauer: corrige por <b>exposición y varianza</b> de cada tramo.</div>
-      </div>
-      <div class="sipat-card" style="margin-bottom:8px">
-        <div class="sipat-card__t">3 · Residuos del modelo &gt; 2.0</div>
-        <div class="sipat-card__d">El tramo es peor de lo que el NegBin predice: el modelo no lo explica.</div>
-      </div>
-      <div class="sipat-note">
-        Cada punto lleva su <code>fuente_dominante</code>: qué fuente concentra el exceso.
-      </div>
-    </v-clicks>
+    <div class="sipat-card" style="margin-bottom:7px">
+      <div class="sipat-card__t">1 · Percentil 95 regional</div>
+      <div class="sipat-card__d">Supera el percentil 95 de su región: descarta ruido estadístico.</div>
+    </div>
+    <div class="sipat-card" style="margin-bottom:7px">
+      <div class="sipat-card__t">2 · Exceso Empirical Bayes &gt; 1.0</div>
+      <div class="sipat-card__d">Método de Hauer: corrige por <b>exposición y varianza</b> de cada tramo.</div>
+    </div>
+    <div class="sipat-card" style="margin-bottom:7px">
+      <div class="sipat-card__t">3 · Residuos del modelo &gt; 2.0</div>
+      <div class="sipat-card__d">El tramo es peor de lo que el NegBin predice: el modelo no lo explica.</div>
+    </div>
+    <div class="sipat-note" style="font-size:.78rem">
+      Cada punto lleva su <code>fuente_dominante</code>: qué fuente concentra el exceso.
+    </div>
   </div>
 </div>
 
-<div class="sipat-split sipat-split--even" style="margin-top:11px">
-  <div class="sipat-note sipat-note--ok" style="font-size:.78rem">
-    <b>12</b> = detector de <b>Fase 1</b>, solo ONSV → <code>data/processed/puntos_negros.csv</code>
-  </div>
-  <div class="sipat-note sipat-note--ok" style="font-size:.78rem">
-    <b>129</b> = detector <b>multi-fuente</b> (ONSV+SUTRAN+OSITRAN) → <code>dashboard/puntos_negros.json</code>
-  </div>
+<div class="sipat-note sipat-note--ok" style="margin-top:11px">
+  <b>Una sola salida canónica:</b> <code>dashboard/puntos_negros.csv</code> y
+  <code>puntos_negros.json</code> contienen los mismos <b>133</b> tramos. La detección antigua de Fase 1
+  (solo ONSV) ya no se publica como resultado: quedó archivada en
+  <code>puntos_negros_legacy_residuales.csv</code> para trazabilidad, y
+  <code>tests/test_eb_tramos.py</code> verifica que no vuelva a filtrarse.
 </div>

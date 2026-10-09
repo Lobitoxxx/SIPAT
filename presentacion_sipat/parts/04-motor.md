@@ -164,6 +164,11 @@ transition: slide-left
       <b>Diferencia de AIC: 3.321 a favor del NegBin.</b> Es la evidencia de que la
       sobre-dispersión no era una suposición, sino que está en los datos.
     </div>
+    <div class="sipat-note sipat-note--warn" style="margin-top:10px;font-size:.79rem">
+      <b>Lo que este predictor NO es:</b> un pronóstico de cuántos siniestros ocurrirán.
+      La validación fuera de muestra (bloque siguiente) concluye que sirve para
+      <b>priorizar</b> tramos, no para prever cantidades.
+    </div>
   </div>
 </div>
 

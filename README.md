@@ -104,6 +104,104 @@ que se detectaron y corrigieron sobre datos reales.
 
 ---
 
+<a id="auditoria"></a>
+
+## 2 ter. Auditoría: ¿son de fiar los datos y la predicción?
+
+Un DQS de 92 y un buen ajuste en entrenamiento **no garantizan** que las fuentes sean fiables ni
+que el modelo prediga. Dos módulos submiten el sistema a prueba y **declaran lo que encuentran**
+en vez de producir un único número tranquilizador.
+
+### Las cuatro preguntas, cuatro módulos — no las mezcles
+
+| Pregunta | Dónde se responde | Qué **NO** contesta |
+|---|---|---|
+| ¿El dato tiene nulos, rangos y unicidad? | `etl-project/src/quality/dimensions.py` (DQS) | Ni si la fuente es de fiar, ni si el modelo predice |
+| ¿Las métricas del ETL son defendibles? | `etl-project/src/quality/auditoria.py` | Audita el **proceso**, no el resultado estadístico |
+| **¿Las fuentes ONSV/SUTRAN/OSITRAN son de fiar?** | **`scripts/fiabilidad_fuentes.py`** | Una fuente puede ser fiable y aun así el modelo no predecir |
+| **¿La predicción aguanta fuera de muestra?** | **`scripts/validez_predictiva.py`** | Un mal R² aquí no dice que los datos sean malos |
+
+Ambos usan la misma forma de responder: una **tabla de afirmaciones con veredicto + evidencia +
+límite**, y **ninguno se colapsa en un índice único**. Combinarlos exigiría decidir cuánto pesa
+cada riesgo, y esa decisión no sale de estos datos.
+
+### Fiabilidad de las fuentes
+
+Módulo `scripts/fiabilidad_fuentes.py` · salida `data/processed/dashboard/fiabilidad_fuentes.json`
+· detalle en [`docs/fiabilidad_fuentes.md`](docs/fiabilidad_fuentes.md)
+
+| Afirmación | Veredicto | Evidencia / límite |
+|---|---|---|
+| Las coordenadas de ONSV sirven para geocodificar por km | **SÍ** | 5.014 filas, 0 sin coordenada, 0 fuera del Perú |
+| Las coordenadas de SUTRAN sirven para geocodificar por km | **CON RESERVAS** | 499 filas (**6,12 %**) sin coordenada sobre 8.155 |
+| El doble reporte dentro de cada fuente es marginal | **SÍ** | 320 coincidencias km+fecha → **204** al añadir modalidad |
+| OSITRAN sirve como capa de contraste de la red nacional | **NO COMO CAPA COMPLETA** | Cubre **26 de 150 rutas (17,3 %)** y solo vías concedidas |
+| Se puede estimar la subnotificación | **NO ESTIMABLE** | Ver abajo: los dos muestreos no son de la misma población |
+| El solape ONSV/SUTRAN no es un artefacto del umbral | **SÍ** | Estable con radio 0,1–1 km y tolerancia 0–7 días |
+
+**Dos errores de lectura que casi llegan a conclusiones falsas:**
+
+- **Los «3.786 duplicados» de SUTRAN no son duplicados.** La coordenada de SUTRAN viene del
+  *kilómetro del tramo* donde se registró el accidente, no de un GPS del lugar, así que 12
+  accidentes distintos del mismo km comparten punto. El número accionable es **204, no 3.786**.
+- **La cobertura de OSITRAN salía 0,0 %** porque se cruzaba con la red por `siglas` (16 valores,
+  código corto de concesión) cuando la red vial usa el identificador de tramo en formato MTC
+  (`ruta`, 103 valores). Era un cruce de dos sistemas de códigos distintos, no un hallazgo.
+
+**Por qué la subnotificación no es estimable.** Lincoln-Petersen da N ≈ 153.670 (IC95
+83.868–281.568) con solo 26 eventos en común y un intervalo **estrecho** (multiplicador ≈ 1,77).
+El veredicto sigue siendo NO ESTIMABLE por una razón estructural: el estimador exige dos
+muestreos independientes de la misma población, y ONSV/SUTRAN difieren en **56,1 % de rutas no
+comunes** y **87,5 % de meses no comunes**. Aplicado aquí mediría la diferencia entre dos
+poblaciones. *Una confianza alta sobre la pregunta equivocada sigue siendo la pregunta equivocada.*
+
+### Validez predictiva
+
+Módulo `scripts/validez_predictiva.py` · salida `data/processed/dashboard/validez_predictiva.json`
+· detalle en [`docs/validez_predictiva.md`](docs/validez_predictiva.md)
+
+Se reconstruye el panel tramo × año (3.750 × 5 = **18.750 celdas, 86,4 % en cero**) con la misma
+función `panel_anual.construir_panel` que alimenta `dataset_modelo.csv`, y se valida con
+`GroupKFold` de 5 folds **agrupado por corredor, no por tramo** — `PE-1N` y `PE-1S` son la misma
+Panamericana en sentidos opuestos y, separados, el test sería copia del train.
+
+| Modelo | MAE | R² | Dev. Poisson |
+|---|---|---|---|
+| Media de entrenamiento | 0,464 | −0,009 | 1,252 |
+| Mediana de entrenamiento | 0,267 | −0,079 | *n/d* |
+| **NegBin con offset** | **0,370** | **+0,102** | **0,824** |
+
+| Afirmación | Veredicto |
+|---|---|
+| El modelo usa las covariables para predecir mejor que la media | **SÍ** |
+| El R² justifica usarlo como pronóstico | **NO** |
+| El modelo supera a la persistencia en el holdout temporal | **AMBIGUO** |
+| El holdout temporal mide capacidad de predecir a futuro | **NO** |
+
+**El límite que estos datos no pueden sortear.** ONSV registra **−67 % de siniestros en 2025**
+frente al promedio 2021-2024, con los 12 meses cubiertos y una tasa de mortalidad casi constante
+(1,24 → 1,21 fallecidos por siniestro). Un descenso de volumen con mortalidad constante no es un
+patrón de mejora: si bajaran los accidentes graves, la tasa subiría. Lo más consistente es un
+**cambio en la captura de la fuente**, y el error del holdout mezcla error del modelo con cambio de
+la fuente sin que estos datos permitan separarlos.
+
+**Conclusión operativa:** el modelo sirve para **priorizar** tramos (ordena mejor que la media) y
+**no** para **prevenir cuántos siniestros** ocurrirán. El dashboard debe decirlo así en lugar de
+mostrar un número como si fuera un pronóstico.
+
+### Reproducir
+
+```bash
+python scripts/fiabilidad_fuentes.py      # -> fiabilidad_fuentes.json
+python scripts/validez_predictiva.py      # -> validez_predictiva.json  (requiere scikit-learn)
+python -m pytest tests/test_fiabilidad_fuentes.py tests/test_validez_predictiva.py -q
+```
+
+También hay dos notebooks que explican los hallazgos sobre datos reales:
+`notebooks/05_fiabilidad_fuentes.ipynb` y `notebooks/06_validez_predictiva.ipynb`.
+
+---
+
 ## 3. Cómo se manejan los datos (pipeline)
 
 ```mermaid
@@ -118,12 +216,12 @@ flowchart LR
 
     subgraph INGESTA["Ingesta y geocodificación"]
         GEOC["Geocodificación lineal por km<br/>(abscisado: ruta + km → lat/lon)"]
-        MODELO["dataset_modelo.csv<br/>3,750 × 40"]
+        MODELO["dataset_modelo.csv<br/>3,750 × 48"]
     end
 
     subgraph PROCESOS["Procesamiento"]
         BD["build_dashboard_data.py<br/>→ tramos_geo.json multi-fuente"]
-        PN["build_puntos_negros.py<br/>EB de Hauer → 129 puntos negros"]
+        PN["build_puntos_negros.py<br/>EB de Hauer → 133 puntos negros"]
         NB["modelo_multi.py / prediccion.py<br/>NegBin → IRRs + predictor"]
     end
 
@@ -154,7 +252,7 @@ flowchart LR
 
 1. **Geocodificación lineal**: cada accidente llega con "ruta + kilómetro" (ej. PE-1S km 45).
    Se proyecta al polilíneo correspondiente de la red MTC usando el abscisado por km.
-2. **Dataset espacial** (`dataset_modelo.csv`, 3,750 tramos × 40 variables): siniestros por fuente,
+2. **Dataset espacial** (`dataset_modelo.csv`, 3,750 tramos × 48 variables): siniestros por fuente,
    fallecidos, topografía, superficie, velocidad proyectada, carriles, sinuosidad, distancia a
    peligros INGEMMET, peajes, etc.
 3. **Unificación multi-fuente** (`build_dashboard_data.py` → `tramos_geo.json`): suma ONSV+SUTRAN+
@@ -232,7 +330,7 @@ flowchart TD
     B -- no --> D
     C --> D{Validaciones}
     D -- "coordenadas fuera de Perú" --> X["❌ Rechazado (HTTP 400)"]
-    D -- "descripción < 5 caracteres" --> X
+    D -- "descripción demasiado corta" --> X
     D -- "duplicado: mismo tipo,<br/><150 m y <10 min" --> Y["↩️ Se omite (dedupe)"]
     D -- ok --> E["agregar_reporte()<br/>storage append-only"]
     E --> F[(reportes_ciudadanos.json)]
@@ -302,7 +400,7 @@ flowchart TB
     A["1 · Entendimiento del negocio<br/>Prevenir accidentes antes de viajar"] --> B["2 · Entendimiento de los datos<br/>51,000+ siniestros en 3 fuentes"]
     B --> C["3 · Preparación de los datos<br/>Geocodificación lineal · limpieza · dataset 3,750×48"]
     C --> D["4 · Modelado<br/>NegBin por fuente → IRRs + predictor"]
-    D --> E["5 · Evaluación<br/>AIC · 12 + 129 puntos · cobertura 42%"]
+    D --> E["5 · Evaluación<br/>AIC · 133 puntos · validez fuera de muestra"]
     E --> F["6 · Despliegue<br/>Datos ligeros → dashboard · API · reporte HTML"]
     F -. "lecciones → nuevo sprint" .-> A
 ```
@@ -368,11 +466,15 @@ SIPAT/
 │   ├── reportes_ciudadanos.py  # backend de reportes con foto
 │   ├── reporte_ruta.py         # reporte HTML autocontenido
 │   ├── build_dashboard_data.py # reconstruye tramos_geo.json multi-fuente
-│   ├── build_puntos_negros.py  # detector de puntos negros
+│   ├── build_puntos_negros.py  # detector de puntos negros (EB de Hauer)
 │   ├── modelo_multi.py         # NegBin multi-fuente (IRRs)
+│   ├── fiabilidad_fuentes.py   # auditoría: ¿son de fiar ONSV/SUTRAN/OSITRAN?
+│   ├── validez_predictiva.py   # auditoría: ¿la predicción aguanta fuera de muestra?
+│   ├── build_notebooks.py      # genera notebooks 01-06 con validación de sintaxis
 │   ├── boot_services.py        # arranca Docker+OSRM, API y Streamlit
 │   ├── verificar_proyecto.py   # batería de 30 verificaciones
 │   └── apptest_check.py        # AppTest del dashboard (7 tabs + calcular)
+├── tests/                      # regresiones de datos, modelo, KPIs y auditoría
 ├── data/
 │   ├── raw/                    # archivos originales descargados
 │   ├── processed/              # datasets geocodificados y modelo
@@ -380,7 +482,11 @@ SIPAT/
 │   └── osm/                    # extracto PBF de Perú
 ├── docs/
 │   ├── informe_sipat.md             # informe técnico, matriz técnica, manual, figuras
+│   ├── fiabilidad_fuentes.md        # auditoría de las tres fuentes
+│   ├── validez_predictiva.md        # validación del modelo fuera de muestra
 │   └── archify/                     # 4 diagramas interactivos (HTML autocontenidos)
+├── notebooks/                  # 01-06: exploración, auditoría y validación
+├── presentacion_sipat/         # presentación interactiva del sistema (Slidev)
 └── graphify-out/               # grafo de conocimiento del código
 ```
 
@@ -421,9 +527,26 @@ python scripts/verificar_proyecto.py
   UP (OSRM/API/Streamlit), endpoints de API con respuesta válida, AppTest del dashboard
   (7 pestañas + botón "Analizar mi ruta" sin excepciones), exportaciones JSON/CSV y reportes HTML.
   Guarda el resultado en `data/processed/dashboard/verificacion.json`.
+  **Los 30 pasan con los tres servicios encendidos**; con el stack apagado los 8 de API y
+  servicios fallan y la corrida marca `all_required_ok: false`. Es dependencia de entorno, no
+  una regresión.
 - `scripts/apptest_check.py`: prueba headless de UI con Streamlit AppTest.
 - Validaciones del módulo de reportes: coordenadas dentro de Perú, descripción mínima,
   deduplicación temporal-espacial, tipos y severidades acotados.
+- `tests/` — regresiones sobre datos reales, no solo fixtures sintéticas:
+
+  | Suite | Qué blinda |
+  |---|---|
+  | `test_fiabilidad_fuentes.py` | Cada afirmación de la auditoría de fuentes como regresión |
+  | `test_validez_predictiva.py` | Cada veredicto de la validación fuera de muestra |
+  | `test_dashboard_kpis.py` | El contrato del KPI unionado: `siniestros_union_comun` existe y la unión nunca supera la suma ingenua |
+  | `test_panel_anual.py` | La construcción del panel tramo × año que usa la validación |
+  | `test_deduplicacion_eventos.py` | La deduplicación ONSV/SUTRAN y la identidad contable de la unión |
+  | `test_eb_tramos.py`, `test_modelo_*.py` | Detección de puntos negros y ajuste del modelo |
+
+```bash
+python -m pytest tests -q
+```
 
 ---
 
@@ -433,13 +556,29 @@ python scripts/verificar_proyecto.py
   variable por departamento; SUTRAN cubre 2020-2021; OSITRAN cubre solo concesiones (sin
   coordenadas exactas, se asignan al centroide del tramo). El sistema nunca mezcla cifras como si
   fueran homogéneas: todo análisis permite separar por fuente.
+- **OSITRAN no es una capa completa** (ver [2 ter](#auditoria)):
+  cubre 26 de 150 rutas (17,3 %). Sirve para describir caminos concedidos, **no** para corregir el
+  total nacional, porque las rutas concedidas concentran tráfico.
+- **SUTRAN tiene coordenadas incompletas**: 499 de 8.155 filas (6,12 %) sin coordenada, por lo que
+  su geocodificación por km es usable **con reservas**.
+- **La subnotificación no es estimable con estos datos**: Lincoln-Petersen exige dos muestreos
+  independientes de la misma población y ONSV/SUTRAN difieren en 56,1 % de rutas y 87,5 % de meses.
 - **El riesgo histórico no es una predicción**: es exposición pasada; por eso existe la segunda
   capa predictiva (NegBin) que ajusta por longitud, tráfico y características viales.
+- **La capa predictiva ordena pero no pronostica**: la validación fuera de muestra concluye que
+  sirve para **priorizar** tramos, no para prever cuántos siniestros ocurrirán (devianza 0,824
+  contra 1,252 de la media, pero R² de solo +0,102).
+- **ONSV 2025 registra −67 %** de siniestros con tasa de mortalidad constante: es un cambio en la
+  captura de la fuente, no una mejora de la seguridad vial. El holdout temporal no puede separar
+  error del modelo de cambio de fuente.
 - **Clima y avisos dependen de servicios externos** (SENAMHI/Open-Meteo/COEN); ante fallo el
   dashboard muestra "no disponible" sin romper la experiencia.
 - **Los reportes ciudadanos son autodeclarados**: sin moderación aún; sirven como señal
   complementaria y reciente, no como dato oficial.
 - Cobertura predictiva típica ≈ 42% de la longitud de la ruta (tramos con features completas).
+- **El grafo de conocimiento está desactualizado**: `graphify-out/graph.json` conserva los nodos
+  pero perdió las aristas en un update incremental, y el check `graph:graph_json` valida que el
+  fichero exista y tenga nodos, **no que tenga aristas**.
 
 ---
 
@@ -448,7 +587,11 @@ python scripts/verificar_proyecto.py
 - `docs/informe_sipat.md` — informe técnico completo (Fase 0/Fase 1).
 - `docs/matriz_tecnica.md` — decisiones técnicas por componente.
 - `docs/modulo_ruta_segura.md` — manual del motor de ruta segura.
+- `docs/fiabilidad_fuentes.md` — auditoría de ONSV, SUTRAN y OSITRAN: qué se puede afirmar y qué no.
+- `docs/validez_predictiva.md` — validación del modelo fuera de muestra y sus límites.
 - `docs/archify/*.html` — 4 diagramas interactivos (arquitectura, flujo de datos, secuencia y workflow).
+- `notebooks/01..06` — exploración, auditoría de medición, fiabilidad de fuentes y validez predictiva.
+- `presentacion_sipat/` — presentación interactiva del sistema (Slidev, 57 slides) con `npm run dev`.
 - `graphify-out/GRAPH_REPORT.md` — arquitectura como grafo de conocimiento.
 
 ---

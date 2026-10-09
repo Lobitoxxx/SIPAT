@@ -142,7 +142,7 @@ transition: slide-left
     </div>
     <div class="sipat-card" style="margin-bottom:10px">
       <div class="sipat-card__t">🔀 Flujo de datos</div>
-      <div class="sipat-card__d">De las 3 fuentes geocodificadas al dataset 3.750 × 40 y de ahí a los servicios.</div>
+      <div class="sipat-card__d">De las 3 fuentes geocodificadas al dataset 3.750 × 48 y de ahí a los servicios.</div>
     </div>
   </div>
   <div>
@@ -211,7 +211,13 @@ transition: slide-left
   { capa: 'ETL', items: [
     { name: 'PyYAML', note: 'config declarativa', tone: 'ml' },
     { name: 'Parquet writers', note: 'capas medallion', tone: 'ml' },
-    { name: 'Pytest', note: '87 tests', tone: 'ml' },
+    { name: 'Pytest', note: '87 tests ETL', tone: 'ml' },
     { name: 'nbclient', note: 'notebooks verificados', tone: 'ml' },
+  ]},
+  { capa: 'Auditoría', items: [
+    { name: 'scikit-learn', note: 'GroupKFold espacial', tone: 'red' },
+    { name: 'panel_anual', note: 'panel tramo × año', tone: 'red' },
+    { name: 'dedup eventos', note: 'unión ONSV/SUTRAN', tone: 'red' },
+    { name: 'Pytest', note: '4 suites nuevas', tone: 'red' },
   ]},
 ]" />

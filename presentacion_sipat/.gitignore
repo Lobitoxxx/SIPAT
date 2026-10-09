@@ -11,4 +11,5 @@ dist/
 .gif-frames/
 .verify/
 .devserver.log
+.devserver.err.log
 pal-*.png
